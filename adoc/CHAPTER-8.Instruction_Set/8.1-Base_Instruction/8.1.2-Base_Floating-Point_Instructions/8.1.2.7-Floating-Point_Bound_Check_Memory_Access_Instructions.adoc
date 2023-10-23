@@ -1,0 +1,69 @@
+===== *8.1.2.7 Floating-Point Bound Check Memory Access Instructions*
+
+====== *8.1.2.7.1 `FLD{GT/LE}.{S/D}`, `FST{GT/LE}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2
+
+^.^|*`fldgt.s`*, *`fldgt.d`*, *`fldle.s`*, *`fldle.d`*, *`fstgt.s`*, *`fstgt.d`*, *`fstle.s`*, *`fstle.d`*
+^.^|*`fd`*
+^.^|*`rj`*
+^.^|*`rk`*  
+|===========================
+
+*Description :*
+
+*`fldgt.{s/d}`* :
+
+ if($rj > $rk)
+   $fd = SignExtend(MemoryLoad($rj, single/double),GRLEN)
+ else :
+   RaiseException(BCE)
+
+*`fldle.{s/d}`* :
+
+ if($rj <= $rk)
+   $fd = SignExtend(MemoryLoad($rj, single/double),GRLEN)
+ else :
+   RaiseException(BCE)
+
+*`fstgt.{s/d}`* :
+
+ if $rj > $rk :
+   MemoryStore($fd[31:0],$rj,single)/
+   MemoryStore($fd[63:0],$rj,double)
+ else :
+   RaiseException(BCE)
+
+*`fstle.{s/d}`* :
+
+ if $rj <= $rk :
+   MemoryStore($fd[31:0],$rj,single)/
+   MemoryStore($fd[63:0],$rj,double)
+ else :
+   RaiseException(BCE)
+
+<<<
+
+*Usage :* 
+[source]
+----
+fstle.s  $f24, $r25, $r24 
+fldle.s  $f25, $r25, $r24
+fstle.d  $f26, $r25, $r24
+fldle.d  $f27, $r25, $r24
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.1`* .
+=====

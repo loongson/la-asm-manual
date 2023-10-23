@@ -1,0 +1,13 @@
+=== *8.1 Base Instruction Introduction*
+
+[.text-justify]
+The basic part of the *`LoongArch`* architecture consists of two parts: the non privileged instruction set and the privileged instruction set. The non privileged instruction set defines commonly used integer and floating-point instructions, which can fully support the generation of efficient object code by existing mainstream compilation systems.
+
+<<<
+
+include::8.1-Base_Instruction/8.1.1-Base_Integer_Instruction.adoc[]
+
+<<<
+
+include::8.1-Base_Instruction/8.1.2-Base_Floating-Point_Instructions.adoc[]
+

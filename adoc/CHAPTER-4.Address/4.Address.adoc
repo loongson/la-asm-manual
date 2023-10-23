@@ -1,0 +1,10 @@
+== *CHAPTER 4. Addressing*
+
+[.text-justify]
+This chapter describes the formats that you can use to specify addresses. The machine uses a byte addressing scheme.
+
+include::4.1-Addressing_Range.adoc[]
+
+include::4.2-Addressing_Method.adoc[]
+
+<<<

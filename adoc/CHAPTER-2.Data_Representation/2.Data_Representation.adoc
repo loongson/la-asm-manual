@@ -1,0 +1,7 @@
+== *CHAPTER 2. Data Representation*
+
+include::2.1-LoongArch_Data_Representation.adoc[]
+
+include::2.2-Sign_Entend_Zero_Extend.adoc[]
+
+<<<

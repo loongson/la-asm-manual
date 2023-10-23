@@ -1,0 +1,206 @@
+===== *8.1.1.7 Atomic Memory Access Instructions*
+
+====== *8.1.1.7.1 `AM{SWAP/ADD/AND/OR/XOR/MAX/MIN}[_DB].{W/D}`, `AM{MAX/MIN}[_DB].{WU/DU}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`amswap.w`*, *`amswap_db.w`*, *`amswap.d`*, *`amswap_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amadd.w`*, *`amadd_db.w`*, *`amadd.d`*, *`amadd_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amand.w`*, *`amand_db.w`*, *`amand.d`*, *`amand_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amor.w`*, *`amor_db.w`*, *`amor.d`*, *`amor_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amxor.w`*, *`amxor_db.w`*, *`amxor.d`*, *`amxor_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammax.w`*, *`ammax_db.w`*, *`ammax.d`*, *`ammax_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammin.w`*, *`ammin_db.w`*, *`ammin.d`*, *`ammin_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammax.wu`*, *`ammax_db.wu`*, *`ammax.du`*, *`ammax_db.du`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammin.wu`*, *`ammin_db.wu`*, *`ammin.du`*, *`ammin_db.du`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+*`amswap.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rk`*, *`$rj`*, word)
+
+*`amswap_db.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rk`*, *`$rj`*, word)
+
+*`amswap.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(*`$rk`*, *`$rj`*, doubleword)
+
+*`amswap_db.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(*`$rk`*, *`$rj`*, doubleword)
+
+*Usage :* 
+[source]
+----
+li.d       $r26, 0x0123456789abcdef
+li.d       $r24, &(0xfedcba9876543210)
+amswap.d   $r25, $r26, $r24
+----
+
+* *Explanation :*
+
+** *`$r25`* = *`0xfedcba9876543210`*
+
+** *`$r24`* = address -> *`0x0123456789abcdef`*
+
+*Description :*
+
+*`amadd.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rd`* + *`$rk`*, *`$rj`*, word)
+
+*`amadd_db.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rd`* + *`$rk`*, *`$rj`*, word)
+
+*`amadd.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(*`$rd`* + *`$rk`*, *`$rj`*, doubleword)
+
+*`amadd_db.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(*`$rd`* + *`$rk`*, *`$rj`*, doubleword)
+
+*`amand.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rd`* & *`$rk`*, *`$rj`*, word)
+
+*`amand_db.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rd`* & *`$rk`*, *`$rj`*, word)
+
+*`amand.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(*`$rd`* & *`$rk`*, *`$rj`*, doubleword)
+
+*`amand_db.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword),  *MemoryStore*(*`$rd`* & *`$rk`*, *`$rj`*, doubleword)
+
+*`amor.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rd`* | *`$rk`*, *`$rj`*, word)
+
+*`amor_db.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rd`* | *`$rk`*, *`$rj`*, word)
+
+*`amor.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(*`$rd`* | *`$rk`*, *`$rj`*, doubleword)
+
+*`amor_db.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(*`$rd`* | *`$rk`*, *`$rj`*, doubleword)
+
+*`amxor.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rd`* ^  *`$rk`*, *`$rj`*, word)
+
+*`amxor_db.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(*`$rd`* ^ *`$rk`*, *`$rj`*, word)
+
+*`amxor.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(*`$rd`* ^  *`$rk`*, *`$rj`*, doubleword)
+
+*`amxor_db.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*,doubleword), *MemoryStore*(*`$rd`* ^  *`$rk`*, *`$rj`*, doubleword)
+
+*`ammax.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(max{*`$rd`*, *`$rk`*}, *`$rj`*, word)
+
+*`ammax_db.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(max{*`$rd`*, *`$rk`*}, *`$rj`*, word)
+
+*`ammax.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(max{*`$rd`*, *`$rk`*}, *`$rj`*, doubleword)
+
+*`ammax_db.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(max{*`$rd`*, *`$rk`*}, *`$rj`*, doubleword)
+
+*`ammin.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(min{*`$rd`*, *`$rk`*}, *`$rj`*, word)
+
+*`ammin_db.w`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(min{*`$rd`*, *`$rk`*}, *`$rj`*, word)
+
+*`ammin.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(min{*`$rd`*, *`$rk`*}, *`$rj`*, doubleword)
+
+*`ammin_db.d`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(min{*`$rd`*, *`$rk`*}, *`$rj`*, doubleword)
+
+*`ammax.wu`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(max{*`$rd`*, *`$rk`*}, *`$rj`*, word)
+
+*`ammax_db.wu`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(max{*`$rd`*, *`$rk`*}, *`$rj`*, word)
+
+*`ammax.du`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(max{*`$rd`*, *`$rk`*}, *`$rj`*, doubleword)
+
+*`ammax_db.du`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(max{*`$rd`*, *`$rk`*}, *`$rj`*, doubleword)
+
+*`ammin.wu`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(min{*`$rd`*, *`$rk`*}, *`$rj`*, word)
+
+*`ammin_db.wu`* : *`$rd`* = *MemoryLoad*(*`$rj`*, word), *MemoryStore*(min{*`$rd`*, *`$rk`*}, *`$rj`*, word)
+
+*`ammin.du`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(min{*`$rd`*, *`$rk`*}, *`$rj`*, doubleword)
+
+*`ammin_db.du`* : *`$rd`* = *MemoryLoad*(*`$rj`*, doubleword), *MemoryStore*(min{*`$rd`*, *`$rk`*}, *`$rj`*, doubleword)
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.1`* .
+=====
+
+====== *8.1.1.7.2 `LL.{W/D}`, `SC.{W/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`ll.w`*, *`ll.d`*, *`sc.w`*, *`sc.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si16`* 
+|===========================
+
+* *Explanation :*
+
+*`ll.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`* + {*`si16`*}, word)
+
+*`ll.d`* : *`$rd`* = *MemoryLoad*(*`$rj`* + {*`si16`*}, doubleword)
+
+*`sc.w`* : *MemoryStore*(*`$rd`*[31:0], *`$rj`* + {*`si16`*}, word)
+
+*`sc.d`* : *MemoryStore*(*`$rd`*, *`$rj`* + {*`si16`*}, doubleword)
+
+** *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
+
+*** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
+
+*Usage :* 
+[source]
+----
+ll.w    $r25, $r12, 0
+addi.w  $r25, $r25, 5
+sc.w    $r25, $r12, 0
+ll.d    $r25, $r12, 0 
+addi.d  $r25, $r25, 10
+sc.d    $r25, $r12, 0 
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.2`* .
+=====

@@ -1,0 +1,15 @@
+== *Change History*
+
+[.text-justify]
+.Change History Table
+[options="header"]
+[cols="20,20,60"]
+|==========================
+<.^|Date 
+^.^|Version 
+^.^|Note
+
+<.^|2023-08-15 
+^.^|V0.9 
+<.^|*`Draft version`*.
+|==========================

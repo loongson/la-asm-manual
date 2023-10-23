@@ -1,0 +1,19 @@
+=== *2.2 Sign Extend & Zero Extend*
+
+[.text-justify]
+In *`LoongArch`* computing instructions, immediate values require both *`Sign-Extend`* and *`Zero-Extend`*.
+
+[.text-justify]
+* 32-bit sign extend: Fills the high 32-n bits of an n-bit immediate with the highest bit of the immediate.
+
+[.text-justify]
+* 64 bit sign extend: Fills the high 64-n bits of an n-bit immediate with the highest bit of the immediate.
+
+[.text-justify]
+* 32-bit unsigned extend: Fill the high 32-n bits of the n-bit immediate with 0.
+
+[.text-justify]
+* 64 bit unsigned extend: Fill the high 64-n bits of the n-bit immediate with 0.
+
+[.text-justify]
+In the subsequent instructions, *SignExtend*(x, len) represents sign extend, x represents the extend object, and len represents the number of digits in the final length of x after sign extend. *ZeroExtend*(x, len) uses 0 to extend x to len.
