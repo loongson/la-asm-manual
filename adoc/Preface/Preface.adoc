@@ -1,0 +1,10 @@
+== *Preface*
+
+[.text-justify]
+This preface introduces the *`LoongArch`* Assembly Language Programming Guide. 
+
+This document aims to provide guidance to assembly programmers targeting the standard *`LoongArch`* assembly language, which common open-source assemblers like *`GNU`* as and *`LLVM`*'s assembler support. Other assemblers might not support the same directives or pseudo instructions; their dialects are outside the scope of this document.
+
+include::About_This_Book.adoc[]
+
+<<<

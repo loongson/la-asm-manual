@@ -1,0 +1,41 @@
+= `Assembly Language Programming Guide` LoongArch
+Loongson Technology Corporation Limited
+v0.9(draft), 2023-08-15
+:docinfo: shared
+:doctype: book
+:toc: macro
+:toc-title: Contents
+:toclevels: 4
+:source-highlighter: coderay
+toc::[]
+
+== Preamble
+This is the official documentation of the `Assembly Language Programming Guide` LoongArch for the `LoongArch` Architecture.
+
+The latest `Assembly Language Programming Guide` documentation releases are available at https://github.com/loongson/la-asm-manual/releases and are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.
+
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+<<<
+
+include::adoc/Preface/Preface.adoc[]
+
+include::adoc/Preface/Change_History.adoc[]
+
+include::adoc/CHAPTER-1.Introduction/1.Introduction.adoc[]
+
+include::adoc/CHAPTER-2.Data_Representation/2.Data_Representation.adoc[]
+
+include::adoc/CHAPTER-3.Register/3.Register.adoc[]
+
+include::adoc/CHAPTER-4.Address/4.Address.adoc[]
+
+include::adoc/CHAPTER-5.Assembler_Directives/5.Assembler_Directives.adoc[]
+
+include::adoc/CHAPTER-6.ASM_File_&_ELF_File/6.ASM_File_&_ELF_File.adoc[]
+
+include::adoc/CHAPTER-7.Extended_Asm/7.Extended_Asm.adoc[]
+
+include::adoc/CHAPTER-8.Instruction_Set/8.Instruction_Set.adoc[]
+
+include::adoc/CHAPTER-9.Pseudo_Instruction_Set/9.Pseudo_Instruction_Set.adoc[]

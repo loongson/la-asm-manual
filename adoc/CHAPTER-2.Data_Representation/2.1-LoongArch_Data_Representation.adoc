@@ -1,0 +1,25 @@
+=== *2.1 `LoongArch` Data Representation*
+
+[.text-justify]
+There are five data types for basic integer instruction operations, namely:
+
+[.text-justify]
+* *`bit`* (short for 1 bit)
+
+[.text-justify]
+* *`byte`* (short for *`B`*, length 8 bits)
+
+[.text-justify]
+* *`halfword`* (short for *`H`*, length 16 bits)
+
+[.text-justify]
+* *`word`* (short for *`W`*, length 32 bits)
+
+[.text-justify]
+* *`doubleword`* (short for *`D`*, length 64 bits)
+
+[.text-justify]
+Under the *`LA32`* architecture, there are no integer instructions for manipulating doublewords. Byte, half word, and word data types are encoded using binary complement.
+
+[.text-justify]
+Floating-point data types include single precision floating-point numbers and double precision floating-point numbers, both of which follow the definition in the *`IEEE 754-2008 standard`* specification.

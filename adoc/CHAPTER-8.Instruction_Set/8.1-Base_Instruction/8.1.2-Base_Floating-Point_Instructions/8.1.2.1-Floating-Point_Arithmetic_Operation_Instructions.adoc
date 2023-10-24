@@ -1,0 +1,464 @@
+===== *8.1.2.1 Floating-Point Arithmetic Operation Instructions*
+
+====== *8.1.2.1.1 `F{ADD/SUB/MUL/DIV}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2 
+
+^.^|*`fadd.s`*, *`fadd.d`*, *`fsub.s`*, *`fsub.d`*, *`fmul.s`*, *`fmul.d`*, *`fdiv.s`*, *`fdiv.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+|===========================
+
+*Description :*
+
+*`fadd.s`* : *`$fd`*[31:0] = *FP32_addition*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fadd.d`* : *`$fd`* = *FP64_addition*(*`$fj`*, *`$fk`*)
+
+*`fsub.s`* : *`$fd`*[31:0] = *FP32_subtraction*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fsub.d`* : *`$fd`* = *FP64_subtraction*(*`$fj`*, *`$fk`*)
+
+*`fmul.s`* : *`$fd`*[31:0] = *FP32_multiplication*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fmul.d`* : *`$fd`* = *FP64_multiplication*(*`$fj`*, *`$fk`*)
+
+*`fdiv.s`* : *`$fd`*[31:0] = *FP32_division*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fdiv.d`* : *`$fd`* = *FP64_division*(*`$fj`*, *`$fk`*)
+
+** When the operand is a single-precision floating-point number, the upper 32 bits of the resulting floating-point register can be any value.
+
+** The floating-point *`addition`* / *`subtraction`* / *`multiplication`* / *`division`* operation follows the *`addition`*(x, y) / *`subtraction`*(x, y) / *`multiplication`*(x, y) / *`division`*(x, y) operation specification in the *`IEEE 754-2008 standard`* .
+
+<<<
+
+*Usage :* 
+[source]
+----
+fadd.s   $f23, $f24, $f25
+fadd.d   $f23, $f24, $f25
+fsub.s   $f23, $f24, $f25
+fsub.d   $f23, $f24, $f25
+fmul.s   $f23, $f24, $f25
+fmul.d   $f23, $f24, $f25
+fdiv.s   $f23, $f24, $f25
+fdiv.d   $f23, $f24, $f25
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.1.1`* .
+=====
+
+====== *8.1.2.1.2 `F{MADD/MSUB/NMADD/NMSUB}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2,  src3
+
+[options="header"]
+[cols="60,10,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2 
+^.^|src3 
+
+^.^|*`fmadd.s`*, *`fmadd.d`*, *`fmsub.s`*, *`fmsub.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+^.^|*`$fa`* 
+
+^.^|*`fnmadd.s`*, *`fnmadd.d`*, *`fnmsub.s`*, *`fnmsub.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+^.^|*`$fa`* 
+|===========================
+
+*Description :*
+
+*`fmadd.s`* : *`$fd`*[31:0] = *FP32_fusedMultiplyAdd*(*`$fj`*[31:0], *`$fk`*[31:0], *`$fa`*[31:0])
+
+*`fmadd.d`* : *`$fd`* = *FP64_fusedMultiplyAdd*(*`$fj`*, *`$fk`*, *`$fa`*)
+
+*`fmsub.s`* : *`$fd`*[31:0] = *FP32_fusedMultiplyAdd*(*`$fj`*[31:0], *`$fk`*[31:0], -*`$fa`*[31:0])
+
+*`fmsub.d`* : *`$fd`* = *FP64_fusedMultiplyAdd*(*`$fj`*, *`$fk`*, -*`$fa`*)
+
+*`fnmadd.s`* : *`$fd`*[31:0] = - *FP32_fusedMultiplyAdd*(*`$fj`*[31:0], *`$fk`*[31:0], *`$fa`*[31:0])
+
+*`fnmadd.d`* : *`$fd`* = - *FP64_fusedMultiplyAdd*(*`$fj`*, *`$fk`*, *`$fa`*)
+
+*`fnmsub.s`* : *`$fd`*[31:0] = - *FP32_fusedMultiplyAdd*(*`$fj`*[31:0], *`$fk`*[31:0], -*`$fa`*[31:0])
+
+*`fnmsub.d`* : *`$fd`* = - *FP64_fusedMultiplyAdd*(*`$fj`*, *`$fk`*, -*`$fa`*)
+
+* The above four floating-point *`fusion multiply-add`* operations follow the specification of the *`fusedMultiplyAdd`*(x,y,z) operation in the *`IEEE 754-2008 standard`* .
+
+<<<
+
+*Usage :* 
+[source]
+----
+fmadd.s    $f23, $f24, $f25, $f26 
+fmadd.d    $f23, $f24, $f25, $f26
+fmsub.s    $f23, $f24, $f25, $f26
+fmsub.d    $f23, $f24, $f25, $f26
+fnmadd.s   $f23, $f24, $f25, $f26
+fnmadd.d   $f23, $f24, $f25, $f26
+fnmsub.s   $f23, $f24, $f25, $f26
+fnmsub.d   $f23, $f24, $f25, $f26
+----
+
+* *Explanation :*
+
+** *`fmadd.s`* : *`$f23` = `$f24` × `$f25` + `$f26`*
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.1.2`* .
+=====
+
+====== *8.1.2.1.3 `F{MAX/MIN}{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2 
+
+^.^|*`fmax.s`*, *`fmax.d`*, *`fmin.s`*, *`fmin.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+|===========================
+
+*Description :*
+
+*`fmax.s`* : *`$fd`*[31:0] = *FP32_maxNum*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fmax.d`* : *`$fd`* = *FP64_maxNum*(*`$fj`*, *`$fk`*)
+
+* *`FMAX{S/D}`* follows the specification of *`maxNum`*(x,y) operation in *`IEEE 754-2008 standard`* .
+
+*`fmin.s`* : *`$fd`*[31:0] = *FP32_minNum*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fmin.d`* : *`$fd`* = *FP64_minNum*(*`$fj`*, *`$fk`*)
+
+* *`FMIN{S/D}`* follows the specification of *`minNum`*(x,y) operation in *`IEEE 754-2008 standard`* .
+
+*Usage :* 
+[source]
+----
+fmax.s    $f23, $f24, $f25  # $f23 = max{$f24, $f25}
+fmax.d    $f23, $f24, $f25  # $f23 = max{$f24, $f25}
+fmin.s    $f23, $f24, $f25  # $f23 = min{$f24, $f25}
+fmin.d    $f23, $f24, $f25  # $f23 = min{$f24, $f25}
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.1.3`* .
+=====
+
+====== *8.1.2.1.4 `F{MAXA/MINA}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2 
+
+^.^|*`fmaxa.s`*, *`fmaxa.d`*, *`fmina.s`*, *`fmina.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+|===========================
+
+*Description :*
+
+*`fmaxa.s`* : *`$fd`*[31:0] = *FP32_maxNumMag*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fmaxa.d`* : *`$fd`* = *FP64_maxNumMag*(*`$fj`*, *`$fk`*)
+
+* *`FMAXA{S/D}`* follows the specification of *`maxNumMag`*(x,y) operation in *`IEEE 754-2008 standard`* .
+
+*`fmina.s`* : *`$fd`*[31:0] = *FP32_minNumMag*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fmina.d`* : *`$fd`* = *FP64_minNumMag*(*`$fj`*, *`$fk`*)
+
+* *`FMINA{S/D}`* follows the specification of *`minNumMag`*(x,y) operation in *`IEEE 754-2008 standard`* .
+
+*Usage :* 
+[source]
+----
+fmaxa.s    $f23, $f24, $f25  # $f23 = max{|$f24|, |$f25|}
+fmaxa.d    $f23, $f24, $f25  # $f23 = max{|$f24|, |$f25|}
+fmina.s    $f23, $f24, $f25  # $f23 = min{|$f24|, |$f25|}
+fmina.d    $f23, $f24, $f25  # $f23 = min{|$f24|, |$f25|}
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.1.4`* .
+=====
+
+====== *8.1.2.1.5 `F{ABS/NEG}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`fabs.s`*, *`fabs.d`*, *`fneg.s`*, *`fneg.d`*
+^.^|*`$fd`*
+^.^|*`$fj`*  
+|===========================
+
+*Description :*
+
+*`fabs.s`* : *`$fd`*[31:0] = *FP32_maxNumMag*(*`$fj`*[31:0])
+
+*`fabs.d`* : *`$fd`* = *FP64_maxNumMag*(*`$fj`*)
+
+* *`FABS.{S/D}`* follows the specification of *`abs`*(x) operation in *`IEEE 754-2008 standard`* .
+
+*`fneg.s`* : *`$fd`*[31:0] = *FP32_minNumMag*(*`$fj`*[31:0])
+
+*`fneg.d`* : *`$fd`* = *FP64_minNumMag*(*`$fj`*)
+
+* *`FNEG.{S/D}`* follows the specification of *`negate`*(x) operation in *`IEEE 754-2008 standard`* .
+
+*Usage :* 
+[source]
+----
+fabs.s    $f23, $f24    # $f23 = |$f24|
+fabs.d    $f23, $f24    # $f23 = |$f24|
+fneg.s    $f23, $f24    # $f23 = -$f24
+fneg.d    $f23, $f24    # $f23 = -$f24
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.1.5`* .
+=====
+
+====== *8.1.2.1.6 `F{SQRT/RECIP/RSQRT}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`fsqrt.s`*, *`fsqrt.d`*, *`frecip.s`*, *`frecip.d`*, *`frsqrt.s`*, *`frsqrt.d`*
+^.^|*`$fd`*
+^.^|*`$fj`*  
+|===========================
+
+*Description :*
+
+*`fsqrt.s`* : *`$fd`*[31:0] = *FP32_squareRoot*(*`$fj`*[31:0])
+
+*`fsqrt.d`* : *`$fd`* = *FP64_squareRoot*(*`$fj`*)
+
+* The floating-point *`square root`* operation follows the specifications of the *`squareRoot`*(x) operation in the *`IEEE 754-2008 standard`* .
+
+*`frecip.s`* : *`$fd`*[31:0] = *FP32_division*(1.0, *`$fj`*[31:0])
+
+*`frecip.d`* : *`$fd`* = *FP64_division*(1.0, *`$fj`*)
+
+* *`FP32_Division` / `FP64_division`* is equivalent to the *`division`*(1.0, x) in the *`IEEE 754-2008 standard`* .
+
+*`frsqrt.s`* : *`$fd`*[31:0] = *FP32_division*(1.0, *FP32_squareRoot*(*`$fj`*[31:0]) )
+
+*`frsqrt.d`* : *`$fd`* = *FP64_division*(1.0, *FP64_squareRoot*(*`$fj`*) )
+
+* The floating-point *`square root`* inversion operation follows the specifications of *`rSqrt`*(x) operation in *`IEEE 754-2008 standard`*.
+
+*Usage :* 
+[source]
+----
+fsqrt.s     $f23, $f24    
+fsqrt.d     $f23, $f24    
+frecip.s    $f23, $f24    
+frecip.d    $f23, $f24   
+frsqrt.s    $f23, $f24  
+frsqrt.d    $f23, $f24   
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.1.6`* .
+=====
+
+====== *8.1.2.1.7 `F{SCALEB/LOGB/COPYSIGN}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  {src2}
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2
+
+^.^|*`flogb.s`*, *`flogb.d`*
+^.^|*`$fd`*
+^.^|*`$fj`*  
+^.^|
+
+^.^|*`fscaleb.s`*, *`fscaleb.d`*, *`fcopysign.s`*, *`fcopysign.d`*
+^.^|*`$fd`*
+^.^|*`$fj`*  
+^.^|*`$fk`* 
+|===========================
+
+*Description :*
+
+*`flogb.s`* : *`$fd`*[31:0] = *FP32_logB*(*`$fj`*[31:0])
+
+*`flogb.d`* : *`$fd`* = *FP64_logB*(*`$fj`*)
+
+* *`LOGB.{S/D}`* follows the specification of *`logB`*(x) operation in *`IEEE 754-2008 standard`* .
+
+*`fscaleb.s`* : *`$fd`*[31:0] = *FP32_scaleB*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fscaleb.d`* : *`$fd`* = *FP64_scaleB*(*`$fj`*, *`$fk`*)
+
+* *`FSCALEB.{S/D}`* follows the specification of *`scaleB`*(x, N) operation in *`IEEE 754-2008 standard`* .
+
+*`fcopysign.s`* : *`$fd`*[31:0] = *FP32_copySign*(*`$fj`*[31:0], *`$fk`*[31:0])
+
+*`fcopysign.d`* : *`$fd`* = *FP64_copySign*(*`$fj`*, *`$fk`*)
+
+* *`COPYSIGN.{S/D}`* follows the specification of *`copySign`*(x, y) operation in *`IEEE 754-2008 standard`* .
+
+<<<
+
+*Usage :* 
+[source]
+----
+flogb.s        $f23, $f24    
+flogb.d        $f23, $f24    
+fscaleb.s      $f23, $f24, $f25     
+fscaleb.d      $f23, $f24, $f25   
+fcopysign.s    $f23, $f24, $f25  
+fcopysign.d    $f23, $f24, $f25   
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.1.7`* .
+=====
+
+====== *8.1.2.1.8 `FCLASS.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`fclass.s`*, *`fclass.d`*
+^.^|*`$fd`*
+^.^|*`$fj`*  
+|===========================
+
+*Description :*
+
+*`fclass.s`* : *`$fd`*[31:0] = *FP32_class*(*`$fj`*[31:0])
+
+*`fclass.d`* : *`$fd`* = *FP64_class*(*`$fj`*)
+
+* *`FCLASS.{S/D}`* follows the specification of *`class`*(x) operation in *`IEEE 754-2008 standard`* .
+
+*Usage :* 
+[source]
+----
+flogb.s        $f23, $f24    
+flogb.d        $f23, $f24  
+----
+
+This instruction determines the category of floating-point numbers in the floating-point register *`fj`*, and the resulting judgment result consists of a total of 10 bits of information. The meaning of each bit is as follows:
+
+[options="header"]
+[cols="8,8,8,10,16,8,8,10,16,8"]
+|===========================
+^.^|bit *`0`*
+^.^|bit *`1`*
+^.^|bit *`2`*
+^.^|bit *`3`*
+^.^|bit *`4`*
+^.^|bit *`5`*
+^.^|bit *`6`*
+^.^|bit *`7`*
+^.^|bit *`8`*
+^.^|bit *`9`*
+
+.2+^.^|SNaN
+.2+^.^|QNaN
+
+4.+^.^|negative value
+4.+^.^|positive value
+
+^.^|∞
+^.^|normal
+^.^|subnormal
+^.^|0
+^.^|∞
+^.^|normal
+^.^|subnormal
+^.^|0
+|===========================
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.1.8`* .
+=====

@@ -1,0 +1,12 @@
+== *CHAPTER 5. Assembler Directives*
+
+[.text-justify]
+This chapter mainly describes assembler commands and assembler instructions.
+
+For more command line parameters of the assembler, please refer to the documentation for the assembler on the *`GCC`* and *`LLVM`* official websites.
+
+include::5.1-Symbol_Define_Assembler_Instruction.adoc[]
+
+include::5.2-Logic_Control_Assembler_Instruction.adoc[]
+
+<<<

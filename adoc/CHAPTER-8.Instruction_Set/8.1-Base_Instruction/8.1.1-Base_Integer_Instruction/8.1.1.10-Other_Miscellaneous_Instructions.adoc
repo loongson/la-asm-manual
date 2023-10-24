@@ -1,0 +1,138 @@
+===== *8.1.1.10 Other Miscellaneous Instructions*
+
+====== *8.1.1.10.1 `SYSCALL`*
+
+*Syntax:*
+
+ opcode    src1
+
+[options="header"]
+[cols="90,10"]
+|===========================
+^.^|opcode
+^.^|src1 
+
+^.^|*`syscall`*
+^.^|*`code`*
+|===========================
+
+*Description :*
+
+Executing the SYSCALL instruction will immediately and unconditionally trigger the system call exception.
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.10.1`* .
+=====
+
+====== *8.1.1.10.2 `BREAK`*
+
+*Syntax:*
+
+ opcode    src1
+
+[options="header"]
+[cols="90,10"]
+|===========================
+^.^|opcode
+^.^|src1 
+
+^.^|*`break`*
+^.^|*`code`*
+|===========================
+
+*Description :*
+
+Executing the BREAK instruction will immediately and unconditionally trigger the breakpoint exception.
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.10.2`* .
+=====
+
+====== *8.1.1.10.3 `ASRT{LE/GT}.D`*
+
+*Syntax:*
+
+ opcode    src1,  src2
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|src1 
+^.^|src2
+
+^.^|*`asrtle.d`*, *`asrtgt.d`*
+^.^|*`$rj`*
+^.^|*`$rk`*
+|===========================
+
+*Description :*
+
+*`asrtle.d`* : *if* (*`$rj`* > *`$rk`*) *RaiseException*(BCE)
+
+*`asrtgt.d`* : *if* (*`$rj`*  < = *`$rk`*) *RaiseException*(BCE)
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.10.3`* .
+=====
+
+====== *8.1.1.10.4 `RDTIME{L/H}.W`, `RDTIME.D`*
+
+*Syntax:*
+
+ opcode    dest,  dest
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest 
+^.^|dest
+
+^.^|*`rdtimel.w`*, *`rdtimeh.w`*, *`rdtime.d`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+|===========================
+
+*Description :*
+
+*`rdtimel.w`* : *`$rd`* = *Stable_Counter*[31:0], *`$rj`* = *Counter ID*
+
+*`rdtimeh.w`* : *`$rd`* = *Stable_Counter*[63:32], *`$rj`* = *Counter ID*
+
+*`rdtime.d`* : *`$rd`* = *Stable_Counter*[63:0], *`$rj`* = *Counter ID*
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.10.4`* .
+=====
+
+====== *8.1.1.10.5 `CPUCFG`*
+
+*Syntax:*
+
+ opcode    src1,  src2
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest 
+^.^|dest
+
+^.^|*`cpucfg`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+|===========================
+
+*Description :*
+
+*`cpucfg`* : When using the *`CPUCFG`* instruction, the source operand register *`rj`* stores the number of the configuration information word to be accessed, and the configuration information word information read after the instruction is executed is written into the general register *`rd`*. In *LA64*, each configuration information word is 32 bits, which is written into the result register after the sign extension.
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.10.5`* .
+=====

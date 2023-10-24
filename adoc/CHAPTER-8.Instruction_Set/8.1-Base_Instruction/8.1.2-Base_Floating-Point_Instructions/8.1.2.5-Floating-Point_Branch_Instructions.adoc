@@ -1,0 +1,41 @@
+===== *8.1.2.5 Floating-Point Branch Instructions*
+
+====== *8.1.2.5.1 `BCEQZ`, `BCNEZ`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="75,10,15"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`bceqz`*, *`bcnez`*
+^.^|*`cj`*
+^.^|*`si23` \| `symbol`*  
+|===========================
+
+*Description :*
+
+*`bceqz`* : *if* (*`$FCC`*[cj] == 0) *jump* ( *`si23` | `symbol`* )
+
+*`bcnez`* : *if* (*`$FCC`*[cj] ! = 0) *jump* ( *`si23` | `symbol`* )
+
+** *`si23`* : a 4-bytes aligned 23-bits signed immediate value in range :
+
+*** [*`-4194304`*, *`4194300`*] or [*`-0x400000`*, *`0x3ffffc`*]
+
+*Usage :* 
+[source]
+----
+bceqz    $fcc0,  (si23 | symbol)
+bcnez    $fcc0,  (si23 | symbol)
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.5.1`* .
+=====
