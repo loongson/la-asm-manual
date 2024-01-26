@@ -1,0 +1,208 @@
+===== *8.1.1.4 Branch Instructions*
+
+====== *8.1.1.4.1 `BEQ`, `BNE`, `BLT[U]`, `BGE[U]`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="60,10,10,20"]
+|===========================
+^.^|opcode
+^.^|src1 
+^.^|src2
+^.^|src3
+
+^.^|*`beq`*, *`bne`*, *`blt`*, *`bge`*, *`bltu`*, *`bgeu`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si18` \| `symbol`* 
+|===========================
+
+*Description :*
+
+*`beq`* : *if* ( *`$rj`* *==* *`$rd`* ) *jump* ( *`si18` | `symbol`* )
+
+*`bne`* : *if* ( *`$rj`* *! =* *`$rd`* ) *jump* ( *`si18` | `symbol`* )
+
+*`blt`* : *if* ( signed(*`$rj`*) *<* signed(*`$rd`*) ) *jump* ( *`si18` | `symbol`* )
+
+*`bge`* : *if* (signed(*`$rj`*) *>=* signed(*`$rd`*)) *jump* ( *`si18` | `symbol`* ) 
+
+*`bltu`* : *if* ( unsigned(*`$rj`*) *<* unsigned(*`$rd`*) ) *jump* ( *`si18` | `symbol`* )
+
+*`bgeu`* : *if* (unsigned(*`$rj`*) *>=* unsigned(*`$rd`*)) *jump* ( *`si18` | `symbol`* )
+
+** *`si18`* : a 4-bytes aligned 18-bits signed immediate value in range :
+
+*** [*`-131072`*, *`131068`*] or [*`-0x20000`*, *`0x1fffc`*]
+
+** *`symbol`* : Tags in assembly for jump.
+
+*Usage :* 
+[source]
+----
+beq    $r23,  $r24,  (si18 | symbol)
+bne    $r23,  $r24,  (si18 | symbol)
+blt    $r23,  $r24,  (si18 | symbol)
+bge    $r23,  $r24,  (si18 | symbol)  
+bltu   $r23,  $r24,  (si18 | symbol)
+bgeu   $r23,  $r24,  (si18 | symbol)
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.4.1`* .
+=====
+
+====== *8.1.1.4.2 `BEQZ`, `BNEZ`*
+
+*Syntax:*
+
+ opcode    src1,  src2
+
+[options="header"]
+[cols="70,10,20"]
+|===========================
+^.^|opcode
+^.^|src1 
+^.^|src2
+
+^.^|*`beqz`*, *`bnez`*
+^.^|*`$rd`*
+^.^|*`si23` \| `symbol`*
+|===========================
+
+*Description :*
+
+*`beqz`* : *if* (*`$rj`* *==* *0*) *jump* ( *`si23` | `symbol`* )
+
+*`bnez`* : *if* (*`$rj`* *! =* *0*) *jump* ( *`si23` | `symbol`* )
+
+** *`si23`* : a 4-bytes aligned 23-bits signed immediate value in range :
+
+*** [*`-4194304`*, *`4194300`*] or [*`-0x400000`*, *`0x3ffffc`*]
+
+** *`symbol`* : Tags in assembly for jump.
+
+*Usage :* 
+[source]
+----
+beqz    $r23,  (si23 | symbol)
+bnez    $r23,  (si23 | symbol)
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.4.2`* .
+=====
+
+====== *8.1.1.4.3 `B`*
+
+*Syntax:*
+
+ opcode    src1
+
+[options="header"]
+[cols="80,20"]
+|===========================
+^.^|opcode
+^.^|src1 
+
+^.^|*`b`*
+^.^|*`si28` \| `symbol`* 
+|===========================
+
+*Description :*
+
+*`b`* : *jump* ( *`si28` | `symbol`* )
+
+** *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
+
+*** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
+
+** *`symbol`* : Tags in assembly for jump.
+
+*Usage :* 
+[source]
+----
+b       (si28 | symbol)
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.4.3`* .
+=====
+
+====== *8.1.1.4.4 `BL`*
+
+*Syntax:*
+
+ opcode    src1
+
+[options="header"]
+[cols="80,20"]
+|===========================
+^.^|opcode
+^.^|src1 
+
+^.^|*`bl`*
+^.^|*`si28` \| `symbol`* 
+|===========================
+
+*Description :*
+
+*`bl`* : *jump* ( *`si28` | `symbol`* )
+
+** *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
+
+*** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
+
+** *`symbol`* : Tags in assembly for jump.
+
+*Usage :* 
+[source]
+----
+bl      (si28 | symbol)
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.4.4`* .
+=====
+
+====== *8.1.1.4.5 `JIRL`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="65,10,10,15"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2 
+
+^.^|*`jirl`*
+^.^|*`$rd`* 
+^.^|*`$rj`* 
+^.^|*`si28`* 
+|===========================
+
+*Description :*
+
+*`jirl`* : *`$rd`* = *`PC`* + 4, *jump `si28` + `$rj`*
+
+** *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
+
+*** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
+
+** *`symbol`* : Tags in assembly for jump.
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.4.5`* .
+=====

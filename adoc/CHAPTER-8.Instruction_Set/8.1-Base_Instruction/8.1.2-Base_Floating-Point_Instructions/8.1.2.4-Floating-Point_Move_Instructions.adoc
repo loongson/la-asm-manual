@@ -1,0 +1,284 @@
+===== *8.1.2.4 Floating-Point Move Instructions*
+
+====== *8.1.2.4.1 `FMOV.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`fmov.d`*, *`fmov.s`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+|===========================
+
+*Description :*
+
+*`fmov.s`* : *`$fd`*[31:0] = *`$fj`*[31:0]
+
+*`fmov.d`* : *`$fd`*[63:0] = *`$fj`*[63:0]
+
+* *`FMOV{S/D}`* Write the value of floating-point register *`$fj`* in single/double precision floating-point format to floating-point register *`$fd`*. If the value of *`$fj`* is not in *`single`*/*`double`* floating-point format, the result is uncertain.
+
+* The above instruction operations are non arithmetic and do not raise IEEE 754 exceptions, nor do they modify the Cause and Flags fields of the floating-point control status register.
+
+*Usage :* 
+[source]
+----
+fld.d	  $f26, $r12,  0    # $f26 = 4.5
+fmov.d    $f27, $f26        # $f27 = 4.5
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.4.1`* .
+=====
+
+====== *8.1.2.4.2 `FSEL`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2,  src3
+
+[options="header"]
+[cols="60,10,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2
+^.^|src3
+
+^.^|*`fsel`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+^.^|*`$fk`*
+^.^|*`$fcc`*[*`ca`*] 
+|===========================
+
+*Description :*
+
+*`fsel`* : *`$fd`* = *`$fcc`*[*`ca`*] ? *`$fk`* : *`$fj`*
+
+* The *`FSEL`* instruction performs conditional assignment operations. When *`FSEL`* is executed, if the value of the condition flag register *`ca`* is equal to 0, the value of floating-point register *`$fj`* is written to *`$fd`*; otherwise, the value of floating-point register *`$fk`* is written to *`$fd`*.
+
+*Usage :* 
+[source]
+----
+fld.d	     $f25,  $r12,  0                   # $f25  = 4.5
+fld.d	     $f26,  $r12,  -8                  # $f26  = -4.5
+fcmp.slt.s   $fcc0, $f25,  $f26                # $fcc0 = 0
+fsel         $f24,  $f25,  $f26,  $fcc0        # $f25  = 4.5
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.4.2`* .
+=====
+
+====== *8.1.2.4.3 `MOVGR2FR.{W/D}`, `MOVGR2FRH.W`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`movgr2fr.w`*, *`movgr2fr.d`*, *`movgr2frh.w`*
+^.^|*`$fd`*
+^.^|*`$rj`*  
+|===========================
+
+*Description :*
+
+*`movgr2fr.w`* : *`$fd`*[31:0] = *`$rj`*[31:0]
+
+*`movgr2fr.d`* : *`$fd`*[63:0] = *`$rj`*[63:0]
+
+*`movgr2frh.w`* : *`$fd`*[63:32] = *`$rj`*[31:0]
+
+*Usage :* 
+[source]
+----
+li.w        $r25, 0x76543210              # r25 = 0x76543210
+movgr2fr.w  $f24, $r25                    # f24 = 0x0000000076543210
+li.d        $r25, 0xfedcba9876543210      # r25 = 0xfedcba9876543210
+movgr2fr.d  $f24, $r25                    # f24 = 0xfedcba9876543210
+movgr2frh.2 $f24, $r25                    # f24 = 0x7654321076543210
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.4.3`* .
+=====
+
+====== *8.1.2.4.4  `MOVFR2GR.{S/D}`, `MOVFRH2GR.S`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`movfr2gr.s`*, *`movfr2gr.d`*, *`movfrh2gr.s`*
+^.^|*`$rd`*
+^.^|*`$fj`*  
+|===========================
+
+*Description :*
+
+*`movfr2gr.s`* : *`$rd`*[63:0] = *SignExtend*(*`$fj`*[31:0], GRLEN)
+
+*`movfr2gr.d`* : *`$rd`*[63:0] = *`$fj`*[63:0]
+
+*`movfrh2gr.s`* : *`$rd`*[63:0] = *SignExtend*(*`$fj`*[63:32], GRLEN)
+
+*Usage :* 
+[source]
+----
+fld.d	     $f24,  $r12,  0         # $f24 = 0x4028ad72ffd1dcd7
+movfr2gr.s   $r25,  $f24             # $f24 = 0xffffffffffd1dcd7
+movfr2gr.d   $r25,  $f24             # $f24 = 0x4028ad72ffd1dcd7
+movfrh2gr.s  $r25,  $f24             # $f24 = 0x000000004028ad72
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.4.4`* .
+=====
+
+====== *8.1.2.4.5 `MOVGR2FCSR`, `MOVFCSR2GR`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="70,15,15"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`movgr2fcsr`*
+^.^|*`$FSCR`*[*`fcsr`*]
+^.^|*`$rj`*  
+
+^.^|*`movfcsr2gr`*
+^.^|*`$rd`*
+^.^|*`$FSCR`*[*`fcsr`*]  
+|===========================
+
+*Description :*
+
+*`movgr2fcsr`* : *`$FCSR`*[*`fcsr`*] = *`$rd`*[31:0]
+
+*`movfcsr2gr`* : *`$rd`*[63:0] = *SignExtend*(*`$FCSR`*[*`fcsr`*], GRLEN) 
+
+*Usage :* 
+[source]
+----
+movgr2fcsr   $fcsr0, $r25
+movfcsr2gr   $r25, $fcsr0
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.4.5`* .
+=====
+
+====== *8.1.2.4.6 `MOVFR2CF`, `MOVCF2FR`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`movfr2cf`*
+^.^|*`$FCC`*[*`cd`*]
+^.^|*`$fj`*  
+
+^.^|*`movcf2fr`*
+^.^|*`$fd`*
+^.^|*`$FCC`*[*`cj`*]  
+|===========================
+
+*Description :*
+
+*`movfr2cf`* : *`$fcc`*[*`cd`*] = *`$fj`*[0]
+
+*`movcf2fr`* : *`$fd`*[0] = *`$fcc`*[*`cj`*]
+
+*Usage :* 
+[source]
+----
+movfr2cf   $fcc0, $f25
+movcf2fr   $f25, $fcc0
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.4.6`* .
+=====
+
+====== *8.1.2.4.7 `MOVGR2CF`, `MOVCF2GR`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`movgr2cf`*
+^.^|*`$FCC`*[*`cd`*]
+^.^|*`$rj`*  
+
+^.^|*`movcf2gr`*
+^.^|*`$rd`*
+^.^|*`$FCC`*[*`cj`*]
+|===========================
+
+*Description :*
+
+*`movgr2cf`* : *`$fcc`*[*`cd`*] = *`$rj`*[0]
+
+*`movcf2gr`* : *`$rd`*[0] = *`$fcc`*[*`cj`*]
+
+*Usage :* 
+[source]
+----
+movgr2cf   $fcc0, $r25
+movcf2gr   $r25, $fcc0
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.4.7`* .
+=====

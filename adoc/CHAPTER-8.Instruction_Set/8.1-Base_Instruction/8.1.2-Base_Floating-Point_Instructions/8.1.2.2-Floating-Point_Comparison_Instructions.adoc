@@ -1,0 +1,170 @@
+===== *8.1.2.2 Floating-Point Comparison Instructions*
+
+====== *8.1.2.2.1 `FCMP.cond.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2 
+
+^.^|*`fcmp.cond.s`*
+^.^|*`$fcc[ca]`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+
+^.^|*`fcmp.cond.d`*
+^.^|*`$fcc[ca]`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+|===========================
+
+This is a floating-point comparison instruction, which stores the result of the comparison into the specified status code (CC). There are 22 types of cond for this instruction. These comparison conditions and judgment standards are listed in the following table .
+
+[options="header"]
+[cols="20,40,20,20"]
+|===========================
+^.^|Mnemonic
+^.^|Meaning
+^.^|True Condition
+^.^|QNaN Exception
+
+^.^|*`CAF`*
+^.^|*`None`*
+^.^|*`None`* 
+^.^|*`No`* 
+
+^.^|*`CUN`*
+^.^|*`Incomparable`*
+^.^|*`UN`* 
+^.^|*`No`* 
+
+^.^|*`CEQ`*
+^.^|*`Equal`*
+^.^|*`EQ`* 
+^.^|*`No`* 
+
+^.^|*`CUEQ`*
+^.^|*`Equal`*, *`incomparable`*
+^.^|*`UN`*, *`EQ`* 
+^.^|*`No`* 
+
+^.^|*`CLT`*
+^.^|*`Less than`*
+^.^|*`LT`* 
+^.^|*`No`* 
+
+^.^|*`CULT`*
+^.^|*`Less than`*, *`incomparable`*
+^.^|*`UN`*,*`LT`* 
+^.^|*`No`* 
+
+^.^|*`CLE`*
+^.^|*`Less than`*, *`Equal`*
+^.^|*`LT`*, *`EQ`* 
+^.^|*`No`* 
+
+^.^|*`CULE`*
+^.^|*`Less than`*, *`Equal`*, *`incomparable`*
+^.^|*`UN`*, *`LT`*, *`EQ`* 
+^.^|*`No`* 
+
+^.^|*`CNE`*
+^.^|*`Vary`*
+^.^|*`GT`*, *`LT`*
+^.^|*`No`* 
+
+^.^|*`COR`*
+^.^|*`Orderly`*
+^.^|*`GT`*, *`LT`*, *`EQ`*
+^.^|*`No`* 
+
+^.^|*`CUNE`*
+^.^|*`Incomparable`*, *`unequal`*
+^.^|*`UN`*, *`GT`*, *`LT`*
+^.^|*`No`* 
+
+^.^|*`SAF`*
+^.^|*`None`*
+^.^|*`None`* 
+^.^|*`Yes`* 
+
+^.^|*`SUN`*
+^.^|Not *`greater than`*, Not *`equal`*
+^.^|*`UN`* 
+^.^|*`Yes`* 
+
+^.^|*`SEQ`*
+^.^|*`Equal`*
+^.^|*`EQ`* 
+^.^|*`Yes`* 
+
+^.^|*`SUEQ`*
+^.^|Not *`greater than`*, Not *`less than`*
+^.^|*`UN`*, *`EQ`* 
+^.^|*`Yes`* 
+
+^.^|*`SLT`*
+^.^|*`Less than`*
+^.^|*`LT`* 
+^.^|*`Yes`* 
+
+^.^|*`SULT`*
+^.^|Not *`greater than`*, Not *`equal`*
+^.^|*`UN`*,*`LT`* 
+^.^|*`Yes`* 
+
+^.^|*`SLE`*
+^.^|*`Less than`*, *`Equal`*
+^.^|*`LT`*, *`EQ`* 
+^.^|*`Yes`* 
+
+^.^|*`SULE`*
+^.^|Not *`greater than`*
+^.^|*`UN`*, *`LT`*, *`EQ`* 
+^.^|*`Yes`* 
+
+^.^|*`SNE`*
+^.^|*`Vary`*
+^.^|*`GT`*, *`LT`*
+^.^|*`Yes`* 
+
+^.^|*`SOR`*
+^.^|*`Orderly`*
+^.^|*`GT`*, *`LT`*, *`EQ`*
+^.^|*`Yes`* 
+
+^.^|*`SUNE`*
+^.^|*`Incomparable`*, *`unequal`*
+^.^|*`UN`*, *`GT`*, *`LT`*
+^.^|*`Yes`* 
+|===========================
+
+*Usage :* 
+[source]
+----
+fcmp.slt.s   $fcc0, $f23, $f24
+bceqz        $fcc0, .L128
+nop
+.L128:
+nop
+----
+
+* *Explanation :*
+
+** *`fcmp.slt.s`*
+*** *if* (*`$f23`* < *`$f24`*) *`$fcc0`* = *1*
+*** *else* *`$fcc0`* = *0*
+** *`bceqz`*
+*** *if* (*`$fcc0`* == *0*) *jump* *`.L128`*
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.2.1`* .
+=====

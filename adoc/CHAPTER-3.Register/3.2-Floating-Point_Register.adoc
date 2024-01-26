@@ -1,0 +1,14 @@
+=== *3.3 Floating-Point Register*
+
+[.text-justify]
+*`LoongArch`* has a total of 32 *`FRs`*, denoted as *`$f0`*-*`$f31`*, each of which can be read and written. The bit width of *`FR`* is 32 bits, which only implements floating-point instructions that operate on single precision floating-point numbers and word integers. Usually, the bit width of *`FR`* is 64 bits, regardless of whether it is an *`LA32`* or *`LA64`* architecture. The basic floating-point instruction has an orthogonal relationship with floating-point registers, meaning that from an architectural perspective, any floating-point register operand in these instructions can take any of the 32 *`FR`* s. When a single floating-point number or word integer is recorded in a floating-point register, the data always load in the [*`31`*: *`0`*] bit of the floating-point register, and the [*`63`*: *`32`*] bit of the floating-point register can be any value.
+
+=== *3.4 Condition Flag Register*
+
+[.text-justify]
+*`LoongArch`* has a total of 8 *`CFR`*, denoted as *`$fcc0`*-*`$fcc7`*, each of which can be read and written. The bit width of *`CFR`* is *1* bit. The result of the floating-point comparison will be written to the condition flag register, set to *1* when the comparison result is true, otherwise set to *0*. The judgment condition for floating-point branch instructions comes from the condition flag register.
+
+=== *3.5 Floating-Point Control Status Register*
+
+[.text-justify]
+*`LoongArch`* has a total of 4 *`FCSRs`*, denoted as *`$fcsr0`*-*`$fcsr3`*, with a bitwidth of 32 bits. Among them, *`$fcsr0`*-*`$fcsr3`* are aliases for the central domain of *`$fcsr0`*, that is, accessing *`$fcsr0`*-*`$fcsr3`* is actually accessing certain domains of *`$fcsr0`*. When the software writes *`$fcsr0`*-*`$fcsr3`*, the corresponding fields in *`$fcsr0`* are modified while the remaining bits remain unchanged.

@@ -1,0 +1,162 @@
+=== *3.6 Register Usage Convention*
+
+[.text-justify]
+*`LoongArch ABI`* has established usage conventions for the functions of registers. 
+
+==== *3.6.1 Generic Register Alias*
+
+[options="header"]
+[cols="12,12,48,28"]
+|===========================
+^.^|Name 
+^.^|Alias 
+^.^|Usage 
+^.^|Preserved across calls
+
+^.^|*`$r0`*	 
+^.^|*`$zero`*	
+^.^|Constant zero
+^.^|(Constant)
+
+^.^|*`$r1`* 
+^.^|*`$ra`*	
+^.^|Return Address
+^.^|NO
+
+^.^|*`$r2`* 
+^.^|*`$tp`* 
+^.^|Thread Pointer 
+^.^|(Non-allocatable)
+
+^.^|*`$r3`* 
+^.^|*`$sp`* 
+^.^|Stack Pointer 
+^.^|YES
+
+^.^|*`$r4`* - *`$r5`* 
+^.^|*`$a0`* - *`$a1`* 
+^.^|Argument registers / return value registers
+^.^|NO
+
+^.^|*`$r6`* - *`$r11`*
+^.^|*`$a2`* - *`$a7`* 
+^.^|Argument registers 
+^.^|NO
+
+^.^|*`$r12`* - *`$r20`* 
+^.^|*`$t0`* - *`$t8`* 
+^.^|Temporary registers  
+^.^|NO
+
+^.^|*`$r21`*
+^.^| 
+^.^|Reserved 	 
+^.^|(Non-allocatable)
+
+^.^|*`$r22`* 
+^.^|*`$fp`* / *`$s9`* 
+^.^|Frame pointer / Static register 
+^.^|YES
+
+^.^|*`$r22`* 
+^.^|*`$s0`* - *`$s8`* 
+^.^|Static registers 
+^.^|YES
+|===========================
+
+==== *3.6.2 Floating-Point Register Alias*
+
+[options="header"]
+[cols="12,14,47,27"]
+|===========================
+^.^|Name 
+^.^|Alias 
+^.^|Usage 
+^.^|Preserved across calls
+
+^.^|*`$f0`* - *`$f1`* 
+^.^|*`$fa0`* - *`$fa1`* 
+^.^|Argument registers / return value registers 
+^.^|NO
+
+^.^|*`$f2`* - *`$f7`* 
+^.^|*`$fa2`* - *`$fa7`* 
+^.^|Argument registers
+^.^|NO
+
+^.^|*`$f8`* - *`$f23`* 
+^.^|*`$ft0`* - *`$ft15`* 
+^.^|Temporary registers 
+^.^|NO
+
+^.^|*`$f23`* - *`$f31`* 
+^.^|*`$s0`* - *`$s8`* 
+^.^|Static registers
+^.^|YES
+|===========================
+
+==== *3.6.3 Register Function Introduction*
+
+===== *3.6.3.1 Zero Register*
+
+[.text-justify]
+The zero register, *`$r0`*, is a constant register that always returns *0* when read, regardless of what is written. To take the opposite number of a variable, you can use the zero register and the register where the variable is located to subtract, reducing the loading operation on the immediate *0*. *`$zero`* can complete some synthesis instructions, such as the macro instruction move in *`LoongArch`*.
+
+[source,asm]
+----
+# macro instruction                  # instruction
+move  $t0, $t1                       # or     $t0, $t1, $zero
+----
+
+===== *3.6.3.2 Function Call Register*
+
+[.text-justify]
+When *`LoongArch`*(*`LP64D ABI`*) makes a function call, registers *`$a0`* - *`$a7`* are used to pass 8 integer or pointer parameters. Registers *`$fa0`* - *`$fa7`* are used to pass 8 float-point parameters. Among them, *`$a0`* / *`$fa0`* and *`$a1`* / *`$fa1`* are also used to return values, and register *`$ra`* stores the return address.
+
+===== *3.6.3.3 Temporary Register & Save Register*
+
+[.text-justify]
+Temporary registers are mainly used as temporary variables. When using these temporary registers in a function, there is no need to consider saving old values.
+
+[.text-justify]
+To save registers, the current function needs to ensure that the values of these registers are consistent with the function entry when the function returns. If one or more registers from *`$s0`* to *`$s8`* are to be used within a function, their old values need to be stored on the stack. And load the old value in the save register before the function returns.
+
+[.text-justify]
+Regarding the physical mapping of registers *`$rd`*, *`$rj`*, *`$rk`* in the assembly instruction description, the physical registers that can be used when writing assembly are as follows:
+
+[options="header"]
+[cols="1,1,4"]
+|===========================
+^.^|Name
+^.^|Alias
+^.^|Note
+
+^.^|*`$r12`* - *`$r20`* 
+^.^|*`$t0`* - *`$t8`* 
+.^|The role of temporary variables in functions does not require consideration of the preservation of old values.
+
+^.^|*`$r23`* - *`$r31`* 
+^.^|*`$s0`* - *`$s8`* 
+.^|The function of a temporary variable requires storing its old value on the stack before use and restoring the old value before the function returns.
+
+^.^|*`$f8`* - *`$f23`* 
+^.^|*`$ft0`* - *`$ft15`* 
+.^|The role of temporary variables in functions does not require consideration of the preservation of old values.
+
+^.^|*`$f23`* - *`$f31`* 
+^.^|*`$s0`* - *`$s8`* 
+.^|The role of temporary variables in functions does not require consideration of the preservation of old values.
+|===========================
+
+===== *3.6.3.4 TP Register*
+
+[.text-justify]
+The *`$tp`* register is used to support thread local storage. *`TLS`* is a storage method for thread local variables, ensuring that variables are globally accessible within the thread, but cannot be accessed by other threads. *`LoongArch ABI`* specifically occupies a register to point to the *`TLS`* region of the current thread, with the aim of quickly locating and accessing variables within this region, and improving program execution efficiency. The user program is not recomened to modify this register.
+
+===== *3.6.3.5 Function Stack & SP FP Register*
+
+[.text-justify]
+In a data structure, a stack is a dynamic storage space that only allows insertion and deletion operations on the same end. According to the principle of first in, last out, data is stored, where the data that enters first is pressed at the bottom of the stack, and the data that enters last is at the top of the stack. The function stack is mainly used to store local variables and related registers within a function, but its usage is not as strict as the stack in the data structure. Each function has different stack space sizes depending on the number of parameters and local variables.
+
+[.text-justify]
+The frame pointer of a function with immutable stack frames is *`$sp`*; The frame pointer of the variable stack frame function is *`$fp`* . In the entire function, the determination of the frame pointer, the storage register, and the backup of *`$ra`* (for non leaf functions) are in a basic block called prologue. Once the frame pointer is determined, it will not change until the function returns.

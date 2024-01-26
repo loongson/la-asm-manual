@@ -1,0 +1,9 @@
+=== *3.1 General Purpose Register*
+
+[.text-justify]
+There are thirty-two General Registers (*`GR`*), denoted as *`$r0`*-*`$r31`*, where the value of register *`$r0`* is always *0*. The bit width of *`GR`* is denoted as *GRLEN*. The bit width of *`GR`* on the *`LA32`* architecture is 32 bits, while on the *`LA64`* architecture, the bit width of *`GR`* is 64 bits. The basic integer instruction has an orthogonal relationship with the *`GR`*. From the *`LoongArch`* architectural perspective, any register operand in these instructions can take any of the 32 *`GR`* s. The only exception is that the destination register implicit in the *`BL`* instruction must be the first register *`$r1`*(*`$ra`*).
+
+=== *3.2 PC Register*
+
+[.text-justify]
+There is only one *`PC`* that records the address of the current instruction. The *`PC`* register cannot be directly modified by instructions, it can only be indirectly modified by transfer instructions, exception trapping, and exception return instructions. *`PC`* registers can be directly read as source operands for some non transfer instructions. The width of *`PC`* always matches the width of *`GR`*.

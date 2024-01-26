@@ -1,0 +1,108 @@
+===== *8.1.2.7 Floating-Point Bound Check Memory Access Instructions*
+
+====== *8.1.2.7.1 `FLD{GT/LE}.{S/D}`, `FST{GT/LE}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2
+
+^.^|*`fldgt.s`*, *`fldgt.d`*
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`$rk`*  
+
+^.^|*`fldle.s`*, *`fldle.d`*
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`$rk`*  
+
+^.^|*`fstgt.s`*, *`fstgt.d`*
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`$rk`*  
+
+^.^|*`fstle.s`*, *`fstle.d`*
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`$rk`*  
+|===========================
+
+*Description :*
+
+*`fldgt.s`* :
+
+* *if* (*`$rj`* > *`$rk`*)
+** *`$fd`*[31:0] = *SignExtend*( *MemoryLoad*(*`$rj`*, [31:0]), GRLEN)
+* *else* :
+** *RaiseException*(BCE)
+
+*`fldgt.d`* :
+
+* *if* (*`$rj`* > *`$rk`*)
+** *`$fd`*[63:0] = *SignExtend*( *MemoryLoad*(*`$rj`*, [63:0]), GRLEN)
+* *else* :
+** *RaiseException*(BCE)
+
+*`fldle.s`* :
+
+* *if* (*`$rj`* < = *`$rk`*)
+** *`$fd`*[31:0] = *SignExtend*( *MemoryLoad*(*`$rj`*, [31:0]), GRLEN)
+* *else* :
+** *RaiseException*(BCE)
+
+*`fldle.d`* :
+
+* *if* (*`$rj`* < = *`$rk`*)
+** *`$fd`*[63:0] = *SignExtend*( *MemoryLoad*(*`$rj`*, [63:0]), GRLEN)
+* *else* :
+** *RaiseException*(BCE)
+
+*`fstgt.s`* :
+
+* *if* (*`$rj`*  > *`$rk`* )
+** *MemoryStore*(*`$fd`* [31:0], *`$rj`* , [31:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`fstgt.d`* :
+
+* *if* (*`$rj`*  > *`$rk`* )
+** *MemoryStore*(*`$fd`* [63:0], *`$rj`* , [63:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`fstle.s`* :
+
+* *if* (*`$rj`* < = *`$rk`*)
+** *MemoryStore*(*`$fd`*[31:0], *`$rj`*, [31:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`fstle.d`* :
+
+* *if* (*`$rj`* < = *`$rk`*)
+** *MemoryStore*(*`$fd`*[63:0], *`$rj`*, [63:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*Usage :* 
+[source]
+----
+fstle.s  $f24, $r25, $r24 
+fldle.s  $f25, $r25, $r24
+fstle.d  $f26, $r25, $r24
+fldle.d  $f27, $r25, $r24
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.1`* .
+=====

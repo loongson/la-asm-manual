@@ -1,0 +1,10 @@
+== *CHAPTER 8. Instruction Set*
+
+[.text-justify]
+The *`LoongArch`* architecture is divided into two versions: 32-bit and 64-bit, respectively referred to as *`LA32`* architecture and *`LA64`* architecture. The *`LA64`* architecture is application level down binary compatible with the *`LA32`* architecture. The so-called "application level down binary compatibility" refers to the fact that the binaries of application software using the *`LA32`* architecture can directly run on machines compatible with the *`LA64`* architecture and obtain the same running results. On the other hand, it refers to the fact that this down binary compatibility is limited to application software. The architecture specification does not guarantee that the binary of system software (such as the operating system kernel) running on machines compatible with *`LA32`* architecture always obtains the same running result when running directly on machines compatible with *`LA64`* architecture.
+
+The hexadecimal representation of the integer range involved in this book must contain signed, for example, [-*`0x800`*, *`0x7ff`*] indicates that the range is [-*`2048`*, *`2047`*], where the minus sign of -*`0x800`* must exist. Otherwise, the assembler overflow error will occur. If it is necessary to not write signed to represent this range, the *`0x800`* and *`0x7ff`* should be signed extended to *`GRLEN`*, corresponding to [*`0xfffffff800`*, *`0x0000007ff`*] of *`LA32`* and [*`0xfffffffffff800`*, *`0x00000000007ff`*] of *`LA64`*. 
+
+include::8.1-Base_Instruction_Introduction.adoc[]
+
+<<<

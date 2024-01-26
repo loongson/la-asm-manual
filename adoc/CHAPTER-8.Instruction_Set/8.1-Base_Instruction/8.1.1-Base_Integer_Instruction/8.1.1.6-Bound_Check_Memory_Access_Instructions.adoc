@@ -1,0 +1,213 @@
+===== *8.1.1.6 Bound Check Memory Access Instructions*
+
+====== *8.1.1.6.1 `LD{GT/LE}.{B/H/W/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`ldgt.b`*, *`ldgt.h`*, *`ldgt.w`*, *`ldgt.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+
+^.^|*`ldle.b`*, *`ldle.h`*, *`ldle.w`*, *`ldle.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+|===========================
+
+*Description :*
+
+*`ldgt.b`* :
+
+* *if* (*`$rj`* *>* *`$rk`*) 
+** *`$rd`*[63:0] = *SignExtend*( *MemoryLoad* (*`$rj`*, [ 8 :0]), GRLEN)
+* *else* : 
+** *RaiseException*(BCE)
+
+*`ldgt.h`* :
+
+* *if* (*`$rj`* *>* *`$rk`*) 
+** *`$rd`*[63:0] = *SignExtend*( *MemoryLoad* (*`$rj`*, [15:0]), GRLEN)
+* *else* : 
+** *RaiseException*(BCE)
+
+*`ldgt.w`* :
+
+* *if* (*`$rj`* *>* *`$rk`*) 
+** *`$rd`*[63:0] = *SignExtend*( *MemoryLoad* (*`$rj`*, [31:0]), GRLEN)
+* *else* : 
+** *RaiseException*(BCE)
+
+*`ldgt.d`* :
+
+* *if* (*`$rj`* *>* *`$rk`*) 
+** *`$rd`*[63:0] = *MemoryLoad* (*`$rj`*, [63:0])
+* *else* : 
+** *RaiseException*(BCE)
+
+*`ldle.b`* :
+
+* *if* (*`$rj`* *< =* *`$rk`*) 
+** *`$rd`*[63:0] = *SignExtend*( *MemoryLoad* (*`$rj`*, [ 8 :0]), GRLEN)
+* *else* : 
+** *RaiseException*(BCE)
+
+*`ldle.h`* :
+
+* *if* (*`$rj`* *< =* *`$rk`*) 
+** *`$rd`*[63:0] = *SignExtend*( *MemoryLoad* (*`$rj`*, [15:0]), GRLEN)
+* *else* : 
+** *RaiseException*(BCE)
+
+*`ldle.w`* :
+
+* *if* (*`$rj`* *< =* *`$rk`*) 
+** *`$rd`*[63:0] = *SignExtend*( *MemoryLoad* (*`$rj`*, [31:0]), GRLEN)
+* *else* : 
+** *RaiseException*(BCE)
+
+*`ldle.d`* :
+
+* *if* (*`$rj`* *< =* *`$rk`*) 
+** *`$rd`*[63:0] = *MemoryLoad* (*`$rj`*, [63:0])
+* *else* : 
+** *RaiseException*(BCE)
+
+*Usage :* 
+[source]
+----
+                                 # memory[$r24] = 0xfedcba9876543210
+addi.d     $r25,  $r24,  -8      # $r24 address > $r25 address
+ldgt.b     $r23,  $r24,  $r25    # $r23 = 0x0000000000000010
+ldgt.h     $r23,  $r24,  $r25    # $r23 = 0x0000000000003210
+ldgt.w     $r23,  $r24,  $r25    # $r23 = 0x0000000076543210
+ldgt.d     $r23,  $r24,  $r25    # $r23 = 0xfedcba9876543210
+
+                                 # memory[$r24] = 0xfedcba9876543210
+addi.d     $r25,  $r24,  8       # $r24 address <= $r25 address
+ldle.b     $r23,  $r24,  $r25    # $r23 = 0x0000000000000010
+ldle.h     $r23,  $r24,  $r25    # $r23 = 0x0000000000003210
+ldle.w     $r23,  $r24,  $r25    # $r23 = 0x0000000076543210
+ldle.d     $r23,  $r24,  $r25    # $r23 = 0xfedcba9876543210
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.6.1`* .
+=====
+
+====== *8.1.1.6.2 `ST{GT/LE}.{B/H/W/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2 
+^.^|src3
+
+^.^|*`stgt.b`*, *`stgt.h`*, *`stgt.w`*, *`stgt.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+
+^.^|*`stle.b`*, *`stle.h`*, *`stle.w`*, *`stle.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+|===========================
+
+*Description :*
+
+*`stgt.b`* :
+
+* *if*(*`$rj`* > *`$rk`*)
+** *MemoryStore* (*`$rd`*[ 7 :0], *`$rj`*, [ 7 :0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`stgt.h`* :
+
+* *if*(*`$rj`* > *`$rk`*)
+** *MemoryStore* (*`$rd`*[15:0], *`$rj`*, [15:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`stgt.w`* :
+
+* *if*(*`$rj`* > *`$rk`*)
+** *MemoryStore* (*`$rd`*[31:0], *`$rj`*, [31:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`stgt.d`* :
+
+* *if*(*`$rj`* > *`$rk`*)
+** *MemoryStore* (*`$rd`*[63:0], *`$rj`*, [63:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`stle.b`* :
+
+* *if*(*`$rj`* < = *`$rk`*)
+** *MemoryStore* (*`$rd`*[ 7 :0],*`$rj`*, [ 7 :0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`stle.h`* :
+
+* *if*(*`$rj`* < = *`$rk`*)
+** *MemoryStore* (*`$rd`*[15:0],*`$rj`*, [15:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`stle.w`* :
+
+* *if*(*`$rj`* < = *`$rk`*)
+** *MemoryStore* (*`$rd`*[31:0],*`$rj`*, [31:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*`stle.d`* :
+
+* *if*(*`$rj`* < = *`$rk`*)
+** *MemoryStore* (*`$rd`*[63:0],*`$rj`*, [63:0])
+* *else* :
+** *RaiseException*(BCE)
+
+*Usage :* 
+[source]
+----
+li.d       $r23,  0xfedcba9876543210
+addi.d     $r25,  $r24,  -8      # $r24 address > $r25 address
+stgt.b     $r23,  $r24,  $r25    # memory[$r24] = 0x0000000000000010
+stgt.h     $r23,  $r24,  $r25    # memory[$r24] = 0x0000000000003210
+stgt.w     $r23,  $r24,  $r25    # memory[$r24] = 0x0000000076543210
+stgt.d     $r23,  $r24,  $r25    # memory[$r24] = 0xfedcba9876543210
+
+li.d       $r23,  0xfedcba9876543210
+addi.d     $r25,  $r24,  8       # $r24 address <= $r25 address
+stle.b     $r23,  $r24,  $r25    # memory[$r24] = 0x0000000000000010
+stle.h     $r23,  $r24,  $r25    # memory[$r24] = 0x0000000000003210
+stle.w     $r23,  $r24,  $r25    # memory[$r24] = 0x0000000076543210
+stle.d     $r23,  $r24,  $r25    # memory[$r24] = 0xfedcba9876543210
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.6.1`* .
+=====

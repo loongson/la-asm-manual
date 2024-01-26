@@ -1,0 +1,357 @@
+===== *8.1.2.3 Floating-Point Conversion Instructions*
+
+====== *8.1.2.3.1 `FCVT.S.D`, `FCVT.D.S`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`fcvt.s.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+
+^.^|*`fcvt.d.s`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+|===========================
+
+*Description :*
+
+*`fcvt.s.d`* : *`$fd`*[31:0] = *FP32_convertFormat*(*`$fj`*[63:0], FP64)
+
+*`fcvt.d.s`* : *`$fd`*[63:0] = *FP64_convertFormat*(*`$fj`*[31:0], FP32)
+
+* The floating-point *`format conversion`* operation follows the specification of the *`convertFormat`*(x) operation in the *`IEEE 754-2008 standard`* .
+
+*Usage :* 
+[source]
+----
+fcvt.s.d   $f23, $f27
+fcvt.d.s   $f26, $f24
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.3.1`* .
+=====
+
+====== *8.1.2.3.2 `FFINT.{S/D}.{W/L}`, `FTINT.{W/L}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`ffint.s.w`*, *`ffint.s.l`*, *`ffint.d.w`*, *`ffint.d.l`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+
+^.^|*`ftint.w.s`*, *`ftint.w.d`*, *`ftint.l.s`*, *`ftint.l.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+|===========================
+
+*Description :*
+
+*`ffint.s.w`* : *`$fd`*[31:0] = *FP32_convertFromInt*(*`$fj`*[31:0], SINT32)
+
+*`ffint.s.l`* : *`$fd`*[31:0] = *FP32_convertFromInt*(*`$fj`*[63:0], SINT64)
+
+*`ffint.d.w`* : *`$fd`*[63:0] = *FP64_convertFromInt*(*`$fj`*[31:0], SINT32)
+
+*`ffint.d.l`* : *`$fd`*[63:0] = *FP64_convertFromInt*(*`$fj`*[63:0], SINT64)
+
+* The *`FFINT{S/D}.{W/L}`* instruction selects the *`integer`*/*`long-integer`* fixed-point number in the floating-point register *`$fj`* and converts it into a *`single`*/*`double`* floating-point number, and the obtained *`single`*/*`double`* floating-point number is written to Floating-point register *`$fd`*. The floating-point *`format conversion`* operation follows the specifications of the *`convertFromInt`*(x) operation in the *`IEEE 754-2008 standard`* .
+
+*`ftint.w.s`* : *`$fd`*[31:0] = *FP32convertToSint32*(*`$fj`*[31:0], FCSR.Enables.I, FCSR.RM)
+
+*`ftint.w.d`* : *`$fd`*[63:0] = *FP64convertToSint32*(*`$fj`*[63:0], FCSR.Enables.I, FCSR.RM)
+
+*`ftint.l.s`* : *`$fd`*[31:0] = *FP32convertToSint64*(*`$fj`*[31:0], FCSR.Enables.I, FCSR.RM)
+
+*`ftint.l.d`* : *`$fd`*[63:0] = *FP64convertToSint64*(*`$fj`*[63:0], FCSR.Enables.I, FCSR.RM)
+
+* *`FTINT{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in the floating-point register *`$fj`* to be converted into an *`integer`*/*`long-integer`* fixed-point number, and the obtained *`integer`*/*`long-integer`* fixed-point number is written To the floating-point memory *`$fd`*. According to the different states in *`FCSR`*, the operations in the *`IEEE 754-2008 standard`* followed by this floating-point *`format conversion`* operation are shown in the following table.
+
+* *IEEE 754-2008 Standard* :
+
+[options="header"]
+[cols="5,6"]
+|===========================
+^.^|rounding mode
+^.^|Operations in IEEE 754-2008 Standard
+
+^.^|Round to the nearest even number
+^.^|*`convertToIntegerExactTiesToEven`*(x)
+
+^.^|Round to zero
+^.^|*`convertToIntegerExactTowardZero`*(x)
+
+^.^|Round towards positive infinity
+^.^|*`convertToIntegerExactTowardPositive`*(x)
+
+^.^|Round towards negative infinity
+^.^|*`convertToIntegerExactTowardNegative`*(x)
+|===========================
+
+* *FP32convertToSint32* : 
+
+ {bits(32) } FP32convertToSint32(bits(32) x, bits(2) rm):
+  case {rm} of:
+   {2'd0}: return Sint32_convertToIntegerExactTiesToEven(x)
+   {2'd1}: return Sint32_convertToIntegerExactTowardZero(x)
+   {2'd2}: return Sint32_convertToIntegerExactTowardPositive(x)
+   {2'd3}: return Sint32_convertToIntegerExactTowardNegative(x)
+
+* *FP64convertToSint32* : 
+
+ {bits(64) } FP32convertToSint64(bits(32) x, bits(2) rm):
+  case {rm} of:
+   {2'd0}: return Sint32_convertToIntegerExactTiesToEven(x)
+   {2'd1}: return Sint32_convertToIntegerExactTowardZero(x)
+   {2'd2}: return Sint32_convertToIntegerExactTowardPositive(x)
+   {2'd3}: return Sint32_convertToIntegerExactTowardNegative(x)
+
+* *FP32convertToSint64* : 
+
+ {bits(64) } FP64convertToSint32(bits(64) x, bits(2) rm):
+  case {rm} of:
+   {2'd0}: return Sint64_convertToIntegerExactTiesToEven(x)
+   {2'd1}: return Sint64_convertToIntegerExactTowardZero(x)
+   {2'd2}: return Sint64_convertToIntegerExactTowardPositive(x)
+   {2'd3}: return Sint64_convertToIntegerExactTowardNegative(x)
+
+* *FP64convertToSint64* : 
+
+ {bits(64) } FP64convertToSint64(bits(64) x, bits(2) rm):
+  case {rm} of:
+   {2'd0}: return Sint64_convertToIntegerExactTiesToEven(x)
+   {2'd1}: return Sint64_convertToIntegerExactTowardZero(x)
+   {2'd2}: return Sint64_convertToIntegerExactTowardPositive(x)
+   {2'd3}: return Sint64_convertToIntegerExactTowardNegative(x)
+
+*Usage :* 
+[source]
+----
+.LC282:
+	.word	 1083179008        # 4.5
+	.align	 3
+
+la.local	 $r12, .LC282      # $r12 = &(.LC282)
+
+fld.s	     $f24, $r12,  0    # $f24 = 4.5
+ftint.w.s    $f25, $f24        # $f25 = 4 (0x4)
+ffint.s.w    $f26, $f25        # $f26 = 4.0 
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.3.2`* .
+=====
+
+====== *8.1.2.3.3 `FTINT{RM/RP/RZ/RNE}.{W/L}.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`ftintrm.w.s`*, *`ftintrm.w.d`*, *`ftintrm.l.s`*, *`ftintrm.l.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+
+^.^|*`ftintrp.w.s`*, *`ftintrp.w.d`*, *`ftintrp.l.s`*, *`ftintrp.l.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+
+^.^|*`ftintrz.w.s`*, *`ftintrz.w.d`*, *`ftintrz.l.s`*, *`ftintrz.l.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+
+^.^|*`ftintrne.w.s`*, *`ftintrne.w.d`*, *`ftintrne.l.s`*, *`ftintrne.l.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+|===========================
+
+*Description :*
+
+*`ftintrm.w.s`* : *`$fd`*[31:0] = *FP32convertToSint32*(*`$fj`*[31:0], FCSR.Enables.I, 3)
+
+*`ftintrm.w.d`* : *`$fd`*[63:0] = *FP64convertToSint32*(*`$fj`*[63:0], FCSR.Enables.I, 3)
+
+*`ftintrm.l.s`* : *`$fd`*[31:0] = *FP32convertToSint64*(*`$fj`*[31:0], FCSR.Enables.I, 3)
+
+*`ftintrm.l.d`* : *`$fd`*[63:0] = *FP64convertToSint64*(*`$fj`*[63:0], FCSR.Enables.I, 3)
+
+* *`FTINTRM.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in the floating-point register *`$fj`* and converts it to *`integer`*/*`long-integer`* fixed point number, and the resulting *`integer`*/*`long-integer`* fixed point number is written to the floating-point register *`$fd`*, using the "*`round to negative infinity`*" mode.
+
+*Usage :* 
+[source]
+----
+fld.s	     $f24, $r12,  0    # $f24 = 4.6
+ftintrm.w.s  $f26, $f24        # $f26 = 4 (0x4)
+fld.s	     $f24, $r12,  0    # $f24 = -4.6
+ftintrm.w.s  $f26, $f24        # $f26 = -5 
+fld.d	     $f24, $r12,  0    # $f24 = 4.6
+ftintrm.l.d  $f26, $f24        # $f26 = 4 
+fld.d	     $f25, $r12,  0    # $f25 = -4.6
+ftintrm.l.d  $f26, $f25        # $f26 = -5 
+----
+
+*Description :*
+
+*`ftintrp.w.s`* : *`$fd`*[31:0] = *FP32convertToSint32*(*`$fj`*[31:0], FCSR.Enables.I, 2)
+
+*`ftintrp.w.d`* : *`$fd`*[63:0] = *FP64convertToSint32*(*`$fj`*[63:0], FCSR.Enables.I, 2)
+
+*`ftintrp.l.s`* : *`$fd`*[31:0] = *FP32convertToSint64*(*`$fj`*[31:0], FCSR.Enables.I, 2)
+
+*`ftintrp.l.d`* : *`$fd`*[63:0] = *FP64convertToSint64*(*`$fj`*[63:0], FCSR.Enables.I, 2)
+
+* *`FTINTRP.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in the floating-point register *`$fj`*, converts it to *`integer`*/*`long-integer`* fixed point number, and writes the *`integer`*/*`long-integer`* fixed point number into the floating-point register *`$fd`*, using the "*`rounding to positive infinity`*" method.
+
+*Usage :* 
+[source]
+----
+fld.s	     $f24, $r12,  0    # $f24 = 4.6
+ftintrp.w.s  $f26, $f24        # $f26 = 5 
+fld.s	     $f25, $r12,  0    # $f25 = -4.6
+ftintrp.w.s  $f26, $f25        # $f26 = -4 
+fld.d	     $f25, $r12,  0    # $f25 = -4.6
+ftintrp.l.d  $f26, $f25        # $f26 = -4 
+----
+
+*Description :*
+
+*`ftintrz.w.s`* : *`$fd`*[31:0] = *FP32convertToSint32*(*`$fj`*[31:0], FCSR.Enables.I, 1)
+
+*`ftintrz.w.d`* : *`$fd`*[63:0] = *FP64convertToSint32*(*`$fj`*[63:0], FCSR.Enables.I, 1)
+
+*`ftintrz.l.s`* : *`$fd`*[31:0] = *FP32convertToSint64*(*`$fj`*[31:0], FCSR.Enables.I, 1)
+
+*`ftintrz.l.d`* : *`$fd`*[63:0] = *FP64convertToSint64*(*`$fj`*[63:0], FCSR.Enables.I, 1)
+
+* *`FTINTRZ.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in floating-point register *`$fj`*, converts it to *`integer`*/*`long-integer`* fixed-point number, and writes the obtained *`integer`*/*`long-integer`* fixed-point number to floating-point register *`$fd`*, using the "*`rounding to zero`*" method.
+
+*Usage :* 
+[source]
+----
+fld.s	     $f24, $r12,  0    # $f24 = 4.6
+ftintrz.w.s  $f26, $f24        # $f26 = 4 
+fld.s	     $f24, $r12,  0    # $f24 = -4.6
+ftintrz.w.s  $f26, $f24        # $f26 = -4 
+----
+
+*Description :*
+
+*`ftintrne.w.s`* : *`$fd`*[31:0] = *FP32convertToSint32*(*`$fj`*[31:0], FCSR.Enables.I, 0)
+
+*`ftintrne.w.d`* : *`$fd`*[63:0] = *FP64convertToSint32*(*`$fj`*[63:0], FCSR.Enables.I, 0)
+
+*`ftintrne.l.s`* : *`$fd`*[31:0] = *FP32convertToSint64*(*`$fj`*[31:0], FCSR.Enables.I, 0)
+
+*`ftintrne.l.d`* : *`$fd`*[63:0] = *FP64convertToSint64*(*`$fj`*[63:0], FCSR.Enables.I, 0)
+
+* *`FTINTRNE.{W/L}{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in floating-point register *`$fj`*, converts it to *`integer`*/*`long-integer`* fixed point number, and writes the obtained *`integer`*/*`long-integer`* fixed point number to floating-point register *`$fd`*, using the "*`rounding to the nearest even number`*" method.
+
+*Usage :* 
+[source]
+----
+fld.s	      $f24, $r12,  0    # $f24 = 4.6
+ftintrne.w.s  $f26, $f24        # $f26 = 5 
+fld.s	      $f24, $r12,  0    # $f24 = -4.6
+ftintrne.w.s  $f26, $f24        # $f26 = -5 
+fld.d	      $f25, $r12,  0    # $f25 = -4.6
+ftintrne.l.d  $f26, $f25        # $f26 = -5 
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.3.3`* .
+=====
+
+====== *8.1.2.3.4 `FRINT.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+
+^.^|*`frint.s`*, *`frint.d`*
+^.^|*`$fd`*
+^.^|*`$fj`* 
+|===========================
+
+*Description :*
+
+*`frint.s`* : *`$fd`*[31:0] = *FP32_roundToInteger*(*`$fj`*[31:0], FCSR.Enables.I, FCSR.RM)
+
+*`frint.d`* : *`$fd`*[63:0] = *FP64_roundToInteger*(*`$fj`*[63:0], FCSR.Enables.I, FCSR.RM)
+
+* The operations in *`IEEE 754-2008 standard`* for floating-point format
+conversion operations are shown in the table below..
+
+[options="header"]
+[cols="5,6"]
+|===========================
+^.^|rounding mode
+^.^|Operations in IEEE 754-2008 Standard
+
+^.^|Round to the nearest even number
+.4+^.^|*`roundToIntegralExact`*(x)
+
+^.^|Round to zero
+
+^.^|Round towards positive infinity
+
+^.^|Round towards negative infinity
+|===========================
+
+* *FP32_roundToInteger* : 
+
+ {bits(32) } FP32_roundToInteger(bits(N) x):
+   return FP32_roundToIntegralExact(x)
+
+* *FP64_roundToInteger* : 
+
+ {bits(64) } FP64_roundToInteger(bits(N) x):
+   return FP64_roundToIntegralExact(x)
+
+*Usage :* 
+[source]
+----
+fld.s	      $f24, $r12,  0    # $f24 = 4.5
+frint.s       $f26, $f24        # $f26 = 4.0
+fld.d	      $f24, $r12,  0    # $f24 = 4.6
+frint.d       $f26, $f24        # $f26 = 5.0 
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.3.4`* .
+=====

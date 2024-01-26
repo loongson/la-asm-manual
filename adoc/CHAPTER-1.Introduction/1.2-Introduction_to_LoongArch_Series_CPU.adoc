@@ -1,0 +1,17 @@
+=== *1.2 Introduction to `LoongArch` Series CPU*
+
+[.text-justify]
+This section mainly introduces the CPU models that are compatible with the *`LoongArch`* assembly program design guide manual.
+
+[options="header"]
+[cols="25,75"]
+|===========================
+^.^|Instruction Version
+^.^|CPU
+
+^.^|V1.0x
+<.^|*`3A5000`*, *`3C5000`*
+
+^.^|V1.1x
+<.^|*`3A5000`*, *`3C5000`*, *`3A6000`*
+|===========================

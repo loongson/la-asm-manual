@@ -1,0 +1,112 @@
+=== *5.1 Symbol Definition Directives*
+
+[.text-justify]
+If an identifier is not defined to the assembler (only referenced), the assembler assumes that the identifier is an external symbol. The assembler treats the identifier like a *`.globl`* pseudo-operation. If the identifier is defined to the assembler and the identifier has not been specified as global, the assembler assumes that the identifier is a local symbol.
+
+==== *5.1.1 Set Symbol Type*
+
+[.text-justify]
+The assembler directive that defines a symbol type is *`.type`*, which is often followed by types *`@function`* and *`@object`*, respectively, indicating that the current symbol is a function and a variable.
+
+[source,asm]
+----
+.type   test, 		@function
+.type   var,  	    @object
+----
+
+==== *5.1.2 Set Symbol Size*
+
+[.text-justify]
+The assembler directive *`.size`* name, expression is used to set the size of symbols, where name is the symbol name. When setting the variable size, expression is a positive integer. When setting the function size, expression is usually a "*`.-name`*" expression.
+
+[source,asm]
+----
+.size  short, 		2           
+.size  main,  	    .-main   
+----
+
+==== *5.1.3 Set Symbol Align*
+
+[.text-justify]
+The assembler directive *`.align`* expr is used to specify the alignment of symbols, where expr is a positive integer used to indicate the alignment of subsequent data storage addresses in the target file.
+
+[source,asm]
+----
+.align expr  
+----
+
+[.text-justify]
+Pad the location counter (in the current subsection) to a particular storage boundary. Expr is a positive integer indicating the alignment of the data storage address in the target file. In *`LoongArch`*:
+
+[source,asm]
+----
+.align 4                     # Align to the 16 bytes 
+----
+
+[.text-justify]
+In order to simplify the hardware design between processors and memory systems, many computer systems impose restrictions on the address of memory access operations, requiring that the address of the accessed memory must be a multiple of the data type, i.e. naturally aligned.
+
+[.text-justify]
+* To read or write a *`halfword`* (*`2 bytes`*) of data from memory, the access address must be a multiple of *2*.
+
+[.text-justify]
+* To read or write a *`word`* (*`4 bytes`*) of data from memory, the access address must be a multiple of *4*.
+
+[.text-justify]
+* To read or write a *`doubleword`* (*`8 bytes`*) of data from memory, the access address must be a multiple of *8*.
+
+[.text-justify]
+*`$r5`* = *`0x120000000`*, *`ld.w`* *`$r4`*, *`$r5`*, *`0x3`* Address *`0x120000003`* Not divisible by *4*, therefore non aligned access. *`ld.w`* *`$r4`*, *`$r5`*, *`0x8`* Address *`0x120000008`* It can be divided by *4*, so it is an aligned access. *`ld.d`* *`$r4`*, *`$r5`*, *`0x5`* Address *`0x120000005`* Not divisible by *4*, therefore non aligned access.
+
+[.text-justify]
+*`LoongArch`* supports hardware processing of non aligned memory data access. Although there is non aligned access in the above example, the processor can still function properly and obtain correct results without throwing non aligned exceptions. However, for better performance, it is recommended to align the data as much as possible. Generally, the compiler will automatically align the data.
+
+[.text-justify]
+The assembler directive *`.align`* expr is used to specify the alignment of symbols, where expr is a positive integer used to indicate the alignment of subsequent data storage addresses in the target file.
+
+[source,asm]
+----
+.align expr
+----
+
+[.text-justify]
+Expr is a positive integer indicating the alignment of the data storage address in the target file. In *`LoongArch`* :
+
+[source,asm]
+----
+.align 4          # Align to the 16byte
+----
+
+[.text-justify]
+In the above command, different architectures of .align have different definitions of expr, and two other variants, *`.balgin`* and *`.p2align`*, can be used. The instruction *`.balgin`* 4 represents 4-byte alignment in any architecture.
+
+* .align  https://sourceware.org/binutils/docs/as/Align.html
+
+[.text-justify]
+Two other variants, *`.balign`* and *`.p2align`*, can be used. Regarding *`.balgin`* and *`.p2align`* :
+
+* .balign  https://sourceware.org/binutils/docs/as/Balign.html
+
+* .p2align  https://sourceware.org/binutils/docs/as/p2align.html
+
+==== *5.1.4 Set Symbol Location*
+
+[.text-justify]
+When defining a variable or function symbol in the assembly source file, its scope should also be declared to identify the scope of the current symbol. By default, the current symbol scope is not specified, and the symbol scope is visible within the current assembly source file. Other compiler instructions that need to be used in other situations include:
+
+[source,asm]
+----
+.globl symbol     # Global visibility
+.global symbol    # Global visibility
+.common symbol    # Universal symbol, similar to uninitialized global variables
+.local symbol     # Similar to uninitialized local static variables
+----
+
+[.text-justify]
+*`.globl`* / *`.global`* specifies the symbol symbol symbol as a global variable or non-static member function, which is globally visible and visible to other source files in the linker.
+
+[.text-justify]
+The *`.common`* declaration is a universal symbol, similar to an uninitialized global variable in C language. A universal symbol with the same name that appears in multiple assembly source files may be merged during the compiler's compilation phase, resulting in the preservation of the one with the largest footprint.
+
+[.text-justify]
+*`.local`* is used to declare an uninitialized local static variable definition similar to that in a language.

@@ -1,0 +1,213 @@
+===== *8.1.1.2 Bit-shift Instructions*
+
+* *SLL* : Shift data logic left. 
+
+* *SRL* : Shift data logic right.
+
+* *SRA* : Arithmetic shift of data to the right.
+
+* *ROTR* : Rotate data to the right.
+
+====== *8.1.1.2.1 `SLL.W`, `SRL.W`, `SRA.W`, `ROTR.W`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest 
+^.^|src1
+^.^|src2
+
+^.^|*`sll.w`*, *`srl.w`*, *`sra.w`*, *`rotr.w`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`*
+|===========================
+
+*Description :*
+
+*`sll.w`* : *`$rd`*[63:0] = *SignExtend*(*`SLL`*(*`$rj`*[31:0], *`$rk`*[4:0]), GRLEN)
+
+*`srl.w`* : *`$rd`*[63:0] = *SignExtend*(*`SRL`*(*`$rj`*[31:0], *`$rk`*[4:0]), GRLEN)
+
+*`sra.w`* : *`$rd`*[63:0] = *SignExtend*(*`SRA`*(*`$rj`*[31:0], *`$rk`*[4:0]), GRLEN)
+
+*`rotr.w`* : *`$rd`*[63:0] = *SignExtend*(*`ROTR`*(*`$rj`*[31:0], *`$rk`*[4:0]), GRLEN)
+
+* The shift amount of the above-mentioned shift instruction is all [4:0] (Unsigned value range(*`integer`*) : [*`0`, `31`*]) bit data in the general register *`$rk`*, and is regarded as an unsigned number.
+
+*Usage :* 
+[source]
+----
+li.d     $r23, 0x00000000f000000e    # $r23 = 0x00000000f000000e
+li.d     $r24, 0x0000000000000002    # $r24 = 0x0000000000000002
+sll.w    $r25, $r23, $r24            # $r25 = 0xffffffffc0000038
+srl.w    $r25, $r23, $r24            # $r25 = 0x000000003c000003
+sra.w    $r25, $r23, $r24            # $r25 = 0xfffffffffc000003
+rotr.w   $r25, $r23, $r24            # $r25 = 0xffffffffbc000003
+----
+
+* *Explanation :*
+
+** Please note that the above instructions first perform Bit-shift operations and then perform signed extend.
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.2.1`* .
+=====
+
+====== *8.1.1.2.2 `SLLI.W`, `SRLI.W`, `SRAI.W`, `ROTRI.W`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest 
+^.^|src1
+^.^|src2
+
+^.^|*`slli.w`*, *`srli.w`*, *`srai.w`*, *`rotri.w`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`ui5`*
+|===========================
+
+*Description :*
+
+*`slli.w`* : *`$rd`*[63:0] = *SignExtend*(*`SLL`*(*`$rj`*[31:0], *`ui5`*), GRLEN)
+
+*`srli.w`* : *`$rd`*[63:0] = *SignExtend*(*`SRL`*(*`$rj`*[31:0], *`ui5`*), GRLEN)
+
+*`srai.w`* : *`$rd`*[63:0] = *SignExtend*(*`SRA`*(*`$rj`*[31:0], *`ui5`*), GRLEN)
+
+*`rotri.w`* : *`$rd`*[63:0] = *SignExtend*(*`ROTR`*(*`$rj`*[31:0], *`ui5`*), GRLEN)
+
+* *`ui5`* : 5 bit immediate, Unsigned value range(*`integer`*) : [*`0`, `31`*] or [*`0x0`, `0x1f`*]
+
+** The shift amounts of the above shift instructions are all 5-bit unsigned immediate *`ui5`* in the instruction code.
+
+*Usage :* 
+[source]
+----
+li.d      $r23, 0x00000000f000000e    # $r23 = 0x00000000f000000e
+slli.w    $r25, $r23, 2               # $r25 = 0xffffffffc0000038
+srli.w    $r25, $r23, 2               # $r25 = 0x000000003c000003
+srai.w    $r25, $r23, 2               # $r25 = 0xfffffffffc000003
+rotri.w   $r25, $r23, 2               # $r25 = 0xffffffffbc000003
+----
+
+* *Explanation :*
+
+** Please note that the above instructions first perform Bit-shift operations and then perform signed extend.
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.2.2`* .
+=====
+
+====== *8.1.1.2.3 `SLL.D`, `SRL.D`, `SRA.D`, `ROTR.D`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest 
+^.^|src1
+^.^|src2
+
+^.^|*`sll.d`*, *`srl.d`*, *`sra.d`*, *`rotr.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`*
+|===========================
+
+*Description :*
+
+*`sll.d`* : *`$rd`*[63:0] = *`SLL`*(*`$rj`*[63:0], *`$rk`*[5:0])
+
+*`srl.d`* : *`$rd`*[63:0] = *`SRL`*(*`$rj`*[63:0], *`$rk`*[5:0])
+
+*`sra.d`* : *`$rd`*[63:0] = *`SRA`*(*`$rj`*[63:0], *`$rk`*[5:0])
+
+*`rotr.d`* : *`$rd`*[63:0] = *`ROTR`*(*`$rj`*[63:0], *`$rk`*[5:0])
+
+* The shift amount of the above-mentioned shift instruction is all [5:0] (Unsigned value range(*`integer`*) : [*`0`, `63`*]) bit data in the general register *`$rk`*, and is regarded as an unsigned number.
+
+*Usage :* 
+
+[source]
+----
+li.d     $r23, 0xf00000000000000e    # $r23 = 0xf00000000000000e
+li.d     $r24, 0x0000000000000002    # $r24 = 0x0000000000000002
+sll.d    $r25, $r23, $r24            # $r25 = 0xc000000000000038
+srl.d    $r25, $r23, $r24            # $r25 = 0x3c00000000000003
+sra.d    $r25, $r23, $r24            # $r25 = 0xfc00000000000003
+rotr.d   $r25, $r23, $r24            # $r25 = 0xbc00000000000003
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.2.3`* .
+=====
+
+====== *8.1.1.2.4 `SLLI.D`, `SRLI.D`, `SRAI.D`, `ROTRI.D`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest 
+^.^|src1
+^.^|src2
+
+^.^|*`slli.d`*, *`srli.d`*, *`srai.d`*, *`rotri.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`ui6`*
+|===========================
+
+*Description :*
+
+*`slli.d`* : *`$rd`*[63:0] = *`SLL`*(*`$rj`*[63:0], *`ui6`*)
+
+*`srli.d`* : *`$rd`*[63:0] = *`SRL`*(*`$rj`*[63:0], *`ui6`*)
+
+*`srai.d`* : *`$rd`*[63:0] = *`SRA`*(*`$rj`*[63:0], *`ui6`*)
+
+*`rotri.d`* : *`$rd`*[63:0] = *`ROTR`*(*`$rj`*[63:0], *`ui6`*)
+
+* *`ui6`* : 6 bit immediate, Unsigned value range(*`integer`*) : [*`0`, `63`*] or [*`0x0`, `0x3f`*]
+
+** The shift amount of the above-mentioned shift instruction is the 6-bit unsigned immediate *`ui6`* in the instruction code.
+
+*Usage :* 
+
+[source]
+----
+li.d      $r23, 0xf00000000000000e    # $r23 = 0xf00000000000000e
+slli.d    $r25, $r23, 2               # $r25 = 0xc000000000000038
+srli.d    $r25, $r23, 2               # $r25 = 0x3c00000000000003
+srai.d    $r25, $r23, 2               # $r25 = 0xfc00000000000003
+rotri.d   $r25, $r23, 2               # $r25 = 0xbc00000000000003
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.2.4`* .
+=====

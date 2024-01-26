@@ -1,0 +1,91 @@
+===== *8.1.2.6 Floating-Point Common Memory Access Instructions*
+
+====== *8.1.2.6.1 `FLD.{S/D}`, `FST.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2
+
+^.^|*`fld.s`*, *`fld.d`*, *`fst.d`*, *`fst.d`*
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`si12`*  
+|===========================
+
+*Description :*
+
+*`fld.s`* : *`$fd`*[31:0] = *MemoryLoad*((*`$rj`* + *SignExtend*(*`si12`*, GRLEN) ), [31:0])
+
+*`fld.d`* : *`$fd`*[63:0] = *MemoryLoad*((*`$rj`* + *SignExtend*(*`si12`*, GRLEN) ), [63:0])
+
+*`fst.s`* : *MemoryStore*(*`$fd`*[31:0], (*`$rj`* + *SignExtend*(*`si12`*, GRLEN) ), [31:0])
+
+*`fst.d`* : *MemoryStore*(*`$fd`*[63:0], (*`$rj`* + *SignExtend*(*`si12`*, GRLEN) ), [63:0])
+
+* *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
+
+*Usage :* 
+[source]
+----
+fst.s $f24, $r22, -24
+fld.s $f26, $r22, -24 	        
+fst.d $f25, $r22, -24	
+fld.d $f27, $r22, -24
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.6.1`* .
+=====
+
+====== *8.1.2.6.2 `FLDX.{S/D}`, `FSTX.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2
+
+^.^|*`fldx.s`*, *`fldx.d`*, *`fstx.d`*, *`fstx.d`*
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`$rk`*  
+|===========================
+
+*Description :*
+
+*`fldx.s`* : *`$fd`*[31:0] = *MemoryLoad*((*`$rj`* + *`$rk`*), [31:0])
+
+*`fldx.d`* : *`$fd`*[63:0] = *MemoryLoad*((*`$rj`* + *`$rk`*), [63:0])
+
+*`fstx.s`* : *MemoryStore*(*`$fd`*[31:0], (*`$rj`* + *`$rk`*), [31:0])
+
+*`fstx.d`* : *MemoryStore*(*`$fd`*[63:0], (*`$rj`* + *`$rk`*), [63:0])
+
+*Usage :* 
+[source]
+----
+fstx.s $f24, $r22, $r23
+fldx.s $f26, $r22, $r23	        
+fstx.d $f25, $r22, $r23
+fldx.d $f27, $r22, $r23
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:3.2.6.2`* .
+=====

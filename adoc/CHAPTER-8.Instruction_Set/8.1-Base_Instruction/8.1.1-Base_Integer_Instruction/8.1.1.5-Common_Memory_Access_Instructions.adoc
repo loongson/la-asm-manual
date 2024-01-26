@@ -1,0 +1,364 @@
+===== *8.1.1.5 Common Memory Access Instructions*
+
+====== *8.1.1.5.1 `LD.{B[U]/H[U]/W[U]/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`ld.b`*, *`ld.h`*, *`ld.w`*, *`ld.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si12`* 
+
+^.^|*`ld.bu`*, *`ld.hu`*, *`ld.wu`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si12`* 
+|===========================
+
+*Description :*
+
+*`ld.b`* : *`$rd`*[63:0] = *SignExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [ 8 :0]), GRLEN)
+
+*`ld.h`* : *`$rd`*[63:0] = *SignExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [16:0]), GRLEN)
+
+*`ld.w`* : *`$rd`*[63:0] = *SignExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [32:0]), GRLEN)
+
+*`ld.d`* : *`$rd`*[63:0] = *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [63:0])
+
+*`ld.bu`* : *`$rd`*[63:0] = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [ 8 :0]), GRLEN)
+
+*`ld.hu`* : *`$rd`*[63:0] = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [16:0]), GRLEN)
+
+*`ld.wu`* : *`$rd`*[63:0] = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [32:0]), GRLEN)
+
+* *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
+
+*Usage :* 
+
+[source]
+----
+                           # memory[$r22 - 40] = 0xfedcba9876543210
+ld.b    $r23, $r22, -40    # $r23 = 0x0000000000000010
+ld.h    $r23, $r22, -40    # $r23 = 0x0000000000003210
+ld.w    $r23, $r22, -40    # $r23 = 0x0000000076543210
+ld.d    $r23, $r22, -40    # $r23 = 0xfedcba9876543210
+
+ld.bu   $r23, $r22, -40    # $r23 = 0x0000000000000010
+ld.hu   $r23, $r22, -40    # $r23 = 0x0000000000003210
+ld.wu   $r23, $r22, -40    # $r23 = 0x0000000076543210
+
+                           # memory[$r22 - 40] = 0x0123456789abcdef
+ld.w    $r23, $r22, -40    # $r23 = 0xffffffff89abcdef
+ld.wu   $r23, $r22, -40    # $r23 = 0x0000000089abcdef
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.5.1`* .
+=====
+
+====== *8.1.1.5.2 `ST.{B/H/W/D}`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2 
+^.^|src3
+
+^.^|*`st.b`*, *`st.h`*, *`st.w`*, *`st.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si12`* 
+|===========================
+
+*Description :*
+
+*`st.b`* : *MemoryStore*(*`$rd`*[ 7 :0], (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [ 7 :0])
+
+*`st.h`* : *MemoryStore*(*`$rd`*[15:0], (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [15:0])
+
+*`st.w`* : *MemoryStore*(*`$rd`*[31:0], (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [31:0])
+
+*`st.d`* : *MemoryStore*(*`$rd`*[63:0], (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), [63:0])
+
+* *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
+
+*Usage :* 
+
+[source]
+----
+li.w $r23, 0xfedcba9876543210   # $r23 = 0xfedcba9876543210 
+st.b $r23, $r22, -24            # memory[$r22 - 24] = 0x0000000000000010
+st.h $r23, $r22, -24            # memory[$r22 - 24] = 0x0000000000003210
+st.w $r23, $r22, -24            # memory[$r22 - 24] = 0x0000000076543210
+st.d $r23, $r22, -24            # memory[$r22 - 24] = 0xfedcba9876543210
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.5.1`* .
+=====
+
+====== *8.1.1.5.3 `LDX.{B[U]/H[U]/W[U]/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`ldx.b`*, *`ldx.h`*, *`ldx.w`*, *`ldx.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+
+^.^|*`ldx.bu`*, *`ldx.hu`*, *`ldx.wu`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+|===========================
+
+*Description :*
+
+*`ldx.b`* : *`$rd`*[63:0] = *SignExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), [ 7 :0]), GRLEN)
+
+*`ldx.h`* : *`$rd`*[63:0] = *SignExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), [15:0]), GRLEN)
+
+*`ldx.w`* : *`$rd`*[63:0] = *SignExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), [31:0]), GRLEN)
+
+*`ldx.d`* : *`$rd`*[63:0] = *MemoryLoad*( (*`$rj`* + *`$rk`*), [63:0])
+
+*`ldx.bu`* : *`$rd`*[63:0] = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), [ 7 :0]), GRLEN)
+
+*`ldx.hu`* : *`$rd`*[63:0] = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), [15:0]), GRLEN)
+
+*`ldx.wu`* : *`$rd`*[63:0] = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), [31:0]), GRLEN)
+
+*Usage :*
+
+[source]
+----
+li.w    $r24, -40           # $r24 = -40
+
+                            # memory[$r22 - $r24] = 0xfedcba9876543210
+ldx.b   $r23, $r22, $r24    # $r23 = 0x0000000000000010
+ldx.h   $r23, $r22, $r24    # $r23 = 0x0000000000003210
+ldx.w   $r23, $r22, $r24    # $r23 = 0x0000000076543210
+ldx.d   $r23, $r22, $r24    # $r23 = 0xfedcba9876543210
+
+ldx.bu  $r23, $r22, $r24    # $r23 = 0x0000000000000010
+ldx.hu  $r23, $r22, $r24    # $r23 = 0x0000000000003210
+ldx.wu  $r23, $r22, $r24    # $r23 = 0x0000000076543210
+
+                            # memory[$r22 - $r24] = 0x0123456789abcdef
+ld.w    $r23, $r22, $r24    # $r23 = 0xffffffff89abcdef
+ld.wu   $r23, $r22, $r24    # $r23 = 0x0000000089abcdef
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.5.2`* .
+=====
+
+====== *8.1.1.5.4 `STX.{B/H/W/D}`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+
+^.^|opcode
+^.^|src1
+^.^|src2 
+^.^|src3
+
+^.^|*`stx.b`*, *`stx.h`*, *`stx.w`*, *`stx.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+
+|===========================
+
+*Description :*
+
+*`stx.b`* : *MemoryStore*(*`$rd`*[ 7 :0], (*`$rj`* + *`$rk`*), [ 7 :0])
+
+*`stx.h`* : *MemoryStore*(*`$rd`*[15:0], (*`$rj`* + *`$rk`*), [15:0])
+
+*`stx.w`* : *MemoryStore*(*`$rd`*[31:0], (*`$rj`* + *`$rk`*), [31:0])
+
+*`stx.d`* : *MemoryStore*(*`$rd`*[63:0], (*`$rj`* + *`$rk`*), [63:0])
+
+*Usage :* 
+
+[source]
+----
+li.w   $r24, -40                  # $r24 = -40
+
+li.w   $r23, 0xfedcba9876543210   # $r23 = 0xfedcba9876543210  
+stx.b  $r23, $r22, $r24           # memory[$r22 - $r24] = 0x0000000000000010
+stx.h  $r23, $r22, $r24           # memory[$r22 - $r24] = 0x0000000000003210
+stx.w  $r23, $r22, $r24           # memory[$r22 - $r24] = 0x0000000076543210
+stx.d  $r23, $r22, $r24           # memory[$r22 - $r24] = 0xfedcba9876543210
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.5.2`* .
+=====
+
+====== *8.1.1.5.5 `LDPTR.{W/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`ldptr.w`*, *`ldptr.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si14`* 
+|===========================
+
+*Description :*
+
+*`ldptr.w`* : *`$rd`*[63:0] = *SignExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*(*`si16`*, GRLEN) ), [31:0]), GRLEN)
+
+*`ldptr.d`* : *`$rd`*[63:0] = *MemoryLoad*( (*`$rj`* + *SignExtend*(*`si16*`, GRLEN) ), [63:0])
+
+** *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
+
+*** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
+
+*Usage :* 
+
+[source]
+----
+                           # memory[$r22 - 40] = 0xfedcba9876543210
+ldptr.w $r23, $r22, -40    # $r23 = 0x0000000076543210
+ldptr.d $r23, $r22, -40    # $r23 = 0xfedcba9876543210
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.5.3`* .
+=====
+
+====== *8.1.1.5.6 `STPTR.{W/D}`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2 
+^.^|src3
+
+^.^|*`stptr.w`*, *`stptr.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si14`* 
+|===========================
+
+*Description :*
+
+*`stptr.w`* : *MemoryStore*( *`$rd`*[31:0], (*`$rj`* + *SignExtend*({*`si14`*, 2'b0}, GRLEN) ), [31:0])
+
+*`stptr.d`* : *MemoryStore*( *`$rd`*[63:0], (*`$rj`* + *SignExtend*({*`si14`*, 2'b0}, GRLEN) ), [63:0])
+
+** *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
+
+*** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
+
+*Usage :* 
+
+[source]
+----
+stptr.w $r23, $r22, -40    # memory[$r22 - 40] = 0x0000000076543210
+stptr.d $r23, $r22, -40    # memory[$r22 - 40] = 0xfedcba9876543210
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.5.3`* .
+=====
+
+====== *8.1.1.5.6 `PRELD`, `PRELDX`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2 
+^.^|src3
+
+^.^|*`preld`*
+^.^|*`hint`*
+^.^|*`$rj`* 
+^.^|*`si12`* 
+
+^.^|*`preldx`*
+^.^|*`hint`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+|===========================
+
+*Description :*
+
+*`preld`* : 
+
+* The processor learns from the hint in the *`PRELD`* instruction what type will be acquired and which level of *`Cache`* the data to be taken back fill in, *`hint`* has 32 optional values (0 to 31), 0 represents load to level 1 *`Cache`*, and 8 represents store to level 1 *`Cache`*. The remaining *`hint`* values are not defined and are processed for nop instructions when the processor executes.
+
+* *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
+
+*`preldx`* : 
+
+* The *`PRELDX`* instruction continuously prefetches data from memory into the Cache according to the configuration parameters, and the continuously prefetched data is a *`block`* (*`block`*) of length *`block_size`* starting from the specified base *`address`* (*`base`*) with a number of (*`block_num`*) spacing stride. The *`base address`* is the sum of the [63:0] bits in the general register *`rj`* and the sign extension [15:0] bits in the general register *`rk`*. The [I16] bits in general register *`rk`* are the address sequence ascending and descending flag bits, with 0 indicating address ascending and 1 indicating address descending. The value of bits [25:20] in general register *`rk`* is *`block_size`*, the basic unit of *`block_size`* is 16 bytes, so the maximum length of a single *`block`* is 1KB. The value of bits [39:32] in general register *`rk`* is *`block_num`*-*`1`*, so a single instruction can prefetch up to 256 *`blocks`*. The value of bits [59:44] in the block general register *`rk`* is treated as a signed number and defines the stride between adjacent blocks, the basic unit of stride is 1 byte. The value of bits [39:32] in *`rk`* is *`block.num`*-*`1`*, so a single instruction can prefetch up to 256 blocks. The value of bits [59:44] in general register *`rk`* is regarded as a signed number, which defines the corresponding The basic unit of stride and stride between adjacent blocks is 1 byte.
+
+* *`hint`* in the *`PRELDX`* instruction indicates the type of prefetch and the level of *`Cache`* into which the fetched data is to be filled. hint has 32 selectable values from 0 to 31. Currently, *`hint`*=*`0`* is defined as load prefetch to level 1 data *`Cache`*, *`hint`*=*`2`* is defined as load prefetch to level 3 *`Cache`*, *`hint`*=*`8`* is defined as store prefetch to level 1 data *`Cache`*. The meaning of the rest of *`hint`* values is not defined yet, and the processor executes it as *`NOP`* instruction.
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.5.4` / `2.2.5.5`* .
+=====

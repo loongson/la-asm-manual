@@ -1,0 +1,12 @@
+== *CHAPTER 3. Register*
+
+[.text-justify]
+This chapter describes the naming and usage conventions that the assembler applies to the CPU and FPU registers. For detailed information, please refer to the *`LoongArch Architecture manual`* and the *`LoongArch Application Binary Interface manual`*.
+
+include::3.1-Integer_General_Purpose_Register.adoc[]
+
+include::3.2-Floating-Point_Register.adoc[]
+
+include::3.3-Register_Usage_Convention.adoc[]
+
+<<<

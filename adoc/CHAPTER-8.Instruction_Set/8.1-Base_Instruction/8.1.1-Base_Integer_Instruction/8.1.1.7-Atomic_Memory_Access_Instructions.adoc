@@ -1,0 +1,423 @@
+===== *8.1.1.7 Atomic Memory Access Instructions*
+
+====== *8.1.1.7.1 `AM{SWAP/ADD/AND/OR/XOR/MAX/MIN}[_DB].{W/D}`, `AM{MAX/MIN}[_DB].{WU/DU}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`amswap.w`*, *`amswap.d`*, *`amswap_db.w`*, *`amswap_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amadd.w`*, *`amadd.d`*, *`amadd_db.w`*, *`amadd_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amand.w`*, *`amand.d`*, *`amand_db.w`*, *`amand_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amor.w`*, *`amor.d`*, *`amor_db.w`*, *`amor_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amxor.w`*, *`amxor.d`*, *`amxor_db.w`*, *`amxor_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammax.w`*, *`ammax.d`*, *`ammax_db.w`*, *`ammax_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammin.w`*, *`ammin.d`*, *`ammin_db.w`*, *`ammin_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammax.wu`*, *`ammax.du`*, *`ammax_db.wu`*, *`ammax_db.du`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammin.wu`*, *`ammin.du`*, *`ammin_db.wu`*, *`ammin_db.du`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+*`amswap.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*(*`$rk`*[31:0], *`$rj`*, [31:0])
+
+*`amswap.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*(*`$rk`*[63:0], *`$rj`*, [63:0])
+
+*`amswap_db.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*(*`$rk`*[31:0], *`$rj`*, [31:0])
+
+*`amswap_db.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*(*`$rk`*[63:0], *`$rj`*, [63:0])
+
+*`amadd.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*({*`$rd`*[31:0] + *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`amadd.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*({*`$rd`*[63:0] + *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`amadd_db.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*({*`$rd`*[31:0] + *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`amadd_db.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*({*`$rd`*[63:0] + *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`amand.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*({*`$rd`*[31:0] & *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`amand.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*({*`$rd`*[63:0] & *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`amand_db.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*({*`$rd`*[31:0] & *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`amand_db.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]),  *MemoryStore*({*`$rd`*[63:0] & *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`amor.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*({*`$rd`*[31:0] | *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`amor.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*({*`$rd`*[63:0] | *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`amor_db.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*({*`$rd`*[31:0] | *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`amor_db.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*({*`$rd`*[63:0] | *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`amxor.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*({*`$rd`*[31:0] ^  *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`amxor.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*({*`$rd`*[63:0] ^  *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`amxor_db.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*({*`$rd`*[31:0] ^ *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`amxor_db.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*({*`$rd`*[63:0] ^  *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`ammax.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*(max{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`ammax.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*(max{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`ammax_db.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*,[31:0]), *MemoryStore*(max{*`$rd`*[31:0],*`$rk`*[31:0]},*`$rj`*,[31:0])
+
+*`ammax_db.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*,[63:0]), *MemoryStore*(max{*`$rd`*[63:0],*`$rk`*[63:0]},*`$rj`*,[63:0])
+
+*`ammin.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*(min{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`ammin.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*(min{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`ammin_db.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*,[31:0]), *MemoryStore*(min{*`$rd`*[31:0],*`$rk`*[31:0]},*`$rj`*,[31:0])
+
+*`ammin_db.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*,[63:0]), *MemoryStore*(min{*`$rd`*[63:0],*`$rk`*[63:0]},*`$rj`*,[63:0])
+
+*`ammax.wu`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*(max{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`ammax.du`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*(max{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`ammax_db.wu`* : *`$rd`*[31:0]= *MemoryLoad*(*`$rj`*,[31:0]),*MemoryStore*(max{*`$rd`*[31:0],*`$rk`*[31:0]},*`$rj`*,[31:0])
+
+*`ammax_db.du`* : *`$rd`*[63:0]= *MemoryLoad*(*`$rj`*,[63:0]),*MemoryStore*(max{*`$rd`*[63:0],*`$rk`*[63:0]},*`$rj`*,[63:0])
+
+*`ammin.wu`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0]), *MemoryStore*(min{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+*`ammin.du`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0]), *MemoryStore*(min{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+*`ammin_db.wu`* : *`$rd`*[31:0]= *MemoryLoad*(*`$rj`*,[31:0]),*MemoryStore*(min{*`$rd`*[31:0],*`$rk`*[31:0]},*`$rj`*,[31:0])
+
+*`ammin_db.du`* : *`$rd`*[63:0]= *MemoryLoad*(*`$rj`*,[63:0]),*MemoryStore*(min{*`$rd`*[63:0],*`$rk`*[63:0]},*`$rj`*,[63:0])
+
+*Usage :* 
+[source]
+----
+li.d       $r26, 0x0123456789abcdef
+li.d       $r24, &(0xfedcba9876543210)
+amswap.d   $r25, $r26, $r24
+----
+
+* *Explanation :*
+
+** *`$r25`* = *`0xfedcba9876543210`*
+
+** *`$r24`* = address -> *`0x0123456789abcdef`*
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.1`* .
+=====
+
+====== *8.1.1.7.2 `AM{SWAP/ADD}[_DB].{B/H} LoongArch V1.1 instruction`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`amswap.b`*, *`amswap.h`*, *`amswap_db.b`*, *`amswap_db.h`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amadd.b`*, *`amadd.h`*, *`amadd_db.b`*, *`amadd_db.h`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+*`amswap.b`* : *`$rd`*[ 7 :0] = *MemoryLoad*(*`$rj`*, [ 7 :0]), *MemoryStore*(*`$rk`*[ 7 :0], *`$rj`*, [ 7 :0])
+
+*`amswap.h`* : *`$rd`*[15:0] = *MemoryLoad*(*`$rj`*, [15:0]), *MemoryStore*(*`$rk`*[15:0], *`$rj`*, [15:0])
+
+*`amswap_db.b`* : *`$rd`*[ 7 :0] = *MemoryLoad*(*`$rj`*, [ 7 :0]), *MemoryStore*(*`$rk`*[ 7 :0], *`$rj`*, [ 7 :0])
+
+*`amswap_db.h`* : *`$rd`*[15:0] = *MemoryLoad*(*`$rj`*, [15:0]), *MemoryStore*(*`$rk`*[15:0], *`$rj`*, [15:0])
+
+*`amadd.b`* : *`$rd`*[ 7 :0] = *MemoryLoad*(*`$rj`*, [ 7 :0]), *MemoryStore*({*`$rd`*[ 7 :0] + *`$rk`*[ 7 :0]}, *`$rj`*, [ 7 :0])
+
+*`amadd.h`* : *`$rd`*[15:0] = *MemoryLoad*(*`$rj`*, [15:0]), *MemoryStore*({*`$rd`*[15:0] + *`$rk`*[15:0]}, *`$rj`*, [15:0])
+
+*`amadd_db.b`* : *`$rd`*[ 7 :0] = *MemoryLoad*(*`$rj`*, [ 7 :0]), *MemoryStore*({*`$rd`*[ 7 :0] + *`$rk`*[ 7 :0]}, *`$rj`*, [ 7 :0])
+
+*`amadd_db.h`* : *`$rd`*[15:0] = *MemoryLoad*(*`$rj`*, [15:0]), *MemoryStore*({*`$rd`*[15:0] + *`$rk`*[15:0]}, *`$rj`*, [15:0])
+
+*Usage :* 
+[source]
+----
+li.d       $r26, 0x0123456789abcdef
+li.d       $r24, &(0xfedcba9876543210)
+amswap.b   $r25, $r26, $r24
+----
+
+* *Explanation :*
+
+** *`$r25`* = *`0xfedcba98765432ef`*
+
+** *`$r24`* = address -> *`0x0123456789abcd10`*
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.2`* .
+=====
+
+====== *8.1.1.7.3 `AMCAS[_DB].{B/H/W/D} LoongArch V1.1 instruction`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2
+^.^|src3
+
+^.^|*`amcas.b`*, *`amcas.h`*, *`amcas.w`*, *`amcas.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amcas_db.b`*, *`amcas_db.h`*, *`amcas_db.w`*, *`amcas_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+*`amcas.b`* : *if* ( *`$rd`*[ 7 :0] == *MemoryLoad*(*`$rj`*, [ 7 :0]) ) *MemoryStore*(*`$rk`*[ 7 :0], *`$rj`*, [ 7 :0])
+
+*`amcas.h`* : *if* ( *`$rd`*[15:0] == *MemoryLoad*(*`$rj`*, [15:0]) ) *MemoryStore*(*`$rk`*[15:0], *`$rj`*, [15:0])
+
+*`amcas.w`* : *if* ( *`$rd`*[31:0] == *MemoryLoad*(*`$rj`*, [31:0]) ) *MemoryStore*(*`$rk`*[31:0], *`$rj`*, [31:0])
+
+*`amcas.d`* : *if* ( *`$rd`*[63:0] == *MemoryLoad*(*`$rj`*, [63:0]) ) *MemoryStore*(*`$rk`*[63:0], *`$rj`*, [63:0])
+
+*`amcas_db.b`* : *if* ( *`$rd`*[ 7 :0] == *MemoryLoad*(*`$rj`*, [ 7 :0]) ) *MemoryStore*(*`$rk`*[ 7 :0], *`$rj`*, [ 7 :0])
+
+*`amcas_db.h`* : *if* ( *`$rd`*[15:0] == *MemoryLoad*(*`$rj`*, [15:0]) ) *MemoryStore*(*`$rk`*[15:0], *`$rj`*, [15:0])
+
+*`amcas_db.w`* : *if* ( *`$rd`*[31:0] == *MemoryLoad*(*`$rj`*, [31:0]) ) *MemoryStore*(*`$rk`*[31:0], *`$rj`*, [31:0])
+
+*`amcas_db.d`* : *if* ( *`$rd`*[63:0] == *MemoryLoad*(*`$rj`*, [63:0]) ) *MemoryStore*(*`$rk`*[63:0], *`$rj`*, [63:0])
+
+*Usage :* 
+[source]
+----
+li.d       $r26, 0x0123456789abcdef
+li.d       $r25, 0xfedcba9876543210
+li.d       $r24, &(0xfedcba9876543210)
+amcas.b    $r25, $r26, $r24
+
+li.d       $r29, 0x0123456789abcdef
+li.d       $r28, 0xfedcba9876543210
+li.d       $r27, &(0xfedcba9876543210)
+amcas.w    $r28, $r29, $r27
+----
+
+* *Explanation :*
+
+** *`$r24`* = address -> *`0xfedcba98765432ef`*
+
+** *`$r27`* = address -> *`0xfedcba9889abcdef`*
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.3`* .
+=====
+
+====== *8.1.1.7.4 `LL.{W/D}`, `SC.{W/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`ll.w`*, *`ll.d`*, *`sc.w`*, *`sc.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si16`* 
+|===========================
+
+*Description :*
+
+*`ll.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`* + {*`si16`*}, [31:0])
+
+*`ll.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`* + {*`si16`*}, [63:0])
+
+*`sc.w`* : *MemoryStore*(*`$rd`*[31:0], *`$rj`* + {*`si16`*}, [31:0])
+
+*`sc.d`* : *MemoryStore*(*`$rd`*[63:0], *`$rj`* + {*`si16`*}, [63:0])
+
+** *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
+
+*** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
+
+*Usage :* 
+[source]
+----
+ll.w    $r25, $r12, 0
+addi.w  $r25, $r25, 5
+sc.w    $r25, $r12, 0
+
+ll.d    $r25, $r12, 0 
+addi.d  $r25, $r25, 10
+sc.d    $r25, $r12, 0 
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.4`* .
+=====
+
+====== *8.1.1.7.5 `SC.Q LoongArch V1.1 instruction`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2 
+^.^|src3
+
+^.^|*`sc.q`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+*`sc.q`* : *MemoryStore*({*`$rk`*[63:0],*`$rd`*[63:0]}, *`$rj`*, [127:0])
+
+*Usage :* 
+
+[source]
+----
+li.d       $r26, 0x0123456789abcdef
+li.d       $r25, 0xfedcba9876543210
+sc.q       $r25, $r26, $r24
+----
+
+* *Explanation :*
+
+** *`$r24`* = address -> *`0x0123456789abcdeffedcba9876543210`*
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.5`* .
+=====
+
+====== *8.1.1.7.6 `LL.ACQ.{W/D}, SC.REL.{W/D} LoongArch V1.1 instruction`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+
+^.^|*`ll.acq.w`*, *`ll.acq.d`*, *`sc.rel.w`*, *`sc.rel.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+*`ll.acq.w`* : *`$rd`*[31:0] = *MemoryLoad*(*`$rj`*, [31:0])
+
+*`ll.acq.d`* : *`$rd`*[63:0] = *MemoryLoad*(*`$rj`*, [63:0])
+
+*`sc.rel.w`* : *MemoryStore*(*`$rd`*[31:0], *`$rj`*, [31:0])
+
+*`sc.rel.d`* : *MemoryStore*(*`$rd`*[63:0], *`$rj`*, [63:0])
+
+*Usage :* 
+
+[source]
+----
+ll.acq.w    $r25, $r12
+addi.w      $r25, $r25, 5
+sc.rel.w    $r25, $r12
+
+ll.acq.d    $r25, $r12 
+addi.d      $r25, $r25, 10
+sc.rel.d    $r25, $r12 
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch instruction manual:2.2.7.6`* .
+=====
