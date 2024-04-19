@@ -1,0 +1,33 @@
+=== *4.2 Addressing Method*
+
+*`Register`*
+
+* *Format* : *`reg`*[R1] = *`reg`*[R1] + *`reg`*[R2]
+
+* *Instruction example* : *`ADD R1`, `R2`*
+
+* *When to use* : Value in register
+
+*`Immediate`*
+
+* *Format* : *`reg`*[R1] = *`reg`*[R1] + 2
+
+* *Instruction example* : *`ADD R1`, `#2`*
+
+* *When to use* : For constants
+
+*`Displacement`*
+
+* *Format* : *`reg`*[R1] = *`reg`*[R1] + *mem*[*`reg`*[R2] + 100]
+
+* *Instruction example* : *`ADD R1`, `100(R2)`*
+
+* *When to use* : Accessing Local Variables (Analog Register Indirect, Direct Addressing)
+
+*`Indexed`*
+
+* *Format* : *`reg`*[R1] = *`reg`*[R1] + *mem*[*`reg`*[R2] + *`reg`*[R3]]
+
+* *Instruction example* : *`ADD R1`, `(R2+R3)`*
+
+* *When to use* : Used for array addressing, with R1 as the array base address and R2 as the index value.

@@ -1,0 +1,47 @@
+== *CHAPTER 6. ASM File & ELF File*
+
+[.text-justify]
+This chapter mainly discusses the format of the *`Loongarch`* assembler source file and the ELF file.
+
+[source,asm]
+----
+.data
+.LC0:
+    .ascii       	"test\0"
+    .text
+    .align       	2
+    .globl       	main
+    .type      	    main,   @function
+
+main:
+    addi.d   		$sp, 	$sp,    -32
+    st.d        	$ra, 	$sp,    24
+    st.d	     	$fp, 	$sp,    16
+    addi.d	   	    $fp, 	$sp,    32
+    or	       	    $t0, 	$a0,    $zero
+    st.d	     	$a1, 	$fp,    -32
+    slli.w	   		$t0, 	$t0,    0
+    st.w	     	$t0, 	$fp,    -20
+    la.local	 	$a0, 	.LC0
+    bl           	%plt(puts)
+    or	       	    $t0, 	$zero,  $zero
+    or	        	$a0, 	$t0,    $zero
+    ld.d	     	$ra, 	$sp,    24
+    ld.d	     	$fp, 	$sp,    16
+    addi.d	   	    $sp, 	$sp,    32
+    jr	       	    $ra
+    .size        	main, .-main
+    .section     	.note.GNU-stack, "", @progbits
+----
+
+[.text-justify]
+A *`relocatable file`* holds code and data suitable for linking with other object files to create an executable or a shared object file.
+
+[.text-justify]
+An *`executable file`* holds a program suitable for execution; the file specifies how exec(LoongArch) creates a program's process image.
+
+[.text-justify]
+A *`shared object file`* holds code and data suitable for linking in two contexts. First, the link editor see ld(LoongArch) processes the shared object file with other relocatable and shared object files to create another object file. Second, the dynamic linker combines it with an executable file and other shared objects to create a process image.
+
+[.text-justify]
+For more information on ELF files, please refer to link:https://www.sco.com/developers/gabi/latest/contents.html[SysV gABI] and http://sysdev.loongson.cn/attachments/download/91249/la-abi.pdf[LoongArch Application Binary Interface manual].

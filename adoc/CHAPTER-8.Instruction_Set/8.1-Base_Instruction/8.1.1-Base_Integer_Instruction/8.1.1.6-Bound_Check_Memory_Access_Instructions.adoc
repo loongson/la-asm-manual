@@ -1,0 +1,166 @@
+===== *8.1.1.6 Bound Check Memory Access Instructions*
+
+====== *8.1.1.6.1 `LD{GT/LE}.{B/H/W/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`ldgt.b`*, *`ldgt.h`*, *`ldgt.w`*, *`ldgt.d`*, *`ldle.b`*, *`ldle.h`*, *`ldle.w`*, *`ldle.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="75,20,905"]
+|===========================
+.2+^.<|*`ldgt.b`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) *`$rd`*[63:0] = `*Sign*`*Extend* ( `*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN)
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`ldgt.h`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) *`$rd`*[63:0] = `*Sign*`*Extend* ( `*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN)
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`ldgt.w`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) *`$rd`*[63:0] = `*Sign*`*Extend* ( `*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN)
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`ldgt.d`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`ldle.b`*
+.2+^.<|*:*
+<.<|*if* (*`$rj`* *`<` `=`* *`$rk`*) *`$rd`*[63:0] = `*Sign*`*Extend* ( `*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN)
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`ldle.h`*
+.2+^.<|*:*
+<.<|*if* (*`$rj`* *`<` `=`* *`$rk`*) *`$rd`*[63:0] = `*Sign*`*Extend* ( `*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN)
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`ldle.w`*
+.2+^.<|*:*
+<.<|*if* (*`$rj`* *`<` `=`* *`$rk`*) *`$rd`*[63:0] = `*Sign*`*Extend* ( `*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN)
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`ldle.d`*
+.2+^.<|*:*
+<.<|*if* (*`$rj`* *`<` `=`* *`$rk`*) *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+|===========================
+
+*Usage :* 
+[source]
+----
+li.d       $r23,  0x0123456789abcdef   # $r23 = 0x0123456789abcdef                                 
+st.d       $r23   $r24,  0             # memory[$r24] = 0x0123456789abcdef
+addi.d     $r25,  $r24,  -8            # $r24 address > $r25 address
+ldgt.b     $r23,  $r24,  $r25          # $r23 = 0xffffffffffffffef
+addi.d     $r25,  $r24,  16            # $r24 address <= $r25 address
+ldle.d     $r23,  $r24,  $r25          # $r23 = 0x0123456789abcdef
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:2.2.6.1`* .
+=====
+
+====== *8.1.1.6.2 `ST{GT/LE}.{B/H/W/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2 
+^.^|src3
+
+^.^|*`stgt.b`*, *`stgt.h`*, *`stgt.w`*, *`stgt.d`*, *`stle.b`*, *`stle.h`*, *`stle.w`*, *`stle.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`$rk`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="75,20,905"]
+|===========================
+.2+^.<|*`stgt.b`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) `*MemoryStore*` (*`$rd`*[ 7 :0], *`$rj`*, [ 7 :0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`stgt.h`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) `*MemoryStore*` (*`$rd`*[15:0], *`$rj`*, [15:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`stgt.w`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) `*MemoryStore*` (*`$rd`*[31:0], *`$rj`*, [31:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`stgt.d`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) `*MemoryStore*` (*`$rd`*[63:0], *`$rj`*, [63:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`stle.b`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* *`<` `=`* *`$rk`* ) `*MemoryStore*` (*`$rd`*[ 7 :0], *`$rj`*, [ 7 :0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`stle.h`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* *`<` `=`* *`$rk`* ) `*MemoryStore*` (*`$rd`*[15:0], *`$rj`*, [15:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`stle.w`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* *`<` `=`* *`$rk`* ) `*MemoryStore*` (*`$rd`*[31:0], *`$rj`*, [31:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+
+.2+^.<|*`stle.d`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* *`<` `=`* *`$rk`* ) `*MemoryStore*` (*`$rd`*[63:0], *`$rj`*, [63:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+|===========================
+
+*Usage :* 
+[source]
+----
+li.d       $r23,  0x0123456789abcdef   # $r23 = 0x0123456789abcdef
+addi.d     $r25,  $r24,  -8            # $r24 address > $r25 address
+stgt.b     $r23,  $r24,  $r25          # memory[$r24] = 0xffffffffffffffef
+addi.d     $r25,  $r24,  8             # $r24 address <= $r25 address
+stle.d     $r23,  $r24,  $r25          # memory[$r24] = 0x0123456789abcdef
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:2.2.6.1`* .
+=====

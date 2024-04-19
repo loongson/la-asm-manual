@@ -1,0 +1,204 @@
+=== *5.2 Logic Control Directives*
+
+[.text-justify]
+The assembler will translate the assembly instructions into machine instructions and store them in the target file. The assembler directive is different from the assembly instruction, which is used to guide the assembler on how to define variables and functions, and how to store assembly instructions in the target file. The assembler directive is the instruction that guides the work of the assembler.
+
+==== *5.2.1 Set Symbol Data Storage Segment*
+
+[.text-justify]
+Use assembler directives such as .data subsection and *`.text`* subsection in the assembly source file to specify the data and code segments where the following statements are stored in the target file. When it is necessary to specify a more refined segment type. You can use the *`.section`* name.
+
+[source,asm]
+----
+.data   # Specify the data segment to store the next data in the target file
+str:
+     .ascii "test\000"
+var:
+     .word  10
+.text   # Specify the code snippet for storing the next data in the target file
+add:
+----
+
+==== *5.2.2 Constant Declaration*
+
+[.text-justify]
+The assembler directive *`.set`* symbol, expression is used for constant settings.
+
+[source,asm]
+----
+.set 	FLAG, 0
+.equ 	FLAG, 0
+----
+
+==== *5.2.3 Conditional Compilation*
+
+[.text-justify]
+In conjunction with constant settings, use the assembler directives *`.if`*, *`.else`*, and *`.endif`* to achieve conditional compilation.
+
+[source,asm]
+----
+      .set          	FLAG, 0
+.LC0:
+      .ascii        	"test1\000" 
+.LC1:
+      .ascii        	"test2\000" 
+main:
+      addi.d        	$sp, 	$sp, 	-8
+      st.d          	$ra, 	$sp, 	0
+.if FLAG == 1
+      la.local      	$r4, 	.LC0
+.else
+      la.local      	$r4, 	.LC1
+.endif
+      bl            	%plt(puts)
+----
+
+[.text-justify]
+For conditional compilation, preprocessing commands such as *`#ifdef`*, *`#else`*, and *`#endif`* in C language can also be directly used in the asm source file. When using the C language pre-processing command, the assembly source file cannot be compiled directly with the assembler, but needs to call the compiler's preprocessing tool in advance to translate the pre-processing command.
+
+.Condition
+[options="header"]
+[cols="18,82"]
+|===========================
+^.^|Command 
+^.^|Function
+
+.^|*`.ifdef`* symbol 
+.^|If the symbol symbol has already been defined, assemble the following code.
+
+.^|*`.ifndef`* symbol 
+.^|If the symbol symbol has not been defined before, assemble the following code, which is equivalent to. ifnotdef symbol.
+
+.^|*`.ifc`* str1, str2 
+.^|If two strings are the same, assemble the following code, which is equivalent to .ifeqs str1, str2.
+
+.^|*`.ifnc`* str1, str2 
+.^|If two strings are different, assemble the following code.
+
+.^|*`.ifeq`* expression 
+.^|If the expression value is 0, assemble the following code.
+
+.^|*`.ifge`* expression 
+.^|If the expression value is greater than or equal to 0, assemble the following code.
+
+.^|*`.ifgt`* expression 
+.^|If the expression value is greater than 0, assemble the following code.
+
+.^|*`.ifle`* expression 
+.^|If the expression value is less than or equal to 0, assemble the following code.
+
+.^|*`.iflt`* expression 
+.^|If the expression value is less than 0, assemble the following code.
+|===========================
+
+==== *5.2.4 Compile Debug*
+
+[.text-justify]
+The information output instructions that can be used during the compilation process of the assembler include:
+
+[.text-justify]
+* *`.print`* string
+
+[.text-justify]
+* *`.fail`* expression
+
+[.text-justify]
+* *`.error`* string & *`.err`*
+
+===== *5.2.4.1 .print string*
+
+[.text-justify]
+Will cause the assembler to output a string on standard output.
+
+===== *5.2.4.2 .fail expression*
+
+[.text-justify]
+An error or warning message will be generated, and when the expression value is greater than or equal to 500, the assembler will output a warning message; When the value of expression is less than 500, the assembler will output an error message. The default value of expression is 0, and the *`.fail`* parameter can be written directly and left blank.
+
+===== *5.2.4.3 .error string & .err*
+
+[.text-justify]
+*`.err`* can output a default error message during the assembly process. If you want to customize the error message type, you can use the *`.error`* string directive.
+
+==== *5.2.5 File Include*
+
+[.text-justify]
+There are two ways to reference other files in the assembly source file. One method is to use the assembler directive *`.include`* '*`file`*', which defaults to the current directory as the reference file path. When the path of the referenced file is not in the same directory, the search path can be controlled through the compiler's command-line option parameter '*`- I`*'; Another method is to use the C language preprocessing command *`#include`*, which requires the assembler file to be *`.S`* and preprocessed through the front-end preprocessing tool.
+
+[source,asm]
+----
+#ref.S
+       .text
+test:
+       .print "test" 
+       .jr $r1
+#main.S
+       .include "ref.S" 
+----
+
+==== *5.2.6 Loop Unrolling*
+
+[.text-justify]
+assembler directives *`.rept`* count and *`.endr`* can be used to loop through their internal statements count times.
+
+[source,asm]
+----
+.rept 3
+nop
+.endr
+----
+
+[.text-justify]
+The above code is equivalent to notifying the assembler to generate three nop instructions in the target file. When it is necessary to insert different numbers of your nop instructions according to the actual situation to achieve address alignment, using the loop unrolling instruction is very convenient.
+
+[.text-justify]
+assembler directives *`.irp`* symbol, values and *`.endr`* can loop through its internal statements.
+
+[source,asm]
+----
+.irp n,4,5,6,7,8,9,10,11,12
+st.d $r\n, $sp, \n*8
+.endr
+----
+
+is equivalent to :
+
+[source,asm]
+----
+st.d $r4, $sp, 0x20
+st.d $r5, $sp, 0x28
+st.d $r6, $sp, 0x30
+st.d $r7, $sp, 0x38
+st.d $r8, $sp, 0x40
+st.d $r9, $sp, 0x48
+st.d $r10, $sp, 0x50
+st.d $r11, $sp, 0x58
+st.d $r12, $sp, 0x60
+----
+
+==== *5.2.7 Macro Define*
+
+[.text-justify]
+The assembler directive *`.macro`* name args is similar in function to the macro definition function in C language, where name is the macro name, args is the parameter, and ends with *`.endm`* .
+
+[.text-justify]
+For example, implementing a macro definition that can generate different numbers of nop instructions based on different parameters:
+
+[source,asm]
+----
+.text
+.macro INSERT_NOP a
+.rept \a
+nop
+.endr
+.endm
+----
+
+[.text-justify]
+Here, *`.text`* is used to indicate that the following instructions are stored in the code snippet of the target file. Macro name is *`INSERT_NOP`*, parameter is a. The format for using parameters in the macro definition body is "parameter", such as a. The parameters of the macro can be 0 or multiple. When there are multiple parameters, use commas or spaces to separate them. When the program is in use, simply call the macro.
+
+[source,asm]
+----
+INSERT_NOP 3
+INSERT_NOP 7
+----

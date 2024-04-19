@@ -1,0 +1,431 @@
+== *CHAPTER 9. Pseudo Instructions*
+
+[.text-justify]
+The LoongArch assembler supports a number of pseudo-instructions that are translated into the appropriate combination of LoongArch instructions at assembly time.
+
+[options="header"]
+[cols="30,35,35"]
+|===========================
+^.^|Pseudo Instruction
+^.^|Machine Instruction
+^.^|Meaning
+
+<.^|*`jr`* *`$rd`*
+<.^|*`jirl`* *`$zero`*, *`$rd`*, *`0`*
+<.^|Direct register jump
+
+<.^|*`ret`* (*`jr`* *`$ra`*)
+<.^|*`jirl`* *`$zero`*, *`$ra`*, *`0`*
+<.^|Function return
+
+<.^|*`bgt`* *`$rj`*, *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|*`blt`* *`$rd`*, *`$rj`*, (*`si18`* \| *`symbol`*)
+<.^|if(*`$rj`* > *`$rd`*)jump (*`si18`* \| *`symbol`*)
+
+<.^|*`bgtu`* *`$rj`*, *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|*`bltu`* *`$rd`*, *`$rj`*, (*`si18`* \| *`symbol`*)
+<.^|if(*`$rj`* > *`$rd`*)jump (*`si18`* \| *`symbol`*)
+
+<.^|*`ble`* *`$rj`*, *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|*`bge`* *`$rd`*, *`$rj`*, (*`si18`* \| *`symbol`*)
+<.^|if(*`$rj`* < = *`$rd`*)jump (*`si18`* \| *`symbol`*)
+
+<.^|*`bleu`* *`$rj`*, *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|*`bgeu`* *`$rd`*, *`$rj`*, (*`si18`* \| *`symbol`*)
+<.^|if(*`$rj`* < = *`$rd`*)jump (*`si18`* \| *`symbol`*)
+
+<.^|*`bltz`* *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|*`blt`* *`$rd`*, *`$zero`*, (*`si18`* \| *`symbol`*)
+<.^|if(*`$rd`* < *`0`*)jump (*`si18`* \| *`symbol`*)
+
+<.^|*`bgtz`* *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|*`blt`* *`$zero`*, *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|if(*`$rd`* > *`0`*)jump (*`si18`* \| *`symbol`*)
+
+<.^|*`blez`* *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|*`bge`* *`$zero`*, *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|if(*`$rd`* < = *`0`*)jump (*`si18`* \| *`symbol`*)
+
+<.^|*`bgez`* *`$rd`*, (*`si18`* \| *`symbol`*)
+<.^|*`bge`* *`$rd`*, *`$zero`*, (*`si18`* \| *`symbol`*)
+<.^|if(*`$rd`* > = *`0`*)jump (*`si18`* \| *`symbol`*)
+
+<.^|*`move`* *`$rd`*, *`$rj`*
+<.^|*`or`* *`$rd`*, *`$rj`*, *`$zero`*
+<.^|Assign the value of *`$rj`* to *`$rd`*
+|===========================
+
+[options="header"]
+[cols="30,35,35"]
+|===========================
+^.^|Pseudo Instruction
+^.^|Machine Instruction
+^.^|Meaning
+
+.2+<.^|*`li.w`* *`$rd`*, *`imm32`*
+
+<.^|*`lu12i.w`* *`$rd`*, *`si20`*
+
+.2+<.^|Load a 32-bit immediate
+
+<.^|*`ori`* *`$rd`*, *`$rd`*, *`si12`*
+
+.4+<.^|*`li.d`* *`$rd`*, *`imm64`*
+
+<.^|*`lu12i.w`* *`$rd`*, *`si20`*
+
+.4+<.^|Load a 64-bit immediate
+
+<.^|*`ori`* *`$rd`*, *`$rd`*, *`si12`*
+<.^|*`lu32i.w`* *`$rd`*, *`si20`*
+<.^|*`lu52i.w`* *`$rd`*, *`si12`*
+|===========================
+
+[options="header"]
+[cols="40,10,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Feature
+^.^|Machine Instructions
+
+.8+<.^|*`la`* *`$rd`*, *`sym`*
+
+.2+^.^|*`NORMAL`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym`*)
+<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym`*)
+
+.2+^.^|*`GTOPCR`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym`*)
+<.^|*`addi.d`* *`$rd`*, *`$rd`*, *`%pc_lo12`*(*`sym`*)
+
+.4+^.^|*`GTOABS`*
+<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym`*)
+<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym`*)
+<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym`*)
+<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym`*)
+|===========================
+
+[options="header"]
+[cols="40,10,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Feature
+^.^|Machine Instructions
+
+.8+<.^|*`la.global`* *`$rd`*, *`sym_global`*
+
+.2+^.^|*`NORMAL`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym_global`*)
+<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym_global`*)
+
+.2+^.^|*`GTOPCR`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_global`*)
+<.^|*`addi.d`* *`$rd`*, *`$rd`*, *`%pc_lo12`*(*`sym_global`*)
+
+.4+^.^|*`GTOABS`*
+<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_global`*)
+<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym_global`*)
+<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym_global`*)
+<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym_global`*)
+|===========================
+
+[options="header"]
+[cols="40,10,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Feature
+^.^|Machine Instructions
+
+.14+<.^|*`la.global`* *`$rd`*, *`$rj`*, *`sym_global_large`*
+
+.5+^.^|*`NORMAL`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym_global_large`*)
+<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%got_pc_lo12`*(*`sym_global_large`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%got64_pc_lo20`*(*`sym_global_large`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%got64_pc_hi12`*(*`sym_global_large`*)
+<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+
+.5+^.^|*`GTOPCR`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_global_large`*)
+<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%pc_lo12`*(*`sym_global_large`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%pc64_lo20`*(*`sym_global_large`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%pc64_hi12`*(*`sym_global_large`*)
+<.^|*`add.d`* *`$rd`*, *`$rd`*, *`$rj`*
+
+.4+^.^|*`GTOABS`*
+
+<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_global_large`*)
+<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym_global_large`*)
+<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym_global_large`*)
+<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym_global_large`*)
+|===========================
+
+*Feature* :
+
+* *`GTOPCR`* : *`la-global-with-pcrel`*
+
+* *`GTOABS`* : *`la-global-with-abs`*
+
+[options="header"]
+[cols="40,10,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Feature
+^.^|Machine Instructions
+
+.6+<.^|*`la.local`* *`$rd`*, *`sym_local`*
+
+.2+^.^|*`NORMAL`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_local`*)
+<.^|*`addi.d`* *`$rd`*, *`$rd`*, *`%pc_lo12`*(*`sym_local`*)
+
+.4+^.^|*`LTOABS`*
+
+<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_local`*)
+<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym_local`*)
+<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym_local`*)
+<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym_local`*)
+|===========================
+
+[options="header"]
+[cols="40,10,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Feature
+^.^|Machine Instructions
+
+.9+<.^|*`la.local`* *`$rd`*, *`$rj`*, *`sym_local_large`*
+
+.5+^.^|*`NORMAL`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_local`*)
+<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%pc_lo12`*(*`sym_local`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%pc64_lo20`*(*`sym_local`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%pc64_hi12`*(*`sym_local`*)
+<.^|*`add.d`* *`$rd`*, *`$rd`*, *`$rj`*
+
+.4+^.^|*`LTOABS`*
+
+<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_local`*)
+<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym_local`*)
+<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym_local`*)
+<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym_local`*)
+|===========================
+
+*Feature* :
+
+* *`LTOABS`* : *`la-local-with-abs`*
+
+[options="header"]
+[cols="50,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Machine Instructions
+
+.4+<.^|*`la.abs`* *`$rd`*, *`sym_abs`*
+
+<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_abs`*)
+<.^|*`ori`* *`$rj`*, *`$zero`*, *`%abs_lo12`*(*`sym_abs`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%abs64_lo20`*(*`sym_abs`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%abs64_hi12`*(*`sym_abs`*)
+|===========================
+
+[options="header"]
+[cols="50,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Machine Instructions
+
+.2+<.^|*`la.pcrel`* *`$rd`*, *`sym_pcrel`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_pcrel`*)
+<.^|*`addi.d`* *`$rd`*, *`$rd`*, *`%pc_lo12`*(*`sym_pcrel`*)
+
+.5+<.^|*`la.pcrel`* *`$rd`*, *`$rj`*, *`sym_pcrel_large`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_pcrel_large`*)
+<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%pc_lo12`*(*`sym_pcrel_large`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%pc64_lo20`*(*`sym_pcrel_large`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%pc64_hi12`*(*`sym_pcrel_large`*)
+<.^|*`add.d`* *`$rd`*, *`$rd`*, *`$rj`*
+|===========================
+
+[options="header"]
+[cols="50,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Machine Instructions
+
+.2+<.^|*`la.got`* *`$rd`*, *`sym_got`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym_got`*)
+<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym_got`*)
+
+.5+<.^|*`la.got`* *`$rd`*, *`$rj`*, *`sym_got_large`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym_got_large`*)
+<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%got_pc_lo12`*(*`sym_got_large`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%got64_pc_lo20`*(*`sym_got_large`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%got64_pc_hi12`*(*`sym_got_large`*)
+<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+|===========================
+
+[options="header"]
+[cols="50,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Machine Instructions
+
+.2+<.^|*`la.tls.le`* *`$rd`*, *`sym_le`*
+
+<.^|*`lu12i.w`* *`$rd`*, *`%le_hi20`*(*`sym_le`*)
+<.^|*`ori`* *`$rd`*, *`$rd`*, *`%le_lo12`*(*`sym_le`*)
+
+.2+<.^|*`la.tls.ie`* *`$rd`*, *`sym_ie`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%ie_pc_hi20`*(*`sym_ie`*)
+<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%ie_pc_lo12`*(*`sym_ie`*)
+
+.5+<.^|*`la.tls.ie`* *`$rd`*, *`$rj`*, *`sym_ie_large`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%ie_pc_hi20`*(*`sym_ie_large`*)
+<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%ie_pc_lo12`*(*`sym_ie_large`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%ie64_pc_lo20`*(*`sym_ie_large`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%ie64_pc_hi12`*(*`sym_ie_large`*)
+<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+|===========================
+
+[options="header"]
+[cols="50,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Machine Instructions
+
+.2+<.^|*`la.tls.ld`* *`$rd`*, *`sym_ld`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%ld_pc_hi20`*(*`sym_ld`*)
+<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym_ld`*)
+
+.5+<.^|*`la.tls.ld`* *`$rd`*, *`$rj`*, *`sym_ld_large`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%ld_pc_hi20`*(*`sym_ld_large`*)
+<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%got_pc_lo12`*(*`sym_ld_large`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%got64_pc_lo20`*(*`sym_ld_large`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%got64_pc_hi12`*(*`sym_ld_large`*)
+<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+|===========================
+
+[options="header"]
+[cols="50,50"]
+|===========================
+^.^|Macros Instruction
+^.^|Machine Instructions
+
+.2+<.^|*`la.tls.gd`* *`$rd`*, *`sym_gd`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%gd_pc_hi20`*(*`sym_gd`*)
+<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym_gd`*)
+
+.5+<.^|*`la.tls.gd`* *`$rd`*, *`$rj`*, *`sym_gd_large`*
+
+<.^|*`pcalau12i`* *`$rd`*, *`%gd_pc_hi20`*(*`sym_gd_large`*)
+<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%got_pc_lo12`*(*`sym_gd_large`*)
+<.^|*`lu32i.d`* *`$rj`*, *`%got64_pc_lo20`*(*`sym_gd_large`*)
+<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%got64_pc_hi12`*(*`sym_gd_large`*)
+<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+|===========================
+
+[options="header"]
+[cols="18,30,62"]
+|===========================
+^.^|Operand
+^.^|ELF reloc type 
+^.^|Usage
+
+<.^|*`%abs_hi20`*
+<.^|*`R_LARCH_ABS_HI20`*
+<.^|[31 … 12] bits of 32/64-bit absolute address
+
+<.^|*`%abs_lo12`*
+<.^|*`R_LARCH_ABS_LO12`*
+<.^|[11 … 0] bits of 32/64-bit absolute address
+
+<.^|*`%abs64_lo20`*
+<.^|*`R_LARCH_ABS64_LO20`*
+<.^|[51 … 32] bits of 64-bit absolute address
+
+<.^|*`%abs64_hi12`*
+<.^|*`R_LARCH_ABS64_HI12`*
+<.^|[63 … 52] bits of 64-bit absolute address
+
+<.^|*`%pc_hi20`*
+<.^|*`R_LARCH_PCALA_HI20`*
+<.^|[31 … 12] bits of 32/64-bit PC-relative offset
+
+<.^|*`%pc_lo12`*
+<.^|*`R_LARCH_PCALA_LO12`*
+<.^|[11 … 0] bits of 32/64-bit PC-relative offset
+
+<.^|*`%pc64_lo20`*
+<.^|*`R_LARCH_PCALA64_LO20`*
+<.^|[51 … 32] bits of 64-bit PC-relative offset
+
+<.^|*`%pc64_hi12`*
+<.^|*`R_LARCH_PCALA64_HI12`*
+<.^|[63 … 52] bits of 64-bit PC-relative offset
+
+<.^|*`%got_pc_hi20`*
+<.^|*`R_LARCH_GOT_PC_HI20`*
+<.^|[31 … 12] bits of 32/64-bit PC-relative offset to GOT entry
+
+<.^|*`%got_pc_lo12`*
+<.^|*`R_LARCH_GOT_PC_LO12`*
+<.^|[11 … 0] bits of 32/64-bit PC-relative offset to GOT entry
+
+<.^|*`%got64_pc_lo20`*
+<.^|*`R_LARCH_GOT64_PC_LO20`*
+<.^|[51 … 32] bits of 64-bit PC-relative offset to GOT entry
+
+<.^|*`%got64_pc_hi12`*
+<.^|*`R_LARCH_GOT64_PC_HI12`*
+<.^|[63 … 52] bits of 64-bit PC-relative offset to GOT entry
+
+<.^|*`%le_hi20`*
+<.^|*`R_LARCH_TLS_LE_HI20`*
+<.^|[31 … 12] bits of 32/64-bit offset from TP register
+
+<.^|*`%le_lo12`*
+<.^|*`R_LARCH_TLS_LE_LO12`*
+<.^|[11 … 0] bits of 32/64-bit offset from TP register
+
+<.^|*`%ie_pc_hi20`*
+<.^|*`R_LARCH_TLS_IE_PC_HI20`*
+<.^|[31 … 12] bits of 32/64-bit PC-relative offset to TLS IE GOT entry
+
+<.^|*`%ie_pc_lo12`*
+<.^|*`R_LARCH_TLS_IE_PC_LO12`*
+<.^|[11 … 0] bits of 32/64-bit PC-relative offset to TLS IE GOT entry
+
+<.^|*`%ie64_pc_lo20`*
+<.^|*`R_LARCH_TLS_IE64_PC_LO20`*
+<.^|[51 … 32] bits of 64-bit PC-relative offset to TLS IE GOT entry
+
+<.^|*`%ie64_pc_hi12`*
+<.^|*`R_LARCH_TLS_IE64_PC_HI12`*
+<.^|[63 … 52] bits of 64-bit PC-relative offset to TLS IE GOT entry
+
+<.^|*`%ld_pc_hi20`*
+<.^|*`R_LARCH_TLS_LD_PC_HI20`*
+<.^|[51 … 32] bits of 64-bit PC-relative offset to TLS LD GOT entry
+
+<.^|*`%gd_pc_hi20`*
+<.^|*`R_LARCH_TLS_GD_PC_HI20`*
+<.^|[63 … 52] bits of 64-bit PC-relative offset to TLS GD GOT entry
+|===========================

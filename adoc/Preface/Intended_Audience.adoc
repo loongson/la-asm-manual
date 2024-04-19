@@ -1,0 +1,4 @@
+==== *Intended Audience*
+
+[.text-justify]
+This book is written for all developers who are producing applications using compilation tools. It assumes that you are an experienced assembly language developer and that you are familiar with the *`LoongArch`* architecture.

@@ -1,0 +1,11 @@
+=== *1.2 Introduction to `LoongArch` Series CPU*
+
+[.text-justify]
+This section mainly introduces the CPU models that are compatible with the *`LoongArch`* assembly program design guide manual.
+
+.Tip
+[caption=""]
+====
+Retain this section
+====
+

@@ -1,0 +1,8 @@
+=== *About This Book*
+
+[.text-justify]
+This book provides tutorial and reference information on the *`LoongArch`* Assembly Language Program. This includes *`LoongArch`* data type, register, address, and inline assemblers in the C and C++ compilers. It describes the assembly language mnemonics, the pseudo-instructions, the macros, and directives available to assembly language programmers. It also describes the format of the *`LoongArch`* ELF file.
+
+include::Intended_Audience.adoc[]
+
+include::Using_This_Book.adoc[]

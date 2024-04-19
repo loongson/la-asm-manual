@@ -1,0 +1,617 @@
+===== *8.1.2.2 Floating-Point Comparison Instructions*
+
+====== *8.1.2.2.1 `FCMP.cond.{S/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1
+^.^|src2 
+
+^.^|*`fcmp.cond.s`*
+^.^|*`$fcc[ca]`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+
+^.^|*`fcmp.cond.d`*
+^.^|*`$fcc[ca]`*
+^.^|*`$fj`* 
+^.^|*`$fk`* 
+|===========================
+
+This is a floating-point comparison instruction, which stores the result of the comparison into the specified status code (CC). There are 22 types of cond for this instruction. These comparison conditions and judgment standards are listed in the following table .
+
+[options="header"]
+[cols="20,40,20,20"]
+|===========================
+^.^|Mnemonic
+^.^|Meaning
+^.^|True Condition
+^.^|QNaN Exception
+
+^.^|*`CAF`*
+^.^|*`None`*
+^.^|*`None`* 
+^.^|*`No`* 
+
+^.^|*`CUN`*
+^.^|*`Incomparable`*
+^.^|*`UN`* 
+^.^|*`No`* 
+
+^.^|*`CEQ`*
+^.^|*`Equal`*
+^.^|*`EQ`* 
+^.^|*`No`* 
+
+^.^|*`CUEQ`*
+^.^|*`Equal`*, *`incomparable`*
+^.^|*`UN`*, *`EQ`* 
+^.^|*`No`* 
+
+^.^|*`CLT`*
+^.^|*`Less than`*
+^.^|*`LT`* 
+^.^|*`No`* 
+
+^.^|*`CULT`*
+^.^|*`Less than`*, *`incomparable`*
+^.^|*`UN`*,*`LT`* 
+^.^|*`No`* 
+
+^.^|*`CLE`*
+^.^|*`Less than`*, *`Equal`*
+^.^|*`LT`*, *`EQ`* 
+^.^|*`No`* 
+
+^.^|*`CULE`*
+^.^|*`Less than`*, *`Equal`*, *`incomparable`*
+^.^|*`UN`*, *`LT`*, *`EQ`* 
+^.^|*`No`* 
+
+^.^|*`CNE`*
+^.^|*`Vary`*
+^.^|*`GT`*, *`LT`*
+^.^|*`No`* 
+
+^.^|*`COR`*
+^.^|*`Orderly`*
+^.^|*`GT`*, *`LT`*, *`EQ`*
+^.^|*`No`* 
+
+^.^|*`CUNE`*
+^.^|*`Incomparable`*, *`unequal`*
+^.^|*`UN`*, *`GT`*, *`LT`*
+^.^|*`No`* 
+
+^.^|*`SAF`*
+^.^|*`None`*
+^.^|*`None`* 
+^.^|*`Yes`* 
+
+^.^|*`SUN`*
+^.^|Not *`greater than`*, Not *`equal`*
+^.^|*`UN`* 
+^.^|*`Yes`* 
+
+^.^|*`SEQ`*
+^.^|*`Equal`*
+^.^|*`EQ`* 
+^.^|*`Yes`* 
+
+^.^|*`SUEQ`*
+^.^|Not *`greater than`*, Not *`less than`*
+^.^|*`UN`*, *`EQ`* 
+^.^|*`Yes`* 
+
+^.^|*`SLT`*
+^.^|*`Less than`*
+^.^|*`LT`* 
+^.^|*`Yes`* 
+
+^.^|*`SULT`*
+^.^|Not *`greater than`*, Not *`equal`*
+^.^|*`UN`*,*`LT`* 
+^.^|*`Yes`* 
+
+^.^|*`SLE`*
+^.^|*`Less than`*, *`Equal`*
+^.^|*`LT`*, *`EQ`* 
+^.^|*`Yes`* 
+
+^.^|*`SULE`*
+^.^|Not *`greater than`*
+^.^|*`UN`*, *`LT`*, *`EQ`* 
+^.^|*`Yes`* 
+
+^.^|*`SNE`*
+^.^|*`Vary`*
+^.^|*`GT`*, *`LT`*
+^.^|*`Yes`* 
+
+^.^|*`SOR`*
+^.^|*`Orderly`*
+^.^|*`GT`*, *`LT`*, *`EQ`*
+^.^|*`Yes`* 
+
+^.^|*`SUNE`*
+^.^|*`Incomparable`*, *`unequal`*
+^.^|*`UN`*, *`GT`*, *`LT`*
+^.^|*`Yes`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="130,20,165,160,50,50,50,190,185"]
+|===========================
+<.^|*`fcmp.caf.s`*
+^.^|*:*
+<.^|*`$fcc`*[ca] = 0
+<.^|
+<.^|
+<.^|
+<.^|
+<.^|
+<.^|
+
+<.^|*`fcmp.caf.d`*
+^.^|*:*
+<.^|*`$fcc`*[ca] = 0
+<.^|
+<.^|
+<.^|
+<.^|
+<.^|
+<.^|
+
+<.^|*`fcmp.cun.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|
+<.^|
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cun.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|
+<.^|
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.ceq.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.ceq.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cueq.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cueq.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.clt.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|
+<.^|
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.clt.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cult.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|
+<.^|
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cult.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cle.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cle.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cule.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cule.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cne.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|*`>`*
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cne.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|*`>`*
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cor.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|*`>`*
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cor.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|*`>`*
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cune.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|*`>`*
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.cune.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|*`>`*
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.saf.s`*
+^.^|*:*
+<.^|*`$fcc`*[ca] = 0
+<.^|
+<.^|
+<.^|
+<.^|
+<.^|
+<.^|
+
+<.^|*`fcmp.saf.d`*
+^.^|*:*
+<.^|*`$fcc`*[ca] = 0
+<.^|
+<.^|
+<.^|
+<.^|
+<.^|
+<.^|
+
+<.^|*`fcmp.sun.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|
+<.^|
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sun.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|
+<.^|
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.seq.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.seq.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sueq.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sueq.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.slt.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|
+<.^|
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.slt.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sult.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|
+<.^|
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sult.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sle.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sle.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sule.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sule.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sne.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|*`>`*
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sne.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|*`>`*
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sor.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|*`>`*
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sor.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|
+<.^|*`<`*
+<.^|*`>`*
+<.^|*`==`* 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sune.s`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|*`>`*
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+
+<.^|*`fcmp.sune.d`*
+^.^|*:*
+<.^|*if* ( *`$fj`* cond = (
+<.^|*`Incomparable`*
+<.^|*`<`*
+<.^|*`>`*
+<.^| 
+<.^|) *`$fk`* ) *`$fcc`*[ca] = 1 
+<.^|*else* *`$fcc`*[ca] = 0
+|===========================
+
+*Usage :* 
+[source]
+----
+fcmp.slt.s   $fcc0, $f23, $f24
+bceqz        $fcc0, .L128
+nop
+.L128:
+nop
+----
+
+* *Explanation :*
+
+** *`fcmp.slt.s`*
+*** *if* (*`$f23`* < *`$f24`*) *`$fcc0`* = *1*
+*** *else* *`$fcc0`* = *0*
+** *`bceqz`*
+*** *if* (*`$fcc0`* == *0*) *jump* *`.L128`*
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:3.2.2.1`* .
+=====

@@ -1,0 +1,649 @@
+===== *8.1.1.7 Atomic Memory Access Instructions*
+
+====== *8.1.1.7.1 `AM{SWAP/ADD/AND/OR/XOR/MAX/MIN}[_DB].{W/D}`, `AM{MAX/MIN}[_DB].{WU/DU}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`amswap.w`*, *`amswap.d`*, *`amswap_db.w`*, *`amswap_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amadd.w`*, *`amadd.d`*, *`amadd_db.w`*, *`amadd_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amand.w`*, *`amand.d`*, *`amand_db.w`*, *`amand_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amor.w`*, *`amor.d`*, *`amor_db.w`*, *`amor_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amxor.w`*, *`amxor.d`*, *`amxor_db.w`*, *`amxor_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammax.w`*, *`ammax.d`*, *`ammax_db.w`*, *`ammax_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammin.w`*, *`ammin.d`*, *`ammin_db.w`*, *`ammin_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammax.wu`*, *`ammax.du`*, *`ammax_db.wu`*, *`ammax_db.du`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`ammin.wu`*, *`ammin.du`*, *`ammin_db.wu`*, *`ammin_db.du`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="130,20,850"]
+|===========================
+.2+<.<|*`amswap.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (*`$rk`*[31:0], *`$rj`*, [31:0])
+
+.2+<.<|*`amswap.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` (*`$rk`*[63:0], *`$rj`*, [63:0])
+
+.2+<.<|*`amswap_db.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (*`$rk`*[31:0], *`$rj`*, [31:0])
+
+.2+<.<|*`amswap_db.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` (*`$rk`*[63:0], *`$rj`*, [63:0])
+
+.2+<.<|*`amadd.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[31:0] `*+*` *`$rk`*[31:0]), *`$rj`*, [31:0])
+
+.2+<.<|*`amadd.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[63:0] `*+*` *`$rk`*[63:0]), *`$rj`*, [63:0])
+
+.2+<.<|*`amadd_db.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[31:0] `*+*` *`$rk`*[31:0]), *`$rj`*, [31:0])
+
+.2+<.<|*`amadd_db.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[63:0] `*+*` *`$rk`*[63:0]), *`$rj`*, [63:0])
+
+.2+<.<|*`amand.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[31:0] `*&*` *`$rk`*[31:0]), *`$rj`*, [31:0])
+
+.2+<.<|*`amand.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[63:0] `*&*` *`$rk`*[63:0]), *`$rj`*, [63:0])
+
+.2+<.<|*`amand_db.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[31:0] `*&*` *`$rk`*[31:0]), *`$rj`*, [31:0])
+
+.2+<.<|*`amand_db.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[63:0] `*&*` *`$rk`*[63:0]), *`$rj`*, [63:0])
+
+.2+<.<|*`amor.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[31:0] `*\|*` *`$rk`*[31:0]), *`$rj`*, [31:0])
+
+.2+<.<|*`amor.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[63:0] `*\|*` *`$rk`*[63:0]), *`$rj`*, [63:0])
+
+.2+<.<|*`amor_db.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[31:0] `*\|*` *`$rk`*[31:0]), *`$rj`*, [31:0])
+
+.2+<.<|*`amor_db.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[63:0] `*\|*` *`$rk`*[63:0]), *`$rj`*, [63:0])
+
+.2+<.<|*`amxor.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[31:0] `*^*` *`$rk`*[31:0]), *`$rj`*, [31:0])
+
+.2+<.<|*`amxor.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[63:0] `*^*` *`$rk`*[63:0]), *`$rj`*, [63:0])
+
+.2+<.<|*`amxor_db.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[31:0] `*^*` *`$rk`*[31:0]), *`$rj`*, [31:0])
+
+.2+<.<|*`amxor_db.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0]) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[63:0] `*^*` *`$rk`*[63:0]), *`$rj`*, [63:0])
+
+.2+<.<|*`ammax.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (signed *`max`*{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+.2+<.<|*`ammax.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*2*. `*MemoryStore*` (signed *`max`*{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+.2+<.<|*`ammax_db.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (signed *`max`*{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+.2+<.<|*`ammax_db.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*2*. `*MemoryStore*` (signed *`max`*{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+.2+<.<|*`ammin.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (signed *`min`*{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+.2+<.<|*`ammin.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*2*. `*MemoryStore*` (signed *`min`*{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+.2+<.<|*`ammin_db.w`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (signed *`min`*{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+.2+<.<|*`ammin_db.d`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*2*. `*MemoryStore*` (signed *`min`*{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+.2+<.<|*`ammax.wu`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (unsigned *`max`*{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+.2+<.<|*`ammax.du`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*2*. `*MemoryStore*` (unsigned *`max`*{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+.2+<.<|*`ammax_db.wu`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (unsigned *`max`*{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+.2+<.<|*`ammax_db.du`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*2*. `*MemoryStore*` (unsigned *`max`*{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+.2+<.<|*`ammin.wu`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (unsigned *`min`*{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+.2+<.<|*`ammin.du`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*2*. `*MemoryStore*` (unsigned *`min`*{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+
+.2+<.<|*`ammin_db.wu`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (unsigned *`min`*{*`$rd`*[31:0], *`$rk`*[31:0]}, *`$rj`*, [31:0])
+
+.2+<.<|*`ammin_db.du`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*2*. `*MemoryStore*` (unsigned *`min`*{*`$rd`*[63:0], *`$rk`*[63:0]}, *`$rj`*, [63:0])
+|===========================
+
+*Usage :* 
+[source]
+----
+li.d       $r26, 0x0123456789abcdef      #        $r26  = 0x0123456789abcdef
+li.d       $r27, 0xfedcba9876543210      #        $r27  = 0xfedcba9876543210
+st.d       $r27, $r24, 0                 # memory[$r24] = 0xfedcba9876543210
+amswap.d   $r25, $r26, $r24              #        $r25  = 0xfedcba9876543210
+                                         # memory[$r24] = 0x0123456789abcdef
+amswap.h   $r25, $r26, $r24              #        $r25  = 0xffffffffffffcdef
+                                         # memory[$r24] = 0x0123456789abcdef
+ammin.du   $r25, $r26, $r24              #        $r25  = 0xfedcba9876543210
+                                         # memory[$r24] = 0x0123456789abcdef
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:2.2.7.1`* .
+=====
+
+====== *8.1.1.7.2 `AM{SWAP/ADD}[_DB].{B/H} LoongArch V1.1 instruction`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`amswap.b`*, *`amswap.h`*, *`amswap_db.b`*, *`amswap_db.h`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amadd.b`*, *`amadd.h`*, *`amadd_db.b`*, *`amadd_db.h`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="130,20,850"]
+|===========================
+.2+<.<|*`amswap.b`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN)  
+<.<|*2*. `*MemoryStore*` (*`$rk`*[ 7 :0], *`$rj`*, [ 7 :0])
+
+.2+<.<|*`amswap.h`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN)
+<.<|*2*. `*MemoryStore*` (*`$rk`*[15:0], *`$rj`*, [15:0])
+
+.2+<.<|*`amswap_db.b`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (*`$rk`*[ 7 :0], *`$rj`*, [ 7 :0])
+
+.2+<.<|*`amswap_db.h`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` (*`$rk`*[15:0], *`$rj`*, [15:0])
+
+.2+<.<|*`amadd.b`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[ 7 :0] `*+*` *`$rk`*[ 7 :0]), *`$rj`*, [ 7 :0])
+
+.2+<.<|*`amadd.h`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[15:0] `*+*` *`$rk`*[15:0]), *`$rj`*, [15:0])
+
+.2+<.<|*`amadd_db.b`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[ 7 :0] `*+*` *`$rk`*[ 7 :0]), *`$rj`*, [ 7 :0])
+
+.2+<.<|*`amadd_db.h`*
+.2+^.<|*:*
+<.<|*1*. *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN) 
+<.<|*2*. `*MemoryStore*` ( (*`$rd`*[15:0] `*+*` *`$rk`*[15:0]), *`$rj`*, [15:0])
+|===========================
+
+*Usage :* 
+[source]
+----
+li.d       $r26, 0xfedcba9876543210      #        $r26  = 0xfedcba9876543210
+li.d       $r27, 0x0123456789abcdef      #        $r27  = 0x0123456789abcdef
+st.d       $r27, $r24, 0                 # memory[$r24] = 0x0123456789abcdef
+amswap.b   $r25, $r26, $r24              #        $r25  = 0xffffffffffffffef
+                                         # memory[$r24] = 0x0123456789abcd10
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:2.2.7.2`* .
+=====
+
+====== *8.1.1.7.3 `AMCAS[_DB].{B/H/W/D} LoongArch V1.1 instruction`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2
+^.^|src3
+
+^.^|*`amcas.b`*, *`amcas.h`*, *`amcas.w`*, *`amcas.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+
+^.^|*`amcas_db.b`*, *`amcas_db.h`*, *`amcas_db.w`*, *`amcas_db.d`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="120,20,860"]
+|===========================
+.2+<.<|*`amcas.b`*
+.2+^.<|*:*
+<.<a|if ( *`$rd`*[ 7 :0] == `*MemoryLoad*` (*`$rj`*, [ 7 :0]) ) 
+
+* *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN)
+* *`MemoryStore`* (*`$rk`*[ 7 :0], *`$rj`*, [ 7 :0])
+
+<.<|else *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN)
+
+.2+<.<|*`amcas.h`*
+.2+^.<|*:*
+<.<a|if ( *`$rd`*[15:0] == `*MemoryLoad*` (*`$rj`*, [15:0]) ) 
+
+* *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN)
+* *`MemoryStore`* (*`$rk`*[15:0], *`$rj`*, [15:0])
+
+<.<|else *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN)
+
+.2+<.<|*`amcas.w`*
+.2+^.<|*:*
+<.<a|if ( *`$rd`*[31:0] == `*MemoryLoad*` (*`$rj`*, [31:0]) ) 
+
+* *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN)
+* *`MemoryStore`* (*`$rk`*[31:0], *`$rj`*, [31:0])
+
+<.<|else *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN)
+
+.2+<.<|*`amcas.d`*
+.2+^.<|*:*
+<.<a|if ( *`$rd`*[63:0] == `*MemoryLoad*` (*`$rj`*, [63:0]) ) 
+
+* *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+* *`MemoryStore`* (*`$rk`*[63:0], *`$rj`*, [63:0])
+
+<.<|else *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+
+.2+<.<|*`amcas_db.b`*
+.2+^.<|*:*
+<.<a|if ( *`$rd`*[ 7 :0] == `*MemoryLoad*` (*`$rj`*, [ 7 :0]) ) 
+
+* *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN)
+* *`MemoryStore`* (*`$rk`*[ 7 :0], *`$rj`*, [ 7 :0])
+
+<.<|else *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [ 7 :0]), GRLEN)
+
+.2+<.<|*`amcas_db.h`*
+.2+^.<|*:*
+<.<a|if ( *`$rd`*[15:0] == `*MemoryLoad*` (*`$rj`*, [15:0]) ) 
+
+* *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN)
+* *`MemoryStore`* (*`$rk`*[15:0], *`$rj`*, [15:0])
+
+<.<|else *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [15:0]), GRLEN)
+
+.2+<.<|*`amcas_db.w`*
+.2+^.<|*:*
+<.<a|if ( *`$rd`*[31:0] == `*MemoryLoad*` (*`$rj`*, [31:0]) ) 
+
+* *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN)
+* *`MemoryStore`* (*`$rk`*[31:0], *`$rj`*, [31:0])
+
+<.<|else *`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`*, [31:0]), GRLEN)
+
+.2+<.<|*`amcas_db.d`*
+.2+^.<|*:*
+<.<a|if ( *`$rd`*[63:0] == `*MemoryLoad*` (*`$rj`*, [63:0]) ) 
+
+* *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+* *`MemoryStore`* (*`$rk`*[63:0], *`$rj`*, [63:0])
+
+<.<|else *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+|===========================
+
+*Usage :* 
+[source]
+----
+li.d       $r26, 0x0123456789abcdef      #        $r26  = 0x0123456789abcdef
+li.d       $r25, 0xfedcba9876543210      #        $r25  = 0xfedcba9876543210
+st.d       $r25, $r24, 0                 # memory[$r24] = 0xfedcba9876543210
+amcas.d    $r25, $r26, $r24              # memory[$r24] == $r25
+                                         #        $r25  = 0xfedcba9876543210
+                                         # memory[$r24] = 0x0123456789abcdef
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:2.2.7.3`* .
+=====
+
+====== *8.1.1.7.4 `LL.{W/D}`, `SC.{W/D}`*
+
+*Syntax:*
+
+ opcode    dest,  src1,  src2
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+^.^|src2
+
+^.^|*`ll.w`*, *`ll.d`*, *`sc.w`*, *`sc.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si16`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="55,20,925"]
+|===========================
+<.^|*`ll.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`MemoryLoad`* (*`$rj`* + {*`si16`*}, [31:0]), GRLEN)
+
+<.^|*`ll.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = *`MemoryLoad`* (*`$rj`* + {*`si16`*}, [63:0])
+
+<.^|*`sc.w`*
+^.^|*:*
+<.^|*`MemoryStore`* (*`$rd`*[31:0], *`$rj`* + {*`si16`*}, [31:0])
+
+<.^|*`sc.d`*
+^.^|*:*
+<.^|*`MemoryStore`* (*`$rd`*[63:0], *`$rj`* + {*`si16`*}, [63:0])
+|===========================
+
+* *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
+
+** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
+
+*Usage :* 
+[source]
+----
+li.d    $r24, 0x0123456789abcdef    #             $r24 = 0x0123456789abcdef
+st.d    $r24, $r12, 0               # memory[$r12 + 0] = 0x0123456789abcdef
+
+ll.w    $r25, $r12, 0               #             $r25 = 0xffffffff89abcdef
+addi.w  $r25, $r25, 0               #             $r25 = 0xffffffff89abcdef
+sc.w    $r25, $r12, 0               # memory[$r12 + 0] = 0x0123456789abcdef
+
+ll.d    $r25, $r12, 0               #             $r25 = 0x0123456789abcdef
+addi.d  $r25, $r25, 10              #             $r25 = 0x0123456789abcdef
+sc.d    $r25, $r12, 0               # memory[$r12 + 0] = 0x0123456789abcdef
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:2.2.7.4`* .
+=====
+
+====== *8.1.1.7.5 `SC.Q LoongArch V1.1 instruction`*
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="70,10,10,10"]
+|===========================
+^.^|opcode
+^.^|src1
+^.^|src2 
+^.^|src3
+
+^.^|*`sc.q`*
+^.^|*`$rd`*
+^.^|*`$rk`* 
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="55,20,925"]
+|===========================
+<.^|*`sc.q`*
+^.^|*:*
+<.^|*`MemoryStore`* ( {*`$rk`*[63:0],*`$rd`*[63:0]}, *`$rj`*, [127:0])
+|===========================
+
+*Usage :* 
+
+[source]
+----
+li.d   $r26, 0x0123456789abcdef  #        $r26  = 0x0123456789abcdef
+li.d   $r25, 0xfedcba9876543210  #        $r25  = 0xfedcba9876543210
+
+sc.q   $r25, $r26, $r24          # memory[$r24] = 0x0123456789abcdeffedcba9876543210
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:2.2.7.5`* .
+=====
+
+====== *8.1.1.7.6 `LL.ACQ.{W/D}, SC.REL.{W/D} LoongArch V1.1 instruction`*
+
+*Syntax:*
+
+ opcode    dest,  src1
+
+[options="header"]
+[cols="80,10,10"]
+|===========================
+^.^|opcode
+^.^|dest
+^.^|src1 
+
+^.^|*`ll.acq.w`*, *`ll.acq.d`*, *`sc.rel.w`*, *`sc.rel.d`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="95,20,885"]
+|===========================
+<.^|*`ll.acq.w`*
+^.^|*:*
+<.^|*`$rd`*[31:0] = `*Sign*`*Extend* (*`MemoryLoad`* (*`$rj`*, [31:0]), GRLEN)
+
+<.^|*`ll.acq.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = *`MemoryLoad`* (*`$rj`*, [63:0])
+
+<.^|*`sc.rel.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = *`MemoryStore`* (*`$rd`*[31:0], *`$rj`*, [31:0])
+
+<.^|*`sc.rel.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = *`MemoryStore`* (*`$rd`*[63:0], *`$rj`*, [63:0])
+|===========================
+
+*Usage :* 
+
+[source]
+----
+li.d       $r24, 0x0123456789abcdef    #            $r24  = 0x0123456789abcdef
+st.d       $r24, $r12, 0               # memory[$r12 + 0] = 0x0123456789abcdef
+
+ll.acq.w   $r25, $r12                  #            $r25  = 0xffffffff89abcdef
+addi.w     $r25, $r25, 0               #            $r25  = 0xffffffff89abcdef
+sc.rel.w   $r25, $r12                  # memory[$r12 + 0] = 0x0123456789abcdef
+
+ll.acq.d   $r25, $r12                  #            $r25  = 0x0123456789abcdef
+addi.d     $r25, $r25, 10              #            $r25  = 0x0123456789abcdef
+sc.rel.d   $r25, $r12                  # memory[$r12 + 0] = 0x0123456789abcdef
+----
+
+[NOTE]
+=====
+For more information, refer to the *`LoongArch Architecture manual:2.2.7.6`* .
+=====
