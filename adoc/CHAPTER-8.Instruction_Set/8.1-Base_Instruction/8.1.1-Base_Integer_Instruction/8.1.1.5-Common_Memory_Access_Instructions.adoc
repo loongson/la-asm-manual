@@ -1,5 +1,13 @@
 ===== *8.1.1.5 Common Memory Access Instructions*
 
+[grid=none]
+[frame=none]
+[cols="50,50"]
+|===========================
+<.^|*value* = `*MemoryLoad*` ( *address*, *size* )
+<.^|`*MemoryStore*` ( *value*, *address*, *size* )
+|===========================
+
 ====== *8.1.1.5.1 `LD.{B[U]/H[U]/W[U]/D}`*
 
 *Syntax:*
@@ -14,7 +22,7 @@
 ^.^|src1 
 ^.^|src2
 
-^.^|*`ld.b`*, *`ld.h`*, *`ld.w`*, *`ld.d`*, *`ld.bu`*, *`ld.hu`*, *`ld.wu`*
+^.^|*`ld.b`*, *`ld.h`*, *`ld.w`*, *`ld.bu`*, *`ld.hu`*, *`ld.wu`*, *`ld.d`*
 ^.^|*`$rd`*
 ^.^|*`$rj`* 
 ^.^|*`si12`* 
@@ -22,19 +30,38 @@
 
 *Description :*
 
-*`ld.b`* : *`$rd`* = *SignExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), BYTE), GRLEN)
+[grid=none]
+[frame=none]
+[cols="65,20,915"]
+|===========================
+<.^|*`ld.b`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN), [ 7 :0]), GRLEN)
 
-*`ld.h`* : *`$rd`* = *SignExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), HALFWORD), GRLEN)
+<.^|*`ld.h`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN), [15:0]), GRLEN)
 
-*`ld.w`* : *`$rd`* = *SignExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), WORD), GRLEN)
+<.^|*`ld.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` (*`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN), [31:0]), GRLEN)
 
-*`ld.d`* : *`$rd`* = *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), DOUBLEWORD)
+<.^|*`ld.bu`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Zero*`*Extend* (`*MemoryLoad*` (*`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN), [ 7 :0]), GRLEN)
 
-*`ld.bu`* : *`$rd`* = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), BYTE), GRLEN)
+<.^|*`ld.hu`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Zero*`*Extend* (`*MemoryLoad*` (*`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN), [15:0]), GRLEN)
 
-*`ld.hu`* : *`$rd`* = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), HALFWORD), GRLEN)
+<.^|*`ld.wu`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Zero*`*Extend* (`*MemoryLoad*` (*`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN), [31:0]), GRLEN)
 
-*`ld.wu`* : *`$rd`* = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), WORD), GRLEN)
+<.^|*`ld.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN), [63:0])
+|===========================
 
 * *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
 
@@ -42,19 +69,19 @@
 
 [source]
 ----
-                           # memory[$r22 - 40] = 0xfedcba9876543210
-ld.b    $r23, $r22, -40    # $r23 = 0x0000000000000010
-ld.h    $r23, $r22, -40    # $r23 = 0x0000000000003210
-ld.w    $r23, $r22, -40    # $r23 = 0x0000000076543210
-ld.d    $r23, $r22, -40    # $r23 = 0xfedcba9876543210
-ld.bu   $r23, $r22, -40    # $r23 = 0x0000000000000010
-ld.hu   $r23, $r22, -40    # $r23 = 0x0000000000003210
-ld.wu   $r23, $r22, -40    # $r23 = 0x0000000076543210
+                           # memory[$r22 - 40] = 0x0123456789abcdef
+ld.b    $r23, $r22, -40    # $r23 = 0xffffffffffffffef
+ld.bu   $r23, $r22, -40    # $r23 = 0x00000000000000ef
+ld.h    $r23, $r22, -40    # $r23 = 0xffffffffffffcdef
+ld.hu   $r23, $r22, -40    # $r23 = 0x000000000000cdef
+ld.w    $r23, $r22, -40    # $r23 = 0xffffffff89abcdef
+ld.wu   $r23, $r22, -40    # $r23 = 0x0000000089abcdef
+ld.d    $r23, $r22, -40    # $r23 = 0x0123456789abcdef
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.5.1`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.5.1`* .
 =====
 
 ====== *8.1.1.5.2 `ST.{B/H/W/D}`*
@@ -79,13 +106,26 @@ For more information, refer to the *`LoongArch instruction manual:2.2.5.1`* .
 
 *Description :*
 
-*`st.b`* : *MemoryStore*(*`$rd`*[ 7 :0], (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), BYTE)
+[grid=none]
+[frame=none]
+[cols="55,20,925"]
+|===========================
+<.^|*`st.b`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$rd`*[ 7 :0], ( *`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN) ), [ 7 :0] )
 
-*`st.h`* : *MemoryStore*(*`$rd`*[15:0], (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), HALFWORD)
+<.^|*`st.h`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$rd`*[15:0], ( *`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN) ), [15:0] )
 
-*`st.w`* : *MemoryStore*(*`$rd`*[31:0], (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), WORD)
+<.^|*`st.w`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$rd`*[31:0], ( *`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN) ), [31:0] )
 
-*`st.d`* : *MemoryStore*(*`$rd`*[63:0], (*`$rj`* + *SignExtend*( *`si12`*, GRLEN) ), DOUBLEWORD)
+<.^|*`st.d`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$rd`*[63:0], ( *`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN) ), [63:0] )
+|===========================
 
 * *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
 
@@ -94,6 +134,7 @@ For more information, refer to the *`LoongArch instruction manual:2.2.5.1`* .
 [source]
 ----
 li.w $r23, 0xfedcba9876543210   # $r23 = 0xfedcba9876543210 
+
 st.b $r23, $r22, -24            # memory[$r22 - 24] = 0x0000000000000010
 st.h $r23, $r22, -24            # memory[$r22 - 24] = 0x0000000000003210
 st.w $r23, $r22, -24            # memory[$r22 - 24] = 0x0000000076543210
@@ -102,7 +143,7 @@ st.d $r23, $r22, -24            # memory[$r22 - 24] = 0xfedcba9876543210
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.5.1`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.5.1`* .
 =====
 
 ====== *8.1.1.5.3 `LDX.{B[U]/H[U]/W[U]/D}`*
@@ -119,7 +160,7 @@ For more information, refer to the *`LoongArch instruction manual:2.2.5.1`* .
 ^.^|src1 
 ^.^|src2
 
-^.^|*`ldx.b`*, *`ldx.h`*, *`ldx.w`*, *`ldx.d`*, *`ldx.bu`*, *`ldx.hu`*, *`ldx.wu`*
+^.^|*`ldx.b`*, *`ldx.h`*, *`ldx.w`*, *`ldx.bu`*, *`ldx.hu`*, *`ldx.wu`*, *`ldx.d`*
 ^.^|*`$rd`*
 ^.^|*`$rj`* 
 ^.^|*`$rk`* 
@@ -127,38 +168,58 @@ For more information, refer to the *`LoongArch instruction manual:2.2.5.1`* .
 
 *Description :*
 
-*`ldx.b`* : *`$rd`* = *SignExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), BYTE), GRLEN)
+[grid=none]
+[frame=none]
+[cols="75,20,905"]
+|===========================
+<.^|*`ldx.b`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [ 7 :0]), GRLEN)
 
-*`ldx.h`* : *`$rd`* = *SignExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), HALFWORD), GRLEN)
+<.^|*`ldx.h`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [15:0]), GRLEN)
 
-*`ldx.w`* : *`$rd`* = *SignExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), WORD), GRLEN)
+<.^|*`ldx.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [31:0]), GRLEN)
 
-*`ldx.d`* : *`$rd`* = *MemoryLoad*( (*`$rj`* + *`$rk`*), DOUBLEWORD)
+<.^|*`ldx.bu`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Zero*`*Extend* (`*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [ 7 :0]), GRLEN)
 
-*`ldx.bu`* : *`$rd`* = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), BYTE), GRLEN)
+<.^|*`ldx.hu`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Zero*`*Extend* (`*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [15:0]), GRLEN)
 
-*`ldx.hu`* : *`$rd`* = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), HALFWORD), GRLEN)
+<.^|*`ldx.wu`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Zero*`*Extend* (`*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [31:0]), GRLEN)
 
-*`ldx.wu`* : *`$rd`* = *ZeroExtend*( *MemoryLoad*( (*`$rj`* + *`$rk`*), WORD), GRLEN)
+<.^|*`ldx.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [63:0])
+|===========================
 
 *Usage :*
 
 [source]
 ----
-                            # memory[$r22 - $r24] = 0xfedcba9876543210
 li.w    $r24, -40           # $r24 = -40
-ldx.b   $r23, $r22, $r24    # $r23 = 0x0000000000000010
-ldx.h   $r23, $r22, $r24    # $r23 = 0x0000000000003210
-ldx.w   $r23, $r22, $r24    # $r23 = 0x0000000076543210
-ldx.d   $r23, $r22, $r24    # $r23 = 0xfedcba9876543210
-ldx.bu  $r23, $r22, $r24    # $r23 = 0x0000000000000010
-ldx.hu  $r23, $r22, $r24    # $r23 = 0x0000000000003210
-ldx.wu  $r23, $r22, $r24    # $r23 = 0x0000000076543210
+
+                            # memory[$r22 - $r24] = 0x0123456789abcdef
+ldx.b   $r23, $r22, $r24    # $r23 = 0xffffffffffffffef
+ldx.bu  $r23, $r22, $r24    # $r23 = 0x00000000000000ef
+ldx.h   $r23, $r22, $r24    # $r23 = 0xffffffffffffcdef
+ldx.hu  $r23, $r22, $r24    # $r23 = 0x000000000000cdef
+ldx.w   $r23, $r22, $r24    # $r23 = 0xffffffff89abcdef
+ldx.wu  $r23, $r22, $r24    # $r23 = 0x0000000089abcdef
+ldx.d   $r23, $r22, $r24    # $r23 = 0x0123456789abcdef
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.5.2`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.5.2`* .
 =====
 
 ====== *8.1.1.5.4 `STX.{B/H/W/D}`*
@@ -185,20 +246,34 @@ For more information, refer to the *`LoongArch instruction manual:2.2.5.2`* .
 
 *Description :*
 
-*`stx.b`* : *MemoryStore*(*`$rd`*[ 7 :0], (*`$rj`* + *`$rk`*), BYTE)
+[grid=none]
+[frame=none]
+[cols="65,20,925"]
+|===========================
+<.^|*`stx.b`*
+^.^|*:*
+<.^|`*MemoryStore*` (*`$rd`*[ 7 :0], (*`$rj`* `*+*` *`$rk`*), [ 7 :0])
 
-*`stx.h`* : *MemoryStore*(*`$rd`*[15:0], (*`$rj`* + *`$rk`*), HALFWORD)
+<.^|*`stx.h`*
+^.^|*:*
+<.^|`*MemoryStore*` (*`$rd`*[15:0], (*`$rj`* `*+*` *`$rk`*), [15:0])
 
-*`stx.w`* : *MemoryStore*(*`$rd`*[31:0], (*`$rj`* + *`$rk`*), WORD)
+<.^|*`stx.w`*
+^.^|*:*
+<.^|`*MemoryStore*` (*`$rd`*[31:0], (*`$rj`* `*+*` *`$rk`*), [31:0])
 
-*`stx.d`* : *MemoryStore*(*`$rd`*[63:0], (*`$rj`* + *`$rk`*), DOUBLEWORD)
+<.^|*`stx.d`*
+^.^|*:*
+<.^|`*MemoryStore*` (*`$rd`*[63:0], (*`$rj`* `*+*` *`$rk`*), [63:0])
+|===========================
 
 *Usage :* 
 
 [source]
 ----
-li.w   $r23, 0xfedcba9876543210   # $r23 = 0xfedcba9876543210  
 li.w   $r24, -40                  # $r24 = -40
+li.w   $r23, 0xfedcba9876543210   # $r23 = 0xfedcba9876543210  
+
 stx.b  $r23, $r22, $r24           # memory[$r22 - $r24] = 0x0000000000000010
 stx.h  $r23, $r22, $r24           # memory[$r22 - $r24] = 0x0000000000003210
 stx.w  $r23, $r22, $r24           # memory[$r22 - $r24] = 0x0000000076543210
@@ -207,7 +282,7 @@ stx.d  $r23, $r22, $r24           # memory[$r22 - $r24] = 0xfedcba9876543210
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.5.2`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.5.2`* .
 =====
 
 ====== *8.1.1.5.5 `LDPTR.{W/D}`*
@@ -232,25 +307,37 @@ For more information, refer to the *`LoongArch instruction manual:2.2.5.2`* .
 
 *Description :*
 
-*`ldptr.w`* : *`$rd`* = *SignExtend*( *MemoryLoad*( (*`$rj`* + *SignExtend*(*`si16`*, GRLEN) ), WORD), GRLEN)
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+<.^|*`ldptr.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (`*MemoryLoad*` ( *`$rj`* `*+*` `*Sign*`*Extend*(*`si16`*, GRLEN), [31:0]), GRLEN)
 
-*`ldptr.d`* : *`$rd`* = *MemoryLoad*( (*`$rj`* + *SignExtend*(*`si16*`, GRLEN) ), WORD)
+<.^|*`ldptr.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*MemoryLoad*` ( *`$rj`* `*+*` `*Sign*`*Extend*(*`si16*`, GRLEN), [63:0])
+|===========================
 
-** *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
+* *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
 
-*** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
+** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
 
 *Usage :* 
 
 [source]
 ----
-ldptr.w $r23, $r22, -40    # $r23 = 0x0000000076543210
-ldptr.d $r23, $r22, -40    # $r23 = 0xfedcba9876543210
+li.d    $r23, 0x0123456789abcdef
+
+st.d    $r23, $r22, -40    # memory[$r22 - 40] = 0x0123456789abcdef
+ldptr.w $r23, $r22, -40    # $r23 = 0xffffffff89abcdef
+ldptr.d $r23, $r22, -40    # $r23 = 0x0123456789abcdef
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.5.3`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.5.3`* .
 =====
 
 ====== *8.1.1.5.6 `STPTR.{W/D}`*
@@ -275,27 +362,36 @@ For more information, refer to the *`LoongArch instruction manual:2.2.5.3`* .
 
 *Description :*
 
-*`stptr.w`* : *MemoryStore*( *`$rd`*[31:0], (*`$rj`* + *SignExtend*({*`si14`*, 2'b0}, GRLEN) ), WORD)
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+<.^|*`ldptr.w`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$rd`*[31:0], *`$rj`* `*+*` `*Sign*`*Extend*({*`si14`*, 2'b0}, GRLEN), [31:0])
 
-*`stptr.d`* : *MemoryStore*( *`$rd`*[63:0], (*`$rj`* + *SignExtend*({*`si14`*, 2'b0}, GRLEN) ), DOUBLEWORD)
+<.^|*`ldptr.d`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$rd`*[63:0], *`$rj`* `*+*` `*Sign*`*Extend*({*`si14`*, 2'b0}, GRLEN), [63:0])
+|===========================
 
-** *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
+* *`si16`* : a 4-bytes aligned 16-bits signed immediate value in range :
 
-*** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
-
-<<<
+** [*`-32768`*, *`32764`*] or [*`-0x8000`*, *`0x7ffc`*]
 
 *Usage :* 
 
 [source]
 ----
+li.d    $r23, 0xfedcba9876543210
+
 stptr.w $r23, $r22, -40    # memory[$r22 - 40] = 0x0000000076543210
 stptr.d $r23, $r22, -40    # memory[$r22 - 40] = 0xfedcba9876543210
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.5.3`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.5.3`* .
 =====
 
 ====== *8.1.1.5.6 `PRELD`, `PRELDX`*
@@ -339,5 +435,5 @@ For more information, refer to the *`LoongArch instruction manual:2.2.5.3`* .
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.5.4` / `2.2.5.5`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.5.4` / `2.2.5.5`* .
 =====

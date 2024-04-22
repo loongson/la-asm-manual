@@ -15,35 +15,66 @@
 ^.^|src2
 
 ^.^|*`fld.s`*, *`fld.d`*, *`fst.d`*, *`fst.d`*
-^.^|*`fd`*
-^.^|*`rj`*
+^.^|*`$fd`*
+^.^|*`$rj`*
 ^.^|*`si12`*  
 |===========================
 
 *Description :*
 
-*`fld.s`* : *`$fd`*[31:0] = *MemoryLoad*((*`$rj`* + *SignExtend*(*`si12`*, GRLEN) ), word)
+[grid=none]
+[frame=none]
+[cols="65,20,915"]
+|===========================
+<.^|*`fld.s`*
+^.^|*:*
+<.^|*`$fd`*[31:0] = `*MemoryLoad*` ( *`$rj`* `*+*` `*Sign*`*Extend*(*`si12`*, GRLEN), [31:0])
 
-*`fld.d`* : *`$fd`* = *MemoryLoad*((*`$rj`* + *SignExtend*(*`si12`*, GRLEN) ), doubleword)
+<.^|*`fld.d`*
+^.^|*:*
+<.^|*`$fd`*[63:0] = `*MemoryLoad*` ( *`$rj`* `*+*` `*Sign*`*Extend*(*`si12`*, GRLEN), [63:0])
 
-*`fst.s`* : *MemoryStore*(*`$fd`*[31:0], (*`$rj`* + *SignExtend*(*`si12`*, GRLEN) ), word)
+<.^|*`fst.s`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$fd`*[31:0], *`$rj`* `*+*` `*Sign*`*Extend*(*`si12`*, GRLEN), [31:0])
 
-*`fst.d`* : *MemoryStore*(*`$fd`*, (*`$rj`* + *SignExtend*(*`si12`*, GRLEN) ), doubleword)
+<.^|*`fst.d`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$fd`*[63:0], *`$rj`* `*+*` `*Sign*`*Extend*(*`si12`*, GRLEN), [63:0])
+|===========================
 
 * *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
 
 *Usage :* 
 [source]
 ----
-fst.s $f24, $r22, -24
-fld.s $f26, $r22, -24 	        
-fst.d $f25, $r22, -24	
-fld.d $f27, $r22, -24
+li.d         $r24, 0x000000003fc00000   # $r24 = 0x000000003fc00000
+movgr2fr.w   $f24, $r24                 # $f24 = 0x????????3fc00000 = 1.5
+fst.s        $f24, $r12, 0              # memory[$r12] = 0x????????3fc00000 = 1.5
+-------------------------------------------------------------------------------------
+    la.local $r12, .LC1                 # $r12 = address(.LC1) 
+    fld.s    $f24, $r12, 0              # $f24 = 0x????????40200000 = 2.5
+
+.LC1:
+    .word    1075838976
+    .align   3
+-------------------------------------------------------------------------------------
+li.d         $r24, 0x400c000000000000   # $r24 = 0x400c000000000000
+movgr2fr.d   $f24, $r24                 # $f24 = 0x400c000000000000 = 3.5
+fst.d        $f24, $r12, 0              # memory[$r12] = 0x400c000000000000 = 3.5
+-------------------------------------------------------------------------------------
+    la.local $r12, .LC3                 # $r12 = address(.LC3) 
+    fld.d    $f24, $r12, 0              # $f24 = 0x4012000000000000 = 4.5
+
+.LC3:
+    .word    0                          # low  32 bits
+    .word    1074921472                 # high 32 bits 
+    .align   3
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:3.2.6.1`* .
+For more information, refer to the *`LoongArch Architecture manual:3.2.6.1`* .
 =====
 
 ====== *8.1.2.6.2 `FLDX.{S/D}`, `FSTX.{S/D}`*
@@ -61,31 +92,62 @@ For more information, refer to the *`LoongArch instruction manual:3.2.6.1`* .
 ^.^|src2
 
 ^.^|*`fldx.s`*, *`fldx.d`*, *`fstx.d`*, *`fstx.d`*
-^.^|*`fd`*
-^.^|*`rj`*
-^.^|*`rk`*  
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`$rk`*  
 |===========================
 
 *Description :*
 
-*`fldx.s`* : *`$fd`*[31:0] = *MemoryLoad*((*`$rj`* + *`$rk`*), word)
+[grid=none]
+[frame=none]
+[cols="75,20,905"]
+|===========================
+<.^|*`fldx.s`*
+^.^|*:*
+<.^|*`$fd`*[31:0] = `*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [31:0])
 
-*`fldx.d`* : *`$fd`* = *MemoryLoad*((*`$rj`* + *`$rk`*), doubleword)
+<.^|*`fldx.d`*
+^.^|*:*
+<.^|*`$fd`*[63:0] = `*MemoryLoad*` ( *`$rj`* `*+*` *`$rk`*, [63:0])
 
-*`fstx.s`* : *MemoryStore*(*`$fd`*[31:0], (*`$rj`* + *`$rk`*), word)
+<.^|*`fstx.s`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$fd`*[31:0], *`$rj`* `*+*` *`$rk`*, [31:0])
 
-*`fstx.d`* : *MemoryStore*(*`$fd`*, (*`$rj`* + *`$rk`*), doubleword)
+<.^|*`fstx.d`*
+^.^|*:*
+<.^|`*MemoryStore*` ( *`$fd`*[63:0], *`$rj`* `*+*` *`$rk`*, [63:0])
+|===========================
 
 *Usage :* 
 [source]
 ----
-fstx.s $f24, $r22, $r23
-fldx.s $f26, $r22, $r23	        
-fstx.d $f25, $r22, $r23
-fldx.d $f27, $r22, $r23
+li.d         $r24, 0x000000003fc00000   # $r24 = 0x000000003fc00000
+movgr2fr.w   $f24, $r24                 # $f24 = 0x????????3fc00000 = 1.5
+fstx.s       $f24, $r12, $r0            # memory[$r12] = 0x????????3fc00000 = 1.5
+-------------------------------------------------------------------------------------
+    la.local $r12, .LC1                 # $r12 = address(.LC1) 
+    fldx.s   $f24, $r12, $r0            # $f24 = 0x????????40200000 = 2.5
+
+.LC1:
+    .word    1075838976
+    .align   3
+-------------------------------------------------------------------------------------
+li.d         $r24, 0x400c000000000000   # $r24 = 0x400c000000000000
+movgr2fr.d   $f24, $r24                 # $f24 = 0x400c000000000000 = 3.5
+fstx.d       $f24, $r12, $r0            # memory[$r12] = 0x400c000000000000 = 3.5
+-------------------------------------------------------------------------------------
+    la.local $r12, .LC3                 # $r12 = address(.LC3) 
+    fldx.d   $f24, $r12, $r0            # $f24 = 0x4012000000000000 = 4.5
+
+.LC3:
+    .word    0                          # low  32 bits
+    .word    1074921472                 # high 32 bits 
+    .align   3
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:3.2.6.2`* .
+For more information, refer to the *`LoongArch Architecture manual:3.2.6.2`* .
 =====

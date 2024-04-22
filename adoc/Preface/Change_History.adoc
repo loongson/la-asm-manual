@@ -1,9 +1,7 @@
-== *Change History*
+== *Version History*
 
-[.text-justify]
-.Change History Table
 [options="header"]
-[cols="20,20,60"]
+[cols="14,11,75"]
 |==========================
 <.^|Date 
 ^.^|Version 
@@ -11,5 +9,9 @@
 
 <.^|2023-08-15 
 ^.^|V0.9 
-<.^|*`Draft version`*.
+<.^|*`Draft Version`*.
+
+<.^|2024-04-10 
+^.^|V1.0 
+<.^|This update has added descriptions of instructions in *`LoongArch Architecture manual v1.10`* to this Guide and corrected some incorrect descriptions.
 |==========================

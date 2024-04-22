@@ -14,56 +14,74 @@
 ^.^|src1
 ^.^|src2
 
-^.^|*`fldgt.s`*, *`fldgt.d`*, *`fldle.s`*, *`fldle.d`*, *`fstgt.s`*, *`fstgt.d`*, *`fstle.s`*, *`fstle.d`*
-^.^|*`fd`*
-^.^|*`rj`*
-^.^|*`rk`*  
+^.^|*`fldgt.s`*, *`fldgt.d`*, *`fldle.s`*, *`fldle.d`*
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`$rk`*  
+
+^.^|*`fstgt.s`*, *`fstgt.d`*, *`fstle.s`*, *`fstle.d`*
+^.^|*`$fd`*
+^.^|*`$rj`*
+^.^|*`$rk`*   
 |===========================
 
 *Description :*
 
-*`fldgt.{s/d}`* :
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+.2+^.<|*`fldgt.s`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) *`$rd`*[31:0] = `*MemoryLoad*` (*`$rj`*, [31:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
 
- if($rj > $rk)
-   $fd = SignExtend(MemoryLoad($rj, single/double),GRLEN)
- else :
-   RaiseException(BCE)
+.2+^.<|*`fldgt.d`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
 
-*`fldle.{s/d}`* :
+.2+^.<|*`fldle.s`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*< =*` *`$rk`* ) *`$rd`*[31:0] = `*MemoryLoad*` (*`$rj`*, [31:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
 
- if($rj <= $rk)
-   $fd = SignExtend(MemoryLoad($rj, single/double),GRLEN)
- else :
-   RaiseException(BCE)
+.2+^.<|*`fldle.d`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*< =*` *`$rk`* ) *`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`*, [63:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
 
-*`fstgt.{s/d}`* :
+.2+^.<|*`fstgt.s`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) `*MemoryStore*` (*`$fd`* [31:0], *`$rj`* , [31:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
 
- if $rj > $rk :
-   MemoryStore($fd[31:0],$rj,single)/
-   MemoryStore($fd[63:0],$rj,double)
- else :
-   RaiseException(BCE)
+.2+^.<|*`fstgt.d`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*>*` *`$rk`* ) `*MemoryStore*` (*`$fd`* [63:0], *`$rj`* , [63:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
 
-*`fstle.{s/d}`* :
+.2+^.<|*`fstle.s`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*< =*` *`$rk`* ) `*MemoryStore*` (*`$fd`* [31:0], *`$rj`* , [31:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
 
- if $rj <= $rk :
-   MemoryStore($fd[31:0],$rj,single)/
-   MemoryStore($fd[63:0],$rj,double)
- else :
-   RaiseException(BCE)
-
-<<<
+.2+^.<|*`fstle.d`*
+.2+^.<|*:*
+<.<|*if* ( *`$rj`* `*< =*` *`$rk`* ) `*MemoryStore*` (*`$fd`* [63:0], *`$rj`* , [63:0])
+<.<|*else* : `*RaiseException*` ( `*BCE*` )
+|===========================
 
 *Usage :* 
 [source]
 ----
-fstle.s  $f24, $r25, $r24 
-fldle.s  $f25, $r25, $r24
-fstle.d  $f26, $r25, $r24
-fldle.d  $f27, $r25, $r24
+fstle.s   $f24, $r25, $r24 
+fldle.s   $f25, $r25, $r24
+fstle.d   $f26, $r25, $r24
+fldle.d   $f27, $r25, $r24
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.7.1`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.7.1`* .
 =====

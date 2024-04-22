@@ -1,12 +1,25 @@
 ===== *8.1.1.2 Bit-shift Instructions*
 
-* *SLL* : Shift data logic left. 
+[grid=none]
+[frame=none]
+[cols="55,20,925"]
+|===========================
+<.^|*`SLL`*
+^.^|*:*
+<.^|Shift data logic left.
 
-* *SRL* : Shift data logic right.
+<.^|*`SRL`*
+^.^|*:*
+<.^|Shift data logic right.
 
-* *SRA* : Arithmetic shift of data to the right.
+<.^|*`SRA`*
+^.^|*:*
+<.^|Arithmetic shift of data to the right.
 
-* *ROTR* : Rotate data to the right.
+<.^|*`ROTR`*
+^.^|*:*
+<.^|Rotate data to the right.
+|===========================
 
 ====== *8.1.1.2.1 `SLL.W`, `SRL.W`, `SRA.W`, `ROTR.W`*
 
@@ -30,34 +43,79 @@
 
 *Description :*
 
-*`sll.w`* : *`$rd`* = *SignExtend*(*`SLL`*(*`$rj`*[31:0], *`$rk`*[4:0]), GRLEN)
+[grid=none]
+[frame=none]
+[cols="75,20,270,150,150,335"]
+|===========================
+<.^|*`sll.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( { 
+<.^|*`$rj`*[31-*`SA`* : 0] 
+<.^|, *`SA`*'b0 
+<.^|} , GRLEN)
 
-*`srl.w`* : *`$rd`* = *SignExtend*(*`SRL`*(*`$rj`*[31:0], *`$rk`*[4:0]), GRLEN)
+<.^|*`srl.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( { 
+<.^|*`SA`*'b0 
+<.^|, *`$rj`*[31 : *`SA`*] 
+<.^|} , GRLEN)
 
-*`sra.w`* : *`$rd`* = *SignExtend*(*`SRA`*(*`$rj`*[31:0], *`$rk`*[4:0]), GRLEN)
+<.^|*`sra.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( { 
+<.^|*`SA`*'*`$rj`*[31] 
+<.^|, *`$rj`*[31 : *`SA`*] 
+<.^|} , GRLEN)
 
-*`rotr.w`* : *`$rd`* = *SignExtend*(*`ROTR`*(*`$rj`*[31:0], *`$rk`*[4:0]), GRLEN)
+<.^|*`rotr.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( { 
+<.^|*`$rj`*[*`SA`*-1 : 0]
+<.^|, *`$rj`*[31 : *`SA`*] 
+<.^|} , GRLEN)
+|===========================
 
-* The shift amount of the above-mentioned shift instruction is all [4:0] (Unsigned value range(*`integer`*) : [*`0`, `31`*]) bit data in the general register *`rk`*, and is regarded as an unsigned number.
+Consider *`$rk`*[4:0] as shift amount(*`SA`* is unsigned value range(*`integer`*) : [*`0` , `31`*]), which is the offset. 
 
 *Usage :* 
 [source]
 ----
-li.d     $r23, 0x00000000f000000e    # $r23 = 0x00000000f000000e
 li.d     $r24, 0x0000000000000002    # $r24 = 0x0000000000000002
+li.d     $r23, 0x00000000f000000e    # $r23 = 0x00000000f000000e
+
 sll.w    $r25, $r23, $r24            # $r25 = 0xffffffffc0000038
+# $r23 = 0xf000000e = 0b11110000000000000000000000001110
+# $r25 = SignExtend({$r23[31-2:0], 2'b0} , GRLEN)
+# {$r23[31-2:0], 2'b0} = 0b11000000000000000000000000111000 = 0xc0000038
+# $r25 = 0xffffffffc0000038
+
 srl.w    $r25, $r23, $r24            # $r25 = 0x000000003c000003
+# $r23 = 0xf000000e = 0b11110000000000000000000000001110
+# $r25 = SignExtend({2'b0, $r23[31:2]} , GRLEN)
+# {2'b0, $r23[31:2]} = 0b00111100000000000000000000000011 = 0x3c000003
+# $r25 = 0x000000003c000003
+
 sra.w    $r25, $r23, $r24            # $r25 = 0xfffffffffc000003
-rotr.w   $r25, $r23, $r24            # $r25 = 0xffffffffbc000003
+# $r23 = 0xf000000e = 0b11110000000000000000000000001110
+# $r25 = SignExtend({2'$r23[31], $r23[31:2]} , GRLEN)
 ----
 
-* *Explanation :*
+[source]
+----
+# {2'$r23[31], $r23[31:2]} = 0b11111100000000000000000000000011 = 0xfc000003
+# $r25 = 0xfffffffffc000003
 
-** Please note that the above instructions first perform Bit-shift operations and then perform signed extend.
+rotr.w   $r25, $r23, $r24            # $r25 = 0xffffffffbc000003
+# $r23 = 0xf000000e = 0b11110000000000000000000000001110
+# $r25 = SignExtend({$r23[1:0], $r23[31:2]} , GRLEN)
+# {$r23[1:0], $r23[31:2]} = 0b10111100000000000000000000000011 = 0xbc000003
+# $r25 = 0xffffffffbc000003
+----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.2.1`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.2.1`* .
 =====
 
 ====== *8.1.1.2.2 `SLLI.W`, `SRLI.W`, `SRAI.W`, `ROTRI.W`*
@@ -82,35 +140,80 @@ For more information, refer to the *`LoongArch instruction manual:2.2.2.1`* .
 
 *Description :*
 
-*`slli.w`* : *`$rd`* = *SignExtend*(*`SLL`*(*`$rj`*[31:0], *`ui5`*), GRLEN)
+[grid=none]
+[frame=none]
+[cols="85,20,270,150,150,325"]
+|===========================
+<.^|*`slli.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( { 
+<.^|*`$rj`*[31-*`SA`* : 0] 
+<.^|, *`SA`*'b0 
+<.^|} , GRLEN)
 
-*`srli.w`* : *`$rd`* = *SignExtend*(*`SRL`*(*`$rj`*[31:0], *`ui5`*), GRLEN)
+<.^|*`srli.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( { 
+<.^|*`SA`*'b0 
+<.^|, *`$rj`*[31 : *`SA`*] 
+<.^|} , GRLEN)
 
-*`srai.w`* : *`$rd`* = *SignExtend*(*`SRA`*(*`$rj`*[31:0], *`ui5`*), GRLEN)
+<.^|*`srai.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( { 
+<.^|*`SA`*'*`$rj`*[31] 
+<.^|, *`$rj`*[31 : *`SA`*] 
+<.^|} , GRLEN)
 
-*`rotri.w`* : *`$rd`* = *SignExtend*(*`ROTR`*(*`$rj`*[31:0], *`ui5`*), GRLEN)
+<.^|*`rotri.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( { 
+<.^|*`$rj`*[*`SA`*-1 : 0]
+<.^|, *`$rj`*[31 : *`SA`*] 
+<.^|} , GRLEN)
+|===========================
+
+Consider *`ui5`* as shift amount(*`SA`* is unsigned value range(*`integer`*) : [*`0` , `31`*]), which is the offset. 
 
 * *`ui5`* : 5 bit immediate, Unsigned value range(*`integer`*) : [*`0`, `31`*] or [*`0x0`, `0x1f`*]
-
-** The shift amounts of the above shift instructions are all 5-bit unsigned immediate *`ui5`* in the instruction code.
 
 *Usage :* 
 [source]
 ----
-li.d      $r23, 0x00000000f000000e    # $r23 = 0x00000000f000000e
-slli.w    $r25, $r23, 2               # $r25 = 0xffffffffc0000038
-srli.w    $r25, $r23, 2               # $r25 = 0x000000003c000003
-srai.w    $r25, $r23, 2               # $r25 = 0xfffffffffc000003
-rotri.w   $r25, $r23, 2               # $r25 = 0xffffffffbc000003
+li.d     $r23, 0x00000000f000000e  # $r23 = 0x00000000f000000e
+
+slli.w    $r25, $r23, 2            # $r25 = 0xffffffffc0000038
+# $r23 = 0xf000000e = 0b11110000000000000000000000001110
+# $r25 = SignExtend({$r23[31-2:0], 2'b0} , GRLEN)
+# {$r23[31-2:0], 2'b0} = 0b11000000000000000000000000111000 = 0xc0000038
+# $r25 = 0xffffffffc0000038
+
+srli.w    $r25, $r23, 2            # $r25 = 0x000000003c000003
+# $r23 = 0xf000000e = 0b11110000000000000000000000001110
+# $r25 = SignExtend({2'b0, $r23[31:2]} , GRLEN)
+# {2'b0, $r23[31:2]} = 0b00111100000000000000000000000011 = 0x3c000003
 ----
 
-* *Explanation :*
+[source]
+----
+# $r25 = 0x000000003c000003
 
-** Please note that the above instructions first perform Bit-shift operations and then perform signed extend.
+srai.w    $r25, $r23, 2            # $r25 = 0xfffffffffc000003
+# $r23 = 0xf000000e = 0b11110000000000000000000000001110
+# $r25 = SignExtend({2'$r23[31], $r23[31:2]} , GRLEN)
+# {2'$r23[31], $r23[31:2]} = 0b11111100000000000000000000000011 = 0xfc000003
+# $r25 = 0xfffffffffc000003
+
+rotri.w   $r25, $r23, 2            # $r25 = 0xffffffffbc000003
+# $r23 = 0xf000000e = 0b11110000000000000000000000001110
+# $r25 = SignExtend({$r23[1:0], $r23[31:2]} , GRLEN)
+# {$r23[1:0], $r23[31:2]} = 0b10111100000000000000000000000011 = 0xbc000003
+# $r25 = 0xffffffffbc000003
+----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.2.2`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.2.2`* .
 =====
 
 ====== *8.1.1.2.3 `SLL.D`, `SRL.D`, `SRA.D`, `ROTR.D`*
@@ -135,31 +238,79 @@ For more information, refer to the *`LoongArch instruction manual:2.2.2.2`* .
 
 *Description :*
 
-*`sll.d`* : *`$rd`* = *`SLL`*(*`$rj`*[63:0], *`$rk`*[5:0])
+[grid=none]
+[frame=none]
+[cols="75,20,135,150,150,470"]
+|===========================
+<.^|*`sll.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = {
+<.^|*`$rj`*[63-*`SA`* : 0] 
+<.^|, *`SA`*'b0 
+<.^|}
 
-*`srl.d`* : *`$rd`* = *`SRL`*(*`$rj`*[63:0], *`$rk`*[5:0])
+<.^|*`srl.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = { 
+<.^|*`SA`*'b0 
+<.^|, *`$rj`*[63 : *`SA`*] 
+<.^|}
 
-*`sra.d`* : *`$rd`* = *`SRA`*(*`$rj`*[63:0], *`$rk`*[5:0])
+<.^|*`sra.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = { 
+<.^|*`SA`*'*`$rj`*[63] 
+<.^|, *`$rj`*[63 : *`SA`*] 
+<.^|}
 
-*`rotr.d`* : *`$rd`* = *`ROTR`*(*`$rj`*[63:0], *`$rk`*[5:0])
+<.^|*`rotr.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = { 
+<.^|*`$rj`*[*`SA`*-1 : 0]
+<.^|, *`$rj`*[63 : *`SA`*] 
+<.^|}
+|===========================
 
-* The shift amount of the above-mentioned shift instruction is all [5:0] (Unsigned value range(*`integer`*) : [*`0`, `63`*]) bit data in the general register *`rk`*, and is regarded as an unsigned number.
+Consider *`$rk`*[5:0] as shift amount(*`SA`* is unsigned value range(*`integer`*) : [*`0` , `63`*]), which is the offset. 
 
 *Usage :* 
 
 [source]
 ----
-li.d     $r23, 0xf00000000000000e    # $r23 = 0xf00000000000000e
 li.d     $r24, 0x0000000000000002    # $r24 = 0x0000000000000002
+li.d     $r23, 0xf00000000000000e    # $r23 = 0xf00000000000000e
+
 sll.d    $r25, $r23, $r24            # $r25 = 0xc000000000000038
+# $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
+# $r25 = {$r23[63-2:0], 2'b0}
+# $r25 = 0b1100000000000000000000000000000000000000000000000000000000111000
+# $r25 = 0x0xc000000000000038
+----
+
+[source]
+----
 srl.d    $r25, $r23, $r24            # $r25 = 0x3c00000000000003
+# $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
+# $r25 = {2'b0, $r23[63:2]}
+# $r25 = 0b0011110000000000000000000000000000000000000000000000000000000011
+# $r25 = 0x0x3c00000000000003
+
 sra.d    $r25, $r23, $r24            # $r25 = 0xfc00000000000003
+# $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
+# $r25 = {2'$r23[63], $r23[63:2]}
+# $r25 = 0b1111110000000000000000000000000000000000000000000000000000000011
+# $r25 = 0x0xfc00000000000003
+
 rotr.d   $r25, $r23, $r24            # $r25 = 0xbc00000000000003
+# $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
+# $r25 = {$r23[1:0], $r23[63:2]}
+# $r25 = 0b1011110000000000000000000000000000000000000000000000000000000011
+# $r25 = 0x0xbc00000000000003
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.2.3`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.2.3`* .
 =====
 
 ====== *8.1.1.2.4 `SLLI.D`, `SRLI.D`, `SRAI.D`, `ROTRI.D`*
@@ -184,30 +335,78 @@ For more information, refer to the *`LoongArch instruction manual:2.2.2.3`* .
 
 *Description :*
 
-*`slli.d`* : *`$rd`* = *`SLL`*(*`$rj`*[63:0], *`ui6`*)
+[grid=none]
+[frame=none]
+[cols="85,20,135,150,150,460"]
+|===========================
+<.^|*`slli.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = {
+<.^|*`$rj`*[63-*`SA`* : 0] 
+<.^|, *`SA`*'b0 
+<.^|}
 
-*`srli.d`* : *`$rd`* = *`SRL`*(*`$rj`*[63:0], *`ui6`*)
+<.^|*`srli.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = { 
+<.^|*`SA`*'b0 
+<.^|, *`$rj`*[63 : *`SA`*] 
+<.^|}
 
-*`srai.d`* : *`$rd`* = *`SRA`*(*`$rj`*[63:0], *`ui6`*)
+<.^|*`srai.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = { 
+<.^|*`SA`*'*`$rj`*[63] 
+<.^|, *`$rj`*[63 : *`SA`*] 
+<.^|}
 
-*`rotri.d`* : *`$rd`* = *`ROTR`*(*`$rj`*[63:0], *`ui6`*)
+<.^|*`rotri.d`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = { 
+<.^|*`$rj`*[*`SA`*-1 : 0]
+<.^|, *`$rj`*[63 : *`SA`*] 
+<.^|}
+|===========================
+
+Consider *`ui6`* as shift amount(*`SA`* is unsigned value range(*`integer`*) : [*`0` , `63`*]), which is the offset. 
 
 * *`ui6`* : 6 bit immediate, Unsigned value range(*`integer`*) : [*`0`, `63`*] or [*`0x0`, `0x3f`*]
 
-** The shift amount of the above-mentioned shift instruction is the 6-bit unsigned immediate *`ui6`* in the instruction code.
-
 *Usage :* 
+[source]
+----
+li.d     $r23, 0xf00000000000000e    # $r23 = 0xf00000000000000e
+
+sll.d    $r25, $r23, 2               # $r25 = 0xc000000000000038
+----
 
 [source]
 ----
-li.d      $r23, 0xf00000000000000e    # $r23 = 0xf00000000000000e
-slli.d    $r25, $r23, 2               # $r25 = 0xc000000000000038
-srli.d    $r25, $r23, 2               # $r25 = 0x3c00000000000003
-srai.d    $r25, $r23, 2               # $r25 = 0xfc00000000000003
-rotri.d   $r25, $r23, 2               # $r25 = 0xbc00000000000003
+# $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
+# $r25 = {$r23[63-2:0], 2'b0}
+# $r25 = 0b1100000000000000000000000000000000000000000000000000000000111000
+# $r25 = 0x0xc000000000000038
+
+srl.d    $r25, $r23, 2               # $r25 = 0x3c00000000000003
+# $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
+# $r25 = {2'b0, $r23[63:2]}
+# $r25 = 0b0011110000000000000000000000000000000000000000000000000000000011
+# $r25 = 0x0x3c00000000000003
+
+sra.d    $r25, $r23, 2               # $r25 = 0xfc00000000000003
+# $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
+# $r25 = {2'$r23[63], $r23[63:2]}
+# $r25 = 0b1111110000000000000000000000000000000000000000000000000000000011
+# $r25 = 0x0xfc00000000000003
+
+rotr.d   $r25, $r23, 2               # $r25 = 0xbc00000000000003
+# $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
+# $r25 = {$r23[1:0], $r23[63:2]}
+# $r25 = 0b1011110000000000000000000000000000000000000000000000000000000011
+# $r25 = 0x0xbc00000000000003
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.2.4`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.2.4`* .
 =====

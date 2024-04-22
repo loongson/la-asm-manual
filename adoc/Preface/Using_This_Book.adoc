@@ -4,8 +4,8 @@
 [.text-justify]
 ====
 For more information, please refer to:
+
+* https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html[LoongArch Architecture manual]
+
+* http://sysdev.loongson.cn/attachments/download/91249/la-abi.pdf[LoongArch Application Binary Interface manual]
 ====
-
-https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html[LoongArch Architecture manual]
-
-http://sysdev.loongson.cn/attachments/download/91249/la-abi.pdf[LoongArch Application Binary Interface manual]
