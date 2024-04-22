@@ -8,7 +8,7 @@ v1.0, 2024-04-10
 :toclevels: 4
 :source-highlighter: coderay
 toc::[]
-
+ 
 == *Preamble*
 This is the official documentation of the `Assembly Language Programming Guide` for the `LoongArch` Architecture.
 
