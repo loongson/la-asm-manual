@@ -58,7 +58,7 @@
 ^.^|Frame pointer / Static register 
 ^.^|YES
 
-^.^|*`$r22`* 
+^.^|*`$r23`* - *`$r31`*
 ^.^|*`$s0`* - *`$s8`* 
 ^.^|Static registers 
 ^.^|YES
@@ -89,8 +89,8 @@
 ^.^|Temporary registers 
 ^.^|NO
 
-^.^|*`$f23`* - *`$f31`* 
-^.^|*`$s0`* - *`$s8`* 
+^.^|*`$f24`* - *`$f31`* 
+^.^|*`$fs0`* - *`$fs7`* 
 ^.^|Static registers
 ^.^|YES
 |===========================
@@ -143,8 +143,8 @@ Regarding the physical mapping of registers *`$rd`*, *`$rj`*, *`$rk`* in the ass
 ^.^|*`$ft0`* - *`$ft15`* 
 .^|The role of temporary variables in functions does not require consideration of the preservation of old values.
 
-^.^|*`$f23`* - *`$f31`* 
-^.^|*`$s0`* - *`$s8`* 
+^.^|*`$f24`* - *`$f31`* 
+^.^|*`$fs0`* - *`$fs7`* 
 .^|The role of temporary variables in functions does not require consideration of the preservation of old values.
 |===========================
 

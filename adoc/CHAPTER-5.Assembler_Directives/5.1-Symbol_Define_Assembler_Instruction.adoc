@@ -62,22 +62,6 @@ In order to simplify the hardware design between processors and memory systems, 
 *`LoongArch`* supports hardware processing of non aligned memory data access. Although there is non aligned access in the above example, the processor can still function properly and obtain correct results without throwing non aligned exceptions. However, for better performance, it is recommended to align the data as much as possible. Generally, the compiler will automatically align the data.
 
 [.text-justify]
-The assembler directive *`.align`* expr is used to specify the alignment of symbols, where expr is a positive integer used to indicate the alignment of subsequent data storage addresses in the target file.
-
-[source,asm]
-----
-.align expr
-----
-
-[.text-justify]
-Expr is a positive integer indicating the alignment of the data storage address in the target file. In *`LoongArch`* :
-
-[source,asm]
-----
-.align 4          # Align to the 16byte
-----
-
-[.text-justify]
 In the above command, different architectures of .align have different definitions of expr, and two other variants, *`.balgin`* and *`.p2align`*, can be used. The instruction *`.balgin`* 4 represents 4-byte alignment in any architecture.
 
 * .align  https://sourceware.org/binutils/docs/as/Align.html
@@ -103,7 +87,7 @@ When defining a variable or function symbol in the assembly source file, its sco
 ----
 
 [.text-justify]
-*`.globl`* / *`.global`* specifies the symbol symbol symbol as a global variable or non-static member function, which is globally visible and visible to other source files in the linker.
+*`.globl`* / *`.global`* specifies the symbol as a global variable or non-static member function, which is globally visible and visible to other source files in the linker.
 
 [.text-justify]
 The *`.common`* declaration is a universal symbol, similar to an uninitialized global variable in C language. A universal symbol with the same name that appears in multiple assembly source files may be merged during the compiler's compilation phase, resulting in the preservation of the one with the largest footprint.

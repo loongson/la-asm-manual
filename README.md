@@ -23,5 +23,5 @@ To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-
 
 ## Revision History
 
-These include version 0.9 (draft).
+These include version 1.0 .
 

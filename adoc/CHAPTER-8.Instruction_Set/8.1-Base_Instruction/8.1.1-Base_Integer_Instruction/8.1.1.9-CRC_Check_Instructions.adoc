@@ -26,22 +26,42 @@
 |===========================
 
 *Description :*
+[grid=none]
+[frame=none]
+[cols="120,20,860"]
+|===========================
+<.^|*`crc.w.b.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`CRC32`* (*`$rk`*[31:0], *`$rj`*[ 7 :0] , *8* , `*0xEDB88320*`), GRLEN)
 
-*`crc.w.b.w`* : *`$rd`* = *SignExtend*(*CRC32*(*`$rk`*[31:0], *`$rj`*[ 7 :0], 8 , 0xEDB88320), GRLEN)
+<.^|*`crc.w.h.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`CRC32`* (*`$rk`*[31:0], *`$rj`*[15:0], *16*, `*0xEDB88320*`), GRLEN)
 
-*`crc.w.h.w`* : *`$rd`* = *SignExtend*(*CRC32*(*`$rk`*[31:0], *`$rj`*[15:0], 16, 0xEDB88320), GRLEN)
+<.^|*`crc.w.w.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`CRC32`* (*`$rk`*[31:0], *`$rj`*[31:0], *32*, `*0xEDB88320*`), GRLEN)
 
-*`crc.w.w.w`* : *`$rd`* = *SignExtend*(*CRC32*(*`$rk`*[31:0], *`$rj`*[31:0], 32, 0xEDB88320), GRLEN)
+<.^|*`crc.w.d.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`CRC32`* (*`$rk`*[31:0], *`$rj`*[63:0], *64*, `*0xEDB88320*`), GRLEN)
 
-*`crc.w.d.w`* : *`$rd`* = *SignExtend*(*CRC32*(*`$rk`*[31:0], *`$rj`*[63:0], 64, 0xEDB88320), GRLEN)
+<.^|*`crcc.w.b.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`CRC32`* (*`$rk`*[31:0], *`$rj`*[ 7 :0] , *8* , `*0x82F63B78*`), GRLEN)
 
-*`crcc.w.b.w`* : *`$rd`* = *SignExtend*(*CRC32*(*`$rk`*[31:0], *`$rj`*[ 7 :0], 8 , 0x82F63B78), GRLEN)
+<.^|*`crcc.w.h.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`CRC32`* (*`$rk`*[31:0], *`$rj`*[15:0], *16*, `*0x82F63B78*`), GRLEN)
 
-*`crcc.w.h.w`* : *`$rd`* = *SignExtend*(*CRC32*(*`$rk`*[31:0], *`$rj`*[15:0], 16, 0x82F63B78), GRLEN)
+<.^|*`crcc.w.w.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`CRC32`* (*`$rk`*[31:0], *`$rj`*[31:0], *32*, `*0x82F63B78*`), GRLEN)
 
-*`crcc.w.w.w`* : *`$rd`* = *SignExtend*(*CRC32*(*`$rk`*[31:0], *`$rj`*[31:0], 32, 0x82F63B78), GRLEN)
-
-*`crcc.w.d.w`* : *`$rd`* = *SignExtend*(*CRC32*(*`$rk`*[31:0], *`$rj`*[63:0], 64, 0x82F63B78), GRLEN)
+<.^|*`crcc.w.d.w`*
+^.^|*:*
+<.^|*`$rd`*[63:0] = `*Sign*`*Extend* (*`CRC32`* (*`$rk`*[31:0], *`$rj`*[63:0], *64*, `*0x82F63B78*`), GRLEN)
+|===========================
 
 *Usage :* 
 [source]
@@ -58,5 +78,5 @@ crc.w.d.w    $r24, $r25, $r26
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.9.1`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.9.1`* .
 =====

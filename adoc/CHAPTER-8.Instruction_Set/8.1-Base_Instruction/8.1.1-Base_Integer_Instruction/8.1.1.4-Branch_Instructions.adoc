@@ -22,38 +22,117 @@
 
 *Description :*
 
-*`beq`* : *if* ( *`$rj`* *==* *`$rd`* ) *jump* ( *`si18` | `symbol`* )
+[grid=none]
+[frame=none]
+[cols="55,20,40,150,40,150,545"]
+|===========================
+<.^|*`beq`*
+^.^|*:*
+<.^|*if* ( 
+^.^|*`$rj`* 
+^.^|`*==*` 
+^.^|*`$rd`* 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
 
-*`bne`* : *if* ( *`$rj`* *! =* *`$rd`* ) *jump* ( *`si18` | `symbol`* )
+<.^|*`bne`*
+^.^|*:*
+<.^|*if* ( 
+^.^|*`$rj`* 
+^.^|`*!=*` 
+^.^|*`$rd`* 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
 
-*`blt`* : *if* ( signed(*`$rj`*) *<* signed(*`$rd`*) ) *jump* ( *`si18` | `symbol`* )
+<.^|*`blt`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(*`$rj`*) 
+^.^|`*<*` 
+^.^|signed(*`$rd`*) 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
 
-*`bge`* : *if* (signed(*`$rj`*) *>=* signed(*`$rd`*)) *jump* ( *`si18` | `symbol`* ) 
+<.^|*`bge`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(*`$rj`*) 
+^.^|`*>=*` 
+^.^|signed(*`$rd`*) 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
 
-*`bltu`* : *if* ( unsigned(*`$rj`*) *<* unsigned(*`$rd`*) ) *jump* ( *`si18` | `symbol`* )
+<.^|*`bltu`*
+^.^|*:*
+<.^|*if* ( 
+^.^|unsigned(*`$rj`*) 
+^.^|`*<*` 
+^.^|unsigned(*`$rd`*) 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
 
-*`bgeu`* : *if* (unsigned(*`$rj`*) *>=* unsigned(*`$rd`*)) *jump* ( *`si18` | `symbol`* )
+<.^|*`bgeu`*
+^.^|*:*
+<.^|*if* ( 
+^.^|unsigned(*`$rj`*) 
+^.^|`*>=*` 
+^.^|unsigned(*`$rd`*) 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+|===========================
 
-** *`si18`* : a 4-bytes aligned 18-bits signed immediate value in range :
+* *`si18`* : a 4-bytes aligned 18-bits signed immediate value in range :
 
-*** [*`-131072`*, *`131068`*] or [*`-0x20000`*, *`0x1fffc`*]
+** [*`-131072`*, *`131068`*] or [*`-0x20000`*, *`0x1fffc`*]
 
-** *`symbol`* : Tags in assembly for jump.
+* *`symbol`* : Tags in assembly for jump.
 
 *Usage :* 
 [source]
 ----
-beq    $r23,  $r24,  (si18 | symbol)
-bne    $r23,  $r24,  (si18 | symbol)
-blt    $r23,  $r24,  (si18 | symbol)
-bge    $r23,  $r24,  (si18 | symbol)  
-bltu   $r23,  $r24,  (si18 | symbol)
-bgeu   $r23,  $r24,  (si18 | symbol)
+.L0
+       li.d   $r23,  0x1
+       li.d   $r24,  0x1
+       beq    $r23,  $r24,  .L1
+.L1
+       ...    # When the value of $r23 is not equal to $r24, no jump.
+.L2
+       ...    # When the values of $r23 and $r24 are equal, jump to .L2 .
+----
+
+[source]
+----
+.L0
+       li.d   $r23,  0x0
+       li.d   $r24,  0x1
+       bne    $r23,  $r24,  .L1
+.L1
+       ...    # When the value of $r23 is equal to $r24, no jump.
+.L2
+       ...    # When the values of $r23 and $r24 are not equal, jump to L2 . 
+----
+
+[source]
+----
+.L0
+       li.d   $r23,  0x0
+       li.d   $r24,  0x1
+       blt    $r23,  $r24,  .L1
+.L1
+       ...    # When the value of $r23 is greater than or equal to $r24, no jump.
+.L2
+       ...    # When the value of $r23 is less than $r24, jump to L2. 
+----
+
+[source]
+----
+.L0
+       li.d   $r23,  0x0
+       li.d   $r24,  0x1
+       bge    $r23,  $r24,  .L1
+.L1
+       ...    # When the value of $r23 is less than $r24, no jump.
+.L2
+       ...    # When the value of $r23 is greater than or equal to $r24, jump to L2. 
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.4.1`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.4.1`* .
 =====
 
 ====== *8.1.1.4.2 `BEQZ`, `BNEZ`*
@@ -76,26 +155,55 @@ For more information, refer to the *`LoongArch instruction manual:2.2.4.1`* .
 
 *Description :*
 
-*`beqz`* : *if* (*`$rj`* *==* *0*) *jump* ( *`si23` | `symbol`* )
+[grid=none]
+[frame=none]
+[cols="55,20,935"]
+|===========================
+<.^|*`beqz`*
+^.^|*:*
+<.^|*if* ( *`$rj`* `*==*` *`0`* ) *jump* ( *`si23` `\|` `symbol`* )
 
-*`bnez`* : *if* (*`$rj`* *! =* *0*) *jump* ( *`si23` | `symbol`* )
+<.^|*`bnez`*
+^.^|*:*
+<.^|*if* ( *`$rj`* `*!=*` *`0`* ) *jump* ( *`si23` `\|` `symbol`* )
+|===========================
 
-** *`si23`* : a 4-bytes aligned 23-bits signed immediate value in range :
+* *`si23`* : a 4-bytes aligned 23-bits signed immediate value in range :
 
-*** [*`-4194304`*, *`4194300`*] or [*`-0x400000`*, *`0x3ffffc`*]
+** [*`-4194304`*, *`4194300`*] or [*`-0x400000`*, *`0x3ffffc`*]
 
-** *`symbol`* : Tags in assembly for jump.
+* *`symbol`* : Tags in assembly for jump.
 
 *Usage :* 
 [source]
 ----
-beqz    $r23,  (si23 | symbol)
-bnez    $r23,  (si23 | symbol)
+.L0
+       li.d    $r23,  0x0
+       beqz    $r23,  .L2
+----
+
+[source]
+----
+.L1
+       ...     # When the value of $r23 is not 0, no jump.
+.L2
+       ...     # When the value of $r23 is 0, jump to L2.
+----
+
+[source]
+----
+.L0
+       li.d    $r23,  0x1
+       beqz    $r23,  .L2
+.L1
+       ...     # When the value of $r23 is 0, no jump.
+.L2
+       ...     # When the value of $r23 is not 0, jump to L2.
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.4.2`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.4.2`* .
 =====
 
 ====== *8.1.1.4.3 `B`*
@@ -116,23 +224,35 @@ For more information, refer to the *`LoongArch instruction manual:2.2.4.2`* .
 
 *Description :*
 
-*`b`* : *jump* ( *`si28` | `symbol`* )
+[grid=none]
+[frame=none]
+[cols="30,20,950"]
+|===========================
+<.^|*`b`*
+^.^|*:*
+<.^| *jump* ( *`si28` `\|` `symbol`* )
+|===========================
 
-** *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
+* *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
 
-*** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
+** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
 
-** *`symbol`* : Tags in assembly for jump.
+* *`symbol`* : Tags in assembly for jump.
 
 *Usage :* 
 [source]
 ----
-b       (si28 | symbol)
+.L0
+       b       .L2
+.L1
+       ...
+.L2
+       ...     # jump to .L2
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.4.3`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.4.3`* .
 =====
 
 ====== *8.1.1.4.4 `BL`*
@@ -153,23 +273,35 @@ For more information, refer to the *`LoongArch instruction manual:2.2.4.3`* .
 
 *Description :*
 
-*`bl`* : *jump* ( *`si28` | `symbol`* )
+[grid=none]
+[frame=none]
+[cols="35,20,945"]
+|===========================
+<.^|*`bl`*
+^.^|*:*
+<.^| *jump* ( *`si28` `\|` `symbol`* )
+|===========================
 
-** *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
+* *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
 
-*** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
+** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
 
-** *`symbol`* : Tags in assembly for jump.
+* *`symbol`* : Tags in assembly for jump.
 
 *Usage :* 
 [source]
 ----
-bl      (si28 | symbol)
+.L0
+       bl      .L2
+.L1
+       ...
+.L2
+       ...     # jump to .L2
 ----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.4.4`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.4.4`* .
 =====
 
 ====== *8.1.1.4.5 `JIRL`*
@@ -179,7 +311,7 @@ For more information, refer to the *`LoongArch instruction manual:2.2.4.4`* .
  opcode    dest,  src1,  src2
 
 [options="header"]
-[cols="65,10,10,15"]
+[cols="70,10,10,10"]
 |===========================
 ^.^|opcode
 ^.^|dest
@@ -194,15 +326,28 @@ For more information, refer to the *`LoongArch instruction manual:2.2.4.4`* .
 
 *Description :*
 
-*`jirl`* : *`$rd`* = *`PC`* + 4, *jump `si28` + `$rj`*
+[grid=none]
+[frame=none]
+[cols="55,20,925"]
+|===========================
+<.^|*`jirl`*
+^.^|*:*
+<.^|*`$rd`* = *`PC`* *`+`* 4, *jump* *`si28`* *`+`* *`$rj`*
+|===========================
 
-** *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
+* *`si28`* : a 4-bytes aligned 28-bits signed immediate value in range :
 
-*** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
+** [*`-134217728`*, *`134217724`*] or [*`-0x8000000`*, *`0x7fffffc`*]
 
-** *`symbol`* : Tags in assembly for jump.
+* *`symbol`* : Tags in assembly for jump.
+
+*Usage :* 
+[source]
+----
+jirl   $ra, $ra, 0    # function return. $ra is Return Address.
+----
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.4.5`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.4.5`* .
 =====

@@ -1,6 +1,6 @@
-= `Assembly Language Programming Guide` LoongArch
+= `Assembly Language Programming Guide` LoongArch(TM)
 Loongson Technology Corporation Limited
-v0.9(draft), 2023-08-15
+v1.0, 2024-04-10
 :docinfo: shared
 :doctype: book
 :toc: macro
@@ -9,8 +9,8 @@ v0.9(draft), 2023-08-15
 :source-highlighter: coderay
 toc::[]
 
-== Preamble
-This is the official documentation of the `Assembly Language Programming Guide` LoongArch for the `LoongArch` Architecture.
+== *Preamble*
+This is the official documentation of the `Assembly Language Programming Guide` for the `LoongArch` Architecture.
 
 The latest `Assembly Language Programming Guide` documentation releases are available at https://github.com/loongson/la-asm-manual/releases and are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.
 

@@ -26,7 +26,7 @@ If there is no special function implementation, all other *`hint`* values must b
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.8.1`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.8.1`* .
 =====
 
 ====== *8.1.1.8.2 `IBAR`*
@@ -53,5 +53,5 @@ A *`hint`* value of *`0`* is mandatory by default. It can ensure that the instru
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.8.2`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.8.2`* .
 =====

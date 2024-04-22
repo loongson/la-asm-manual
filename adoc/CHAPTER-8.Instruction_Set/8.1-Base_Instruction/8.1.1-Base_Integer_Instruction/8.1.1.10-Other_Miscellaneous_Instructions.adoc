@@ -1,5 +1,7 @@
 ===== *8.1.1.10 Other Miscellaneous Instructions*
 
+The information carried in the *`code`* field in the instruction *`code`* can be used as a parameter passed by the exception handling routine.
+
 ====== *8.1.1.10.1 `SYSCALL`*
 
 *Syntax:*
@@ -16,13 +18,9 @@
 ^.^|*`code`*
 |===========================
 
-*Description :*
-
-Executing the SYSCALL instruction will immediately and unconditionally trigger the system call exception.
-
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.10.1`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.10.1`* .
 =====
 
 ====== *8.1.1.10.2 `BREAK`*
@@ -41,13 +39,9 @@ For more information, refer to the *`LoongArch instruction manual:2.2.10.1`* .
 ^.^|*`code`*
 |===========================
 
-*Description :*
-
-Executing the BREAK instruction will immediately and unconditionally trigger the breakpoint exception.
-
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.10.2`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.10.2`* .
 =====
 
 ====== *8.1.1.10.3 `ASRT{LE/GT}.D`*
@@ -63,20 +57,41 @@ For more information, refer to the *`LoongArch instruction manual:2.2.10.2`* .
 ^.^|src1 
 ^.^|src2
 
-^.^|*`asrtle.d`*, *`asrtgt.d`*
+^.^|*`asrtle.d`*
+^.^|*`$rj`*
+^.^|*`$rk`*
+
+^.^|*`asrtgt.d`*
 ^.^|*`$rj`*
 ^.^|*`$rk`*
 |===========================
 
 *Description :*
 
-*`asrtle.d`* : *if* (*`$rj`* > *`$rk`*) *RaiseException*(BCE)
+[grid=none]
+[frame=none]
+[cols="100,20,50,150,50,150,480"]
+|===========================
+<.^|*`asrtle.d`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(`*$rj*`) 
+^.^|*`>`* 
+^.^|signed(`*$rk*`) 
+<.^|) *RaiseException*(BCE)
 
-*`asrtgt.d`* : *if* (*`$rj`*  < = *`$rk`*) *RaiseException*(BCE)
+<.^|*`asrtgt.d`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(`*$rj*`) 
+^.^|*`< =`* 
+^.^|signed(`*$rk*`) 
+<.^|) *RaiseException*(BCE)
+|===========================
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.10.3`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.10.3`* .
 =====
 
 ====== *8.1.1.10.4 `RDTIME{L/H}.W`, `RDTIME.D`*
@@ -99,15 +114,26 @@ For more information, refer to the *`LoongArch instruction manual:2.2.10.3`* .
 
 *Description :*
 
-*`rdtimel.w`* : *`$rd`* = *Stable_Counter*[31:0], *`$rj`* = *Counter ID*
+[grid=none]
+[frame=none]
+[cols="105,20,875"]
+|===========================
+<.^|*`rdtimel.w`*
+^.^|*:*
+<.^|*`$rd`* = *Stable_Counter*[31: 0 ], *`$rj`* = *Counter ID*
 
-*`rdtimeh.w`* : *`$rd`* = *Stable_Counter*[63:32], *`$rj`* = *Counter ID*
+<.^|*`rdtimeh.w`*
+^.^|*:*
+<.^|*`$rd`* = *Stable_Counter*[63:32], *`$rj`* = *Counter ID*
 
-*`rdtime.d`* : *`$rd`* = *Stable_Counter*[63:0], *`$rj`* = *Counter ID*
+<.^|*`rdtime.d`*
+^.^|*:*
+<.^|*`$rd`* = *Stable_Counter*[63: 0 ], *`$rj`* = *Counter ID*
+|===========================
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.10.4`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.10.4`* .
 =====
 
 ====== *8.1.1.10.5 `CPUCFG`*
@@ -134,5 +160,5 @@ For more information, refer to the *`LoongArch instruction manual:2.2.10.4`* .
 
 [NOTE]
 =====
-For more information, refer to the *`LoongArch instruction manual:2.2.10.5`* .
+For more information, refer to the *`LoongArch Architecture manual:2.2.10.5`* .
 =====
