@@ -77,8 +77,8 @@ The LoongArch assembler supports a number of pseudo-instructions that are transl
 .4+<.^|Load a 64-bit immediate
 
 <.^|*`ori`* *`$rd`*, *`$rd`*, *`si12`*
-<.^|*`lu32i.w`* *`$rd`*, *`si20`*
-<.^|*`lu52i.w`* *`$rd`*, *`si12`*
+<.^|*`lu32i.d`* *`$rd`*, *`si20`*
+<.^|*`lu52i.d`* *`$rd`*, *`si12`*
 |===========================
 
 [options="header"]
