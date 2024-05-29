@@ -14,7 +14,7 @@ To contribute fixes or improvements, you are welcome to submit a pull request on
 
 ### Sign Contributor License Agreement (CLA)
 
-Contributors must sign CLA before their pull requests can be merged. Please contact yaopengfei@loongson.cn regarding how to sign the CLA.
+Contributors must sign CLA before their pull requests can be merged. Please contact wuqingling@loongson.cn regarding how to sign the CLA.
 
 ### Make the actual pull request
 
