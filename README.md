@@ -4,7 +4,7 @@ This is the official documentation of the Assembly Language Programming Guide fo
 
 ## Releases
 
-The latest Assembly Language Programming Guide documentation releases are available at https://github.com/loongson/la-asm-manual/releases and are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.
+The latest Assembly Language Programming Guide documentation releases are available at https://github.com/loongson/la-asm-manual/releases and are licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) License.
 
 ## Defect reports
 
@@ -17,9 +17,9 @@ Please refer to the contribution guidelines in [CONTRIBUTING](CONTRIBUTING.md).
 
 ## License
 
-The Assembly Language Programming Guide documents and their source files are currently licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International  (CC BY-NC-SA 4.0) License. Contributions to these files are accepted under the same license.
+The Assembly Language Programming Guide documents and their source files are currently licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International  (CC BY-NC-ND 4.0) License. Contributions to these files are accepted under the same license.
 
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 ## Revision History
 

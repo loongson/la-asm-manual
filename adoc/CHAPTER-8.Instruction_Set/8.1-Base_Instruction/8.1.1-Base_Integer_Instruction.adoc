@@ -1,7 +1,7 @@
 ==== *8.1.1 Base Integer Instruction*
 
 [.text-justify]
-This section will describe the functionality of application level basic integer instructions in the *`LA64`* architecture. For the *`LA32`* architecture, only one subset needs to be implemented. Due to the fact that the bit width of *`GR`* under the *`LA32`* architecture is only 32 bits, the signed extension operation in the subsequent instruction description of "writing the 32-bit result signed extension to the general register *`$rd`*" is not required.
+This section will describe the functionality of application-level basic integer instructions in the *`LA64`* architecture. For the *`LA32`* architecture, only one subset needs to be implemented. Due to the fact that the bit width of *`GR`* under the *`LA32`* architecture is only 32 bits, the signed extension operation mentioned in the subsequent instruction description-"writing the 32-bit result signed extension to the general register *`$rd`*"-is not required.
 
 include::8.1.1-Base_Integer_Instruction/8.1.1.1-Arithmetic_Operation_Instructions.adoc[]
 

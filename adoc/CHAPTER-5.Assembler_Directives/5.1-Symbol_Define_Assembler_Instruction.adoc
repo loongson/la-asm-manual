@@ -1,12 +1,12 @@
 === *5.1 Symbol Definition Directives*
 
 [.text-justify]
-If an identifier is not defined to the assembler (only referenced), the assembler assumes that the identifier is an external symbol. The assembler treats the identifier like a *`.globl`* pseudo-operation. If the identifier is defined to the assembler and the identifier has not been specified as global, the assembler assumes that the identifier is a local symbol.
+If an identifier is referenced but not defined in the assembler, it is treated as an external symbol. In this case, the assembler handles the identifier as if it were declared with the *`.globl`* pseudo-operation. Conversely, if the identifier is defined but not specified as global, the assembler treats it as a local symbol.
 
 ==== *5.1.1 Set Symbol Type*
 
 [.text-justify]
-The assembler directive that defines a symbol type is *`.type`*, which is often followed by types *`@function`* and *`@object`*, respectively, indicating that the current symbol is a function and a variable.
+The assembler directive that defines a symbol type is *`.type`*, which is often followed by the types *`@function`* or *`@object`*, indicating that the current symbol is a function or a variable, respectively.
 
 [source,asm]
 ----
@@ -17,7 +17,7 @@ The assembler directive that defines a symbol type is *`.type`*, which is often 
 ==== *5.1.2 Set Symbol Size*
 
 [.text-justify]
-The assembler directive *`.size`* name, expression is used to set the size of symbols, where name is the symbol name. When setting the variable size, expression is a positive integer. When setting the function size, expression is usually a "*`.-name`*" expression.
+The assembler directive *`.size name, expression`* is used to set the size of symbols, where *`name`* is the symbol name. When setting the size of a variable, *`expression`* is a positive integer. When setting the size of a function, *`expression`* is usually a "*`.-name`*" expression.
 
 [source,asm]
 ----
@@ -28,7 +28,7 @@ The assembler directive *`.size`* name, expression is used to set the size of sy
 ==== *5.1.3 Set Symbol Align*
 
 [.text-justify]
-The assembler directive *`.align`* expr is used to specify the alignment of symbols, where expr is a positive integer used to indicate the alignment of subsequent data storage addresses in the target file.
+The assembler directive *`.align expr`* is used to specify the alignment of symbols, where *`expr`* is a positive integer that indicates the alignment of subsequent data storage addresses in the target file.
 
 [source,asm]
 ----
@@ -36,7 +36,7 @@ The assembler directive *`.align`* expr is used to specify the alignment of symb
 ----
 
 [.text-justify]
-Pad the location counter (in the current subsection) to a particular storage boundary. Expr is a positive integer indicating the alignment of the data storage address in the target file. In *`LoongArch`*:
+Pad the location counter (in the current subsection) to a particular storage boundary. *`Expr`* is a positive integer that indicates the alignment of the data storage address in the target file. In *`LoongArch`*:
 
 [source,asm]
 ----
@@ -56,18 +56,18 @@ In order to simplify the hardware design between processors and memory systems, 
 * To read or write a *`doubleword`* (*`8 bytes`*) of data from memory, the access address must be a multiple of *8*.
 
 [.text-justify]
-*`$r5`* = *`0x120000000`*, *`ld.w`* *`$r4`*, *`$r5`*, *`0x3`* Address *`0x120000003`* Not divisible by *4*, therefore non aligned access. *`ld.w`* *`$r4`*, *`$r5`*, *`0x8`* Address *`0x120000008`* It can be divided by *4*, so it is an aligned access. *`ld.d`* *`$r4`*, *`$r5`*, *`0x5`* Address *`0x120000005`* Not divisible by *4*, therefore non aligned access.
+*`$r5`* = *`0x120000000`*, *`ld.w`* *`$r4`*, *`$r5`*, *`0x3`*: The address *`0x120000003`* is not divisible by *4*, therefore non-aligned access. *`ld.w`* *`$r4`*, *`$r5`*, *`0x8`*: The address *`0x120000008`* is divisible by *4*, so it is an aligned access. *`ld.d`* *`$r4`*, *`$r5`*, *`0x5`*: The address *`0x120000005`* is not divisible by *4*, thus it is also a non-aligned access.
 
 [.text-justify]
-*`LoongArch`* supports hardware processing of non aligned memory data access. Although there is non aligned access in the above example, the processor can still function properly and obtain correct results without throwing non aligned exceptions. However, for better performance, it is recommended to align the data as much as possible. Generally, the compiler will automatically align the data.
+*`LoongArch`* supports hardware processing of non-aligned memory data access. Although there is non-aligned access in the above example, the processor can still function properly and produce correct results without throwing non-aligned exceptions. However, for better performance, it is recommended to align the data as much as possible. Generally, the compiler will automatically align the data.
 
 [.text-justify]
-In the above command, different architectures of .align have different definitions of expr, and two other variants, *`.balgin`* and *`.p2align`*, can be used. The instruction *`.balgin`* 4 represents 4-byte alignment in any architecture.
+In the above command, different architectures of .align have different definitions of *`expr`*. Additionally, two other variants, *`.balign`* and *`.p2align`*, can also be used. The instruction *`.balign 4`* represents 4-byte alignment in any architecture.
 
 * .align  https://sourceware.org/binutils/docs/as/Align.html
 
 [.text-justify]
-Two other variants, *`.balign`* and *`.p2align`*, can be used. Regarding *`.balgin`* and *`.p2align`* :
+Two other variants, *`.balign`* and *`.p2align`*, can be used. Regarding *`.balign`* and *`.p2align`* :
 
 * .balign  https://sourceware.org/binutils/docs/as/Balign.html
 
@@ -76,7 +76,7 @@ Two other variants, *`.balign`* and *`.p2align`*, can be used. Regarding *`.balg
 ==== *5.1.4 Set Symbol Location*
 
 [.text-justify]
-When defining a variable or function symbol in the assembly source file, its scope should also be declared to identify the scope of the current symbol. By default, the current symbol scope is not specified, and the symbol scope is visible within the current assembly source file. Other compiler instructions that need to be used in other situations include:
+When defining a variable or function symbol in the assembly source file, its scope should also be declared to identify the scope of the current symbol. By default, the current symbol's scope is not specified and is visible within the current assembly source file. Other compiler instructions that need to be used in other situations include:
 
 [source,asm]
 ----
@@ -87,10 +87,10 @@ When defining a variable or function symbol in the assembly source file, its sco
 ----
 
 [.text-justify]
-*`.globl`* / *`.global`* specifies the symbol as a global variable or non-static member function, which is globally visible and visible to other source files in the linker.
+The *`.globl`* / *`.global`* directive specifies a symbol as a global variable or non-static member function, making it accessible to other source files during the linking process.
 
 [.text-justify]
-The *`.common`* declaration is a universal symbol, similar to an uninitialized global variable in C language. A universal symbol with the same name that appears in multiple assembly source files may be merged during the compiler's compilation phase, resulting in the preservation of the one with the largest footprint.
+The *`.common`* declaration is a universal symbol, similar to an uninitialized global variable in the C language. If a universal symbol with the same name appears in multiple assembly source files, they may be merged during the compiler's compilation phase, resulting in the preservation of the one with the largest footprint.
 
 [.text-justify]
-*`.local`* is used to declare an uninitialized local static variable definition similar to that in a language.
+The *`.local`* directive is used to declare an uninitialized local static variable, similar to that in the C language.

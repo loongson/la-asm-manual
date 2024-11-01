@@ -180,10 +180,6 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.4.1`* .
 .L0
        li.d    $r23,  0x0
        beqz    $r23,  .L2
-----
-
-[source]
-----
 .L1
        ...     # When the value of $r23 is not 0, no jump.
 .L2

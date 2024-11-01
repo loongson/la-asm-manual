@@ -3,7 +3,7 @@
 [.text-justify]
 This chapter mainly describes assembler commands and assembler instructions.
 
-For more command line parameters of the assembler, please refer to the documentation for the assembler on the *`GCC`* and *`LLVM`* official websites.
+For more command line parameters of the assembler, please refer to the documentation for the assembler on the official *`GCC`* and *`LLVM`* websites.
 
 include::5.1-Symbol_Define_Assembler_Instruction.adoc[]
 

@@ -378,6 +378,8 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.7.2`* .
 ^.^|*`$rj`* 
 |===========================
 
+<<<
+
 *Description :*
 
 [grid=none]
@@ -531,6 +533,10 @@ addi.w  $r25, $r25, 0               #             $r25 = 0xffffffff89abcdef
 sc.w    $r25, $r12, 0               # memory[$r12 + 0] = 0x0123456789abcdef
 
 ll.d    $r25, $r12, 0               #             $r25 = 0x0123456789abcdef
+----
+
+[source]
+----
 addi.d  $r25, $r25, 10              #             $r25 = 0x0123456789abcdef
 sc.d    $r25, $r12, 0               # memory[$r12 + 0] = 0x0123456789abcdef
 ----
@@ -626,6 +632,8 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.7.5`* .
 ^.^|*:*
 <.^|*`$rd`*[63:0] = *`MemoryStore`* (*`$rd`*[63:0], *`$rj`*, [63:0])
 |===========================
+
+<<<
 
 *Usage :* 
 

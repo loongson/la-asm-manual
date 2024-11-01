@@ -35,13 +35,13 @@ main:
 ----
 
 [.text-justify]
-A *`relocatable file`* holds code and data suitable for linking with other object files to create an executable or a shared object file.
+A *`relocatable file`* holds code and data that are suitable for linking with other object files to create an executable or a shared object file.
 
 [.text-justify]
-An *`executable file`* holds a program suitable for execution; the file specifies how exec(LoongArch) creates a program's process image.
+An *`executable file`* holds a program that is suitable for execution; the file specifies how exec(LoongArch) creates a program's process image.
 
 [.text-justify]
-A *`shared object file`* holds code and data suitable for linking in two contexts. First, the link editor see ld(LoongArch) processes the shared object file with other relocatable and shared object files to create another object file. Second, the dynamic linker combines it with an executable file and other shared objects to create a process image.
+A *`shared object file`* holds code and data that are suitable for linking in two contexts. First, the link editor, as seen in ld(LoongArch), processes the shared object file with other relocatable and shared object files to create another object file. Second, the dynamic linker combines it with an executable file and other shared objects to create a process image.
 
 [.text-justify]
-For more information on ELF files, please refer to link:https://www.sco.com/developers/gabi/latest/contents.html[SysV gABI] and http://sysdev.loongson.cn/attachments/download/91249/la-abi.pdf[LoongArch Application Binary Interface manual].
+For more information on ELF files, please refer to link:https://www.sco.com/developers/gabi/latest/contents.html[SysV gABI] and https://github.com/loongson/la-abi-specs/releases/tag/v2.30/la-abi.pdf[LoongArch Application Binary Interface manual].

@@ -1,6 +1,6 @@
 ===== *8.1.1.10 Other Miscellaneous Instructions*
 
-The information carried in the *`code`* field in the instruction *`code`* can be used as a parameter passed by the exception handling routine.
+The information carried in the *`code`* field of the instruction *`code`* can be used as a parameter passed by the exception handling routine.
 
 ====== *8.1.1.10.1 `SYSCALL`*
 
@@ -156,7 +156,7 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.10.4`* .
 
 *Description :*
 
-*`cpucfg`* : When using the *`CPUCFG`* instruction, the source operand register *`rj`* stores the number of the configuration information word to be accessed, and the configuration information word information read after the instruction is executed is written into the general register *`rd`*. In *LA64*, each configuration information word is 32 bits, which is written into the result register after the sign extension.
+*`cpucfg`* : When using the *`CPUCFG`* instruction, the source operand register *`rj`* stores the number of the configuration information word to be accessed, and the configuration information word information read after executing the instruction is written into the general register *`rd`*. In *LA64*, each configuration information word is 32 bits, which is written into the result register after sign extension.
 
 [NOTE]
 =====

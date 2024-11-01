@@ -1,20 +1,23 @@
 = `Assembly Language Programming Guide` LoongArch(TM)
 Loongson Technology Corporation Limited
-v1.0, 2024-04-10
+v1.1, 2024-10-17
 :docinfo: shared
 :doctype: book
 :toc: macro
 :toc-title: Contents
 :toclevels: 4
-:source-highlighter: coderay
 toc::[]
- 
+
 == *Preamble*
+
+[.text-justify]
 This is the official documentation of the `Assembly Language Programming Guide` for the `LoongArch` Architecture.
 
-The latest `Assembly Language Programming Guide` documentation releases are available at https://github.com/loongson/la-asm-manual/releases and are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.
+[.text-justify]
+The latest `Assembly Language Programming Guide` documentation releases are available at https://github.com/loongson/la-asm-manual/releases and are licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) License.
 
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+[.text-justify]
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 <<<
 

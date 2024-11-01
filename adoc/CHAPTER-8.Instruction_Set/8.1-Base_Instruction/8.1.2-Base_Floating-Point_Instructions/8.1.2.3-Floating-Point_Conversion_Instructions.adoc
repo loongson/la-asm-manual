@@ -96,7 +96,7 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.3.1`* .
 <.^|*`$fd`*[63:0] = FP64 `*convertFromInt*` ( *`$fj`*[63:0], SINT64 )
 |===========================
 
-* The *`FFINT{S/D}.{W/L}`* instruction selects the *`integer`*/*`long-integer`* fixed-point number in the floating-point register *`$fj`* and converts it into a *`single`*/*`double`* floating-point number, and the obtained *`single`*/*`double`* floating-point number is written to Floating-point register *`$fd`*. The floating-point *`format conversion`* operation follows the specifications of the *`convertFromInt`*(x) operation in the *`IEEE 754-2008 standard`* .
+* The *`FFINT{S/D}.{W/L}`* instruction selects the *`integer`*/*`long-integer`* fixed-point number from the floating-point register *`$fj`* and converts it into a *`single`*/*`double`* floating-point number. The resulting *`single`*/*`double`* floating-point number is then written to floating-point register *`$fd`*. The floating-point *`format conversion`* operation follows the specifications of the *`convertFromInt`*(x) operation in the *`IEEE 754-2008 standard`* .
 
 [grid=none]
 [frame=none]
@@ -119,7 +119,7 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.3.1`* .
 <.^|*`$fd`*[63:0] = FP64 `*convertTo*` Sint64 ( *`$fj`*[63:0], FCSR.RM )
 |===========================
 
-* The *`FTINT{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in the floating-point register *`$fj`* to be converted into an *`integer`*/*`long-integer`* fixed-point number, and the obtained *`integer`*/*`long-integer`* fixed-point number is written To the floating-point memory *`$fd`*. According to the different states in *`FCSR`*, the operations in the *`IEEE 754-2008 standard`* followed by this floating-point *`format conversion`* operation are shown in the following table.
+* The *`FTINT{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number from the floating-point register *`$fj`* and converts it into an *`integer`*/*`long-integer`* fixed-point number. The resulting *`integer`*/*`long-integer`* fixed-point number is then written to the floating-point memory *`$fd`*. Depending on the different states in *`FCSR`*, the operations in the *`IEEE 754-2008 standard`* followed by this floating-point *`format conversion`* operation are shown in the following table.
 
 ---
 
@@ -173,6 +173,10 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.3.1`* .
   case {rm} of:
    {2'd0}: return Sint64_convertToIntegerExactTiesToEven(x)
    {2'd1}: return Sint64_convertToIntegerExactTowardZero(x)
+----
+
+[source]
+----
    {2'd2}: return Sint64_convertToIntegerExactTowardPositive(x)
    {2'd3}: return Sint64_convertToIntegerExactTowardNegative(x)
 ----
@@ -260,7 +264,7 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.3.2`* .
 <.^|*`$fd`*[63:0] = Sint64 `*convertToIntegerExactTowardNegative*` (*`$fj`*[63:0])
 |===========================
 
-* *`FTINTRM.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in the floating-point register *`$fj`* and converts it to *`integer`*/*`long-integer`* fixed point number, and the resulting *`integer`*/*`long-integer`* fixed point number is written to the floating-point register *`$fd`*, using the "*`round to negative infinity`*" mode.
+* *`FTINTRM.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number from the floating-point register *`$fj`* and converts it into *`integer`*/*`long-integer`* fixed point number. The resulting *`integer`*/*`long-integer`* fixed-point number is then written to the floating-point register *`$fd`*, using the "*`round to negative infinity`*" mode.
 
 *Usage :* 
 [source]
@@ -298,7 +302,7 @@ ftintrm.l.d  $f26, $f25        # $f26 = -5
 <.^|*`$fd`*[63:0] = Sint64 `*convertToIntegerExactTowardPositive*` (*`$fj`*[63:0])
 |===========================
 
-* *`FTINTRP.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in the floating-point register *`$fj`*, converts it to *`integer`*/*`long-integer`* fixed point number, and writes the *`integer`*/*`long-integer`* fixed point number into the floating-point register *`$fd`*, using the "*`rounding to positive infinity`*" method.
+* *`FTINTRP.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number from the floating-point register *`$fj`* and converts it into *`integer`*/*`long-integer`* fixed-point number. It then writes the resulting *`integer`*/*`long-integer`* fixed-point number to the floating-point register *`$fd`*, using the "*`rounding to positive infinity`*" method.
 
 *Usage :* 
 [source]
@@ -336,7 +340,7 @@ ftintrp.l.d  $f26, $f25        # $f26 = 5
 <.^|*`$fd`*[63:0] = Sint64 `*convertToIntegerExactTowardZero*` (*`$fj`*[63:0])
 |===========================
 
-* *`FTINTRZ.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in floating-point register *`$fj`*, converts it to *`integer`*/*`long-integer`* fixed-point number, and writes the obtained *`integer`*/*`long-integer`* fixed-point number to floating-point register *`$fd`*, using the "*`rounding to zero`*" method.
+* *`FTINTRZ.{W/L}.{S/D}`* instruction selects the *`single`*/*`double`* floating-point number from floating-point register *`$fj`* and converts it into *`integer`*/*`long-integer`* fixed-point number. It then writes the resulting *`integer`*/*`long-integer`* fixed-point number to the floating-point register *`$fd`*, using the "*`rounding to zero`*" method.
 
 *Usage :* 
 [source]
@@ -370,7 +374,7 @@ ftintrz.w.s  $f26, $f24        # $f26 = -4
 <.^|*`$fd`*[63:0] = Sint64 `*convertToIntegerExactTiesToEven*` (*`$fj`*[63:0])
 |===========================
 
-* *`FTINTRNE.{W/L}{S/D}`* instruction selects the *`single`*/*`double`* floating-point number in floating-point register *`$fj`*, converts it to *`integer`*/*`long-integer`* fixed point number, and writes the obtained *`integer`*/*`long-integer`* fixed point number to floating-point register *`$fd`*, using the "*`rounding to the nearest even number`*" method.
+* *`FTINTRNE.{W/L}{S/D}`* instruction selects the *`single`*/*`double`* floating-point number from floating-point register *`$fj`* and converts it into *`integer`*/*`long-integer`* fixed-point number. It then writes the resulting *`integer`*/*`long-integer`* fixed-point number to floating-point register *`$fd`*, using the "*`rounding to the nearest even number`*" method.
 
 *Usage :* 
 [source]
@@ -424,7 +428,7 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.3.3`* .
 |===========================
 
 * The operations in *`IEEE 754-2008 standard`* for floating-point format
-conversion operations are shown in the table below..
+conversion are shown in the table below..
 
 [options="header"]
 [cols="5,6"]
