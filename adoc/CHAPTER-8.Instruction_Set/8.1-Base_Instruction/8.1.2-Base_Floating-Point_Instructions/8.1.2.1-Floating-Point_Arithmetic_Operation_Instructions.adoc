@@ -237,9 +237,14 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.1.1`* .
 * The above four floating-point *`fusion multiply-add`* operations follow the specification of the *`fusedMultiplyAdd`*(x,y,z) operation in the *`IEEE 754-2008 standard`* .
 
 *Usage :* 
+
 [source]
 ----
 fmadd.s    $f23, $f24, $f25, $f26      # $f23 = $f24 × $f25 + $f26
+----
+
+[source]
+----
 fmadd.d    $f23, $f24, $f25, $f26      # $f23 = $f24 × $f25 + $f26
 fmsub.s    $f23, $f24, $f25, $f26      # $f23 = $f24 × $f25 - $f26
 fmsub.d    $f23, $f24, $f25, $f26      # $f23 = $f24 × $f25 - $f26
@@ -389,11 +394,7 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.1.4`* .
 ^.^|dest
 ^.^|src1
 
-^.^|*`fabs.s`*, *`fabs.d`*
-^.^|*`$fd`*
-^.^|*`$fj`*  
-
-^.^|*`fneg.s`*, *`fneg.d`*
+^.^|*`fabs.s`*, *`fabs.d`*, *`fneg.s`*, *`fneg.d`*
 ^.^|*`$fd`*
 ^.^|*`$fj`*  
 |===========================
@@ -429,6 +430,10 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.1.4`* .
 [source]
 ----
 fabs.s    $f23, $f24    # $f23 = |$f24|
+----
+
+[source]
+----
 fneg.d    $f23, $f24    # $f23 = -$f24
 ----
 
@@ -517,6 +522,8 @@ frsqrt.d    $f23, $f24    # $f23 = 1.0 / sqrt($f24)
 =====
 For more information, refer to the *`LoongArch Architecture manual:3.2.1.6`* .
 =====
+
+<<<
 
 ====== *8.1.2.1.7 `F{SCALEB/LOGB/COPYSIGN}.{S/D}`*
 
@@ -619,6 +626,8 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.1.7`* .
 ^.^|*`$fj`*  
 |===========================
 
+<<<
+
 *Description :*
 
 [grid=none]
@@ -643,7 +652,7 @@ fclass.s        $f23, $f24
 fclass.d        $f23, $f24  
 ----
 
-This instruction determines the category of floating-point numbers in the floating-point register *`$fj`*, and the resulting judgment result consists of a total of 10 bits of information. The meaning of each bit is as follows:
+This instruction determines the category of floating-point numbers in the floating-point register *`$fj`*, with the resulting judgment consisting of a total of 10 bits of information. The meaning of each bit is as follows:
 
 [options="header"]
 [cols="8,8,8,10,16,8,8,10,16,8"]
@@ -713,7 +722,7 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.1.8`* .
 <.^|*`$fd`*[63:0] = FP64 *`reciprocal estimate`* (*`$fj`*[63:0])
 |===========================
 
-* The *`FRECIPE.{S/D}`* instruction selects the single-precision or double-precision floating-point number in the floating-point register *`$fj`*, calculates the single-precision or double-precision floating-point number approximation obtained by dividing the floating-point number by 1.0, and writes the approximation to the floating-point register *`$fd`* . The relative error of the approximation is less than 2^-14^. When the input value is 2^N^, the output value is 2^-N^. The results when the inputs are QNaN, SNaN, ±∞, ±0, the conditions for generating floating-point exceptions, and the default results when floating-point exceptions are generated without triggering exceptions are the same as those of the *`FRECIPE.{S/D}`* instruction.
+* The *`FRECIPE.{S/D}`* instruction selects the single-precision or double-precision floating-point number in the floating-point register *`$fj`*, calculates the approximation of the floating-point number obtained by dividing it by 1.0, and writes the approximation to the floating-point register *`$fd`* . The relative error of the approximation is less than 2^-14^. When the input value is 2^N^, the output value is 2^-N^. The results when the inputs are QNaN, SNaN, ±∞, ±0, the conditions for generating floating-point exceptions, and the default results when floating-point exceptions are generated without triggering exceptions are the same as those of the *`FRECIPE.{S/D}`* instruction.
 
 [grid=none]
 [frame=none]
@@ -728,7 +737,7 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.1.8`* .
 <.^|*`$fd`*[63:0] = FP64 *`reciprocal squareroot estimate`* (*`$fj`*[63:0])
 |===========================
 
-* The *`FRSQRTE.{S/D}`* instruction selects the single-precision or double-precision floating-point number in the floating-point register *`$fj`*, first extract the Square Root it, and then divides the approximate result by 1.0, and then writes the obtained single-precision or double-precision floating-point number into the floating-point register *`$fd`* . The relative error of the obtained approximation is less than 2^-14^. When the input value is 2^2N^, the output value is 2^-N^. The results when the inputs are QNaN, SNaN, ±∞, ±0, the conditions for generating floating-point exceptions, and the default results when floating-point exceptions are generated without triggered exceptions are the same as those of the *`FRSQRTE.{S/D}`* instruction.
+* The *`FRSQRTE.{S/D}`* instruction selects the single-precision or double-precision floating-point number in the floating-point register *`$fj`*, first extracts its square root, divides the approximate result by 1.0, and then writes the obtained single-precision or double-precision floating-point number into the floating-point register *`$fd`* . The relative error of the obtained approximation is less than 2^-14^. When the input value is 2^2N^, the output value is 2^-N^. The results when the inputs are QNaN, SNaN, ±∞, ±0, the conditions for generating floating-point exceptions, and the default results when floating-point exceptions are generated without triggered exceptions are the same as those of the *`FRSQRTE.{S/D}`* instruction.
 
 *Usage :* 
 [source]

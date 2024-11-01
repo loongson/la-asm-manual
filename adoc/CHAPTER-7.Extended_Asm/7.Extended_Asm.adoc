@@ -1,17 +1,17 @@
 == *CHAPTER 7. Inline Assembly*
 
 [.text-justify]
-The asm keyword allows you to embed assembler instructions within C code. Compiler provides two forms of inline asm statements. A basic assembly statement is one with no operands, and an Extended assembly statement which includes one or more operands to interact with C variables.
+The asm keyword allows you to embed assembler instructions within C code. The compiler provides two forms of inline assembly statements: basic assembly statements, which have no operands, and extended assembly statements,  which include one or more operands to interact with C variables.
 
 [.text-justify]
-In the process of program development, assembly language can achieve functions that cannot be achieved by C language in certain situations, which requires the use of extended asm.
+In the process of program development, assembly language can achieve functionalities that cannot be accomplished by C language in certain situations, which requires the use of extended asm.
 
 === *7.1 Basic Assembly*
 
-Refer to the "Instruction Set" section in Programming Manual document to get details of all instructions.
+Refer to the "Instruction Set" section in the Programming Manual document for details on all instructions.
 
 [.text-justify]
-Here is a example:
+Here is an example:
 
 Inline assembly code is used to write pure assembly code in a *`C/C++`* program:
 
@@ -20,18 +20,18 @@ Inline assembly code is used to write pure assembly code in a *`C/C++`* program:
 int main()
 {
     asm volatile("move $r23, $r24");
-    asm volatile("addi $r23, $r24, 1");
+    asm volatile("addi.w $r23, $r24, 1");
 }
 ----
 
-Use in block of instructions, note the *`\n\t`* at the end of each instruction:
+Use the following format in the block of instructions, noting that *`\n\t`* should be included at the end of each instruction:
 
 [source]
 ----
 int main()
 {
     asm volatile("move $r23, $r24\n\t"
-                 "addi $r23, $r24, 1\n\t");
+                 "addi.w $r23, $r24, 1\n\t");
 }
 ----
 
@@ -39,9 +39,9 @@ int main()
 
 We will write a simple code to:
 
-* Load values from 2 addresses *`0x20001000`* and *`0x20001004`*
+* Load values from two addresses: *`0x20001000`* and *`0x20001004`*
 
-* Store the sum of those numbers to a new address *`0x20001008`*
+* Store the sum of these values at a new address: *`0x20001008`*
 
 [source]
 ----
@@ -56,7 +56,7 @@ int main(void) {
 
 === *7.2 Extended Assembly*
 
-The Inline Assembly full syntax is :
+The full syntax of Inline Assembly is:
 
 [source]
 ----
@@ -87,10 +87,10 @@ asm volatile("move $r23, $r24":::);
 
 *`OutputOperands`* : 
 
-* A comma-separated list of the C variables modified by the instructions in the Assembler Template. An empty list is permitted.
+* A comma-separated list of C variables modified by the instructions in the Assembler Template. An empty list is permitted.
 
 [.text-justify]
-Here is a example:
+Here is an example:
 
 [source]
 ----
@@ -103,22 +103,22 @@ asm volatile("add.w %0 , %1 , %2 \n\t"
 ----
 
 [.text-justify]
-In the above example, the instructions and operands used by extended asm are first described. By using '*`:`*' to inform the compiler of the meaning of this assembly instruction and the number of operands required by the assembly instruction. '*`=r`*' and '*`r`*' indicate that this is a register operand, referred to as an operand constraint. '*`r`*' represents a fixed point register operand, '*`=`*' represents an output operand, otherwise it is an input operand. After containing the above information, the compiler can understand how to convert this extended asm into actual assembly instructions.
+In the above example, the instructions and operands used by extended asm are first described. The '*`:`*' character informs the compiler aboout the meaning of this assembly instruction and the number of operands required. The constraints '*`=r`*' and '*`r`*' indicate that these are register operands, with '*`r`*' representing a fixed-point register operand and '*`=`*' indicating an output operand. In constrast, if there is no *`=`*, it represents an input operand. With this information, the compiler can understand how to convert the extended asm into actual assembly instructions.
 
-If the extended asm is bound to a register variable, it should be noted that if the extended asm uses a temporary register to save the result, or if a register variable is bound to a temporary register, it may be changed during the function call, as the value of the temporary register will not be maintained by the system during the function call and manual instructions need to be added for maintenance. So it is recommended to use save registers as much as possible in extended asm.
+If the extended asm is bound to a register variable, it's important to note that if the extended asm uses a temporary register to store the result, or if a register variable is bound to a temporary register, that value may change during the function call. This is because the value of the temporary register will not be maintained by the system during the function call, so manual instructions need to be added for maintenance. Therefor, it is recommended to use saved registers as much as possible in extended asm.
 
 *`InputOperands`* : 
 
 * A comma-separated list of C expressions read by the instructions in the AssemblerTemplate. An empty list is permitted.
 
 [.text-justify]
-* Sometimes we need to use designated registers in assembly instructions. A typical example is a system call, where the system call number and parameters must be placed in the designated registers.
+* Sometimes we need to use designated registers in assembly instructions. A typical example is a system call, where the system call number and parameters must be placed in specific designated registers.
 
 [.text-justify]
 * To achieve this goal, we need to use extended syntax when declaring variables.
 
 [.text-justify]
-Here is a example:
+Here is an example:
 
 [source]
 ----
@@ -131,17 +131,17 @@ asm volatile("addi.w %0,%1,0xf\n\t"
 ----
 
 [.text-justify]
-If the register used by extended asm is specified in the instruction description, it should be noted that general-purpose registers can be represented as *`$GR`* or *`GR`*, the '*`$`*' symbol is not necessary, floating-point registers must contain the '*`$`*' symbol, and floating-point registers must be represented as *`$FR`*. Please do not use its alias for *`FR`* .
+If the registers used in extended assembly are specified in the instruction description, it should be noted that general-purpose registers can be represented as either *`$GR`* or *`GR`*; the '*`$`*' symbol is not necessary. However, floating-point registers must contain the '*`$`*' symbol and must be represented as *`$FR`*. Please do not use its alias for *`FR`* .
 
 *`Clobbers`* : 
 
 * A comma-separated list of registers or other values changed by the AssemblerTemplate, beyond those listed as outputs. An empty list is permitted.
 
 [.text-justify]
-* Some assembly instructions may implicitly modify some registers that are not in the instruction operand. In order to make the compiler aware of this situation, the implicit change of register rules is listed after the input rules.
+* Some assembly instructions may implicitly modify some registers that are not in the instruction operand. In order to make the compiler aware of this situation, the rules for implicit register changes are listed after the input rules.
 
 [.text-justify]
-Here is a example:
+Here is an example:
 
 [source]
 ----
@@ -152,7 +152,7 @@ asm volatile("xor $r25, $r25, %0\n\t"
 *`GotoLabels`* : 
 
 [.text-justify]
-With extended asm you can read and write C variables from assembler and perform jumps from assembler code to C labels. Extended asm syntax uses colons ('*`:`*') to delimit the operand parameters after the assembler template:
+With extended asm, you can read and write C variables from assembler and perform jumps from assembler code to C labels. The extended asm syntax uses colons ('*`:`*') to delimit the operand parameters after the assembler template:
 
 [source]
 ----
@@ -164,7 +164,7 @@ asm goto( AssemblerTemplate
 ----
 
 [.text-justify]
-Here is a example:
+Here is an example:
 
 [source]
 ----
@@ -182,12 +182,12 @@ labelbeqz:
 
 This is useful for above cases:
 
-* Move the content of C variable to an *`LoongArch`* register.
-* Move the content of an *`LoongArch`* register to a C variable.
-* Access assembly instructions that are not readily available to C programs.
+* Move the content of a C variable to a *`LoongArch`* register.
+* Move the content of a *`LoongArch`* register to a C variable.
+* Access assembly instructions that are not readily available in C programs.
 
 [.text-justify]
-For more extended asm related content, please refer to:
+For more content related to extended asm, please refer to:
 
 [.text-justify]
 * link:https://gcc.gnu.org/onlinedocs/gcc/Basic-Asm.html[Basic Asm — Assembler Instructions Without Operands]

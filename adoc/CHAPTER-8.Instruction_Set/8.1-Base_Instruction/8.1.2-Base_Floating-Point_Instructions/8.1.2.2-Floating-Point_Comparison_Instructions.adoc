@@ -25,7 +25,7 @@
 ^.^|*`$fk`* 
 |===========================
 
-This is a floating-point comparison instruction, which stores the result of the comparison into the specified status code (CC). There are 22 types of cond for this instruction. These comparison conditions and judgment standards are listed in the following table .
+This is a floating-point comparison instruction, which stores the result of the comparison into the specified status code (CC). There are 22 types of conditions (*`cond`*) for this instruction. These comparison conditions and judgment standards are listed in the following table .
 
 [options="header"]
 [cols="20,40,20,20"]
@@ -145,6 +145,8 @@ This is a floating-point comparison instruction, which stores the result of the 
 ^.^|*`UN`*, *`GT`*, *`LT`*
 ^.^|*`Yes`* 
 |===========================
+
+<<<
 
 *Description :*
 

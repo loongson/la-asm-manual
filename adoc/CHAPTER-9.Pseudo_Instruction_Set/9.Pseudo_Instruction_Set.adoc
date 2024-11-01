@@ -1,431 +1,1167 @@
-== *CHAPTER 9. Pseudo Instructions*
+== *CHAPTER 9. Macro Instructions*
 
 [.text-justify]
-The LoongArch assembler supports a number of pseudo-instructions that are translated into the appropriate combination of LoongArch instructions at assembly time.
+The LoongArch assembler supports a number of pseudo-instructions that are translated into the appropriate combination of LoongArch instructions during assembly.
+
+=== *9.1 ALU Macro Instructions*
+
+==== *9.1.1 `move`* 
+
+*Syntax:*
+
+ opcode    dest,  src1
 
 [options="header"]
-[cols="30,35,35"]
+[cols="80,10,10"]
 |===========================
-^.^|Pseudo Instruction
-^.^|Machine Instruction
-^.^|Meaning
+^.^|opcode
+^.^|dest
+^.^|src1
 
-<.^|*`jr`* *`$rd`*
-<.^|*`jirl`* *`$zero`*, *`$rd`*, *`0`*
-<.^|Direct register jump
-
-<.^|*`ret`* (*`jr`* *`$ra`*)
-<.^|*`jirl`* *`$zero`*, *`$ra`*, *`0`*
-<.^|Function return
-
-<.^|*`bgt`* *`$rj`*, *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|*`blt`* *`$rd`*, *`$rj`*, (*`si18`* \| *`symbol`*)
-<.^|if(*`$rj`* > *`$rd`*)jump (*`si18`* \| *`symbol`*)
-
-<.^|*`bgtu`* *`$rj`*, *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|*`bltu`* *`$rd`*, *`$rj`*, (*`si18`* \| *`symbol`*)
-<.^|if(*`$rj`* > *`$rd`*)jump (*`si18`* \| *`symbol`*)
-
-<.^|*`ble`* *`$rj`*, *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|*`bge`* *`$rd`*, *`$rj`*, (*`si18`* \| *`symbol`*)
-<.^|if(*`$rj`* < = *`$rd`*)jump (*`si18`* \| *`symbol`*)
-
-<.^|*`bleu`* *`$rj`*, *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|*`bgeu`* *`$rd`*, *`$rj`*, (*`si18`* \| *`symbol`*)
-<.^|if(*`$rj`* < = *`$rd`*)jump (*`si18`* \| *`symbol`*)
-
-<.^|*`bltz`* *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|*`blt`* *`$rd`*, *`$zero`*, (*`si18`* \| *`symbol`*)
-<.^|if(*`$rd`* < *`0`*)jump (*`si18`* \| *`symbol`*)
-
-<.^|*`bgtz`* *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|*`blt`* *`$zero`*, *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|if(*`$rd`* > *`0`*)jump (*`si18`* \| *`symbol`*)
-
-<.^|*`blez`* *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|*`bge`* *`$zero`*, *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|if(*`$rd`* < = *`0`*)jump (*`si18`* \| *`symbol`*)
-
-<.^|*`bgez`* *`$rd`*, (*`si18`* \| *`symbol`*)
-<.^|*`bge`* *`$rd`*, *`$zero`*, (*`si18`* \| *`symbol`*)
-<.^|if(*`$rd`* > = *`0`*)jump (*`si18`* \| *`symbol`*)
-
-<.^|*`move`* *`$rd`*, *`$rj`*
-<.^|*`or`* *`$rd`*, *`$rj`*, *`$zero`*
-<.^|Assign the value of *`$rj`* to *`$rd`*
+^.^|*`move`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
 |===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+.2+^.<|*`move`*
+.2+^.<|*:*
+<.<|*`$rd`* *=* *`$rj`*
+<.<|Assign the value of *`$rj`* to *`$rd`*
+|===========================
+
+*Usage :* 
+
+[source]
+----
+move                $t0, $t1
+Machine Instruction ---------------
+or                  $t0, $t1, $zero
+----
+
+==== *9.1.2 `li.w/d`* 
+
+*Syntax:*
+
+ opcode    dest,  src1
 
 [options="header"]
-[cols="30,35,35"]
+[cols="80,10,10"]
 |===========================
-^.^|Pseudo Instruction
-^.^|Machine Instruction
-^.^|Meaning
+^.^|opcode
+^.^|dest
+^.^|src1
 
-.2+<.^|*`li.w`* *`$rd`*, *`imm32`*
+^.^|*`li.w`*
+^.^|*`$rd`*
+^.^|*`IMM32`* 
 
-<.^|*`lu12i.w`* *`$rd`*, *`si20`*
-
-.2+<.^|Load a 32-bit immediate
-
-<.^|*`ori`* *`$rd`*, *`$rd`*, *`si12`*
-
-.4+<.^|*`li.d`* *`$rd`*, *`imm64`*
-
-<.^|*`lu12i.w`* *`$rd`*, *`si20`*
-
-.4+<.^|Load a 64-bit immediate
-
-<.^|*`ori`* *`$rd`*, *`$rd`*, *`si12`*
-<.^|*`lu32i.w`* *`$rd`*, *`si20`*
-<.^|*`lu52i.w`* *`$rd`*, *`si12`*
+^.^|*`li.d`*
+^.^|*`$rd`*
+^.^|*`IMM64`* 
 |===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+.2+^.<|*`li.w`*
+.2+^.<|*:*
+<.<|*`$rd`* *=* *`IMM32`*
+<.<|Load a *`IMM32`* to *`$rd`*
+
+.2+^.<|*`li.d`*
+.2+^.<|*:*
+<.<|*`$rd`* *=* *`IMM64`*
+<.<|Load a *`IMM64`* to *`$rd`*
+|===========================
+
+*Usage :* 
+
+* *`li.w` :* 
+
+[source]
+----
+li.w                $t0, 0x76543210
+Machine Instruction ------------------------------------------------------------------
+lu12i.w             $t0, si20         // load IMM32[31:12]    $t0 = 0x76543000
+ori                 $t0, $t0, si12    // load IMM32[11: 0]    $t0 = 0x76543210
+----
+
+* *`li.d` :* 
+
+[source]
+----
+li.d                $t0, 0xfedcba9876543210
+Machine Instruction ------------------------------------------------------------------
+lu12i.w             $rd, si20         // load IMM64[31:12]    $t0 = 0x0000000076543000
+ori                 $rd, $rd, si12    // load IMM64[11: 0]    $t0 = 0x0000000076543210
+lu32i.d             $rd, si20         // load IMM64[51:32]    $t0 = 0x000cba9876543210
+lu52i.d             $rd, $rd, si12    // load IMM64[63:52]    $t0 = 0xfedcba9876543210
+----
+
+=== *9.2 Jump Macro Instructions*
+
+==== *9.2.1 `jr`* 
+
+*Syntax:*
+
+ opcode    src1
 
 [options="header"]
-[cols="40,10,50"]
+[cols="90,10"]
 |===========================
-^.^|Macros Instruction
-^.^|Feature
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1
 
-.8+<.^|*`la`* *`$rd`*, *`sym`*
-
-.2+^.^|*`NORMAL`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym`*)
-<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym`*)
-
-.2+^.^|*`GTOPCR`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym`*)
-<.^|*`addi.d`* *`$rd`*, *`$rd`*, *`%pc_lo12`*(*`sym`*)
-
-.4+^.^|*`GTOABS`*
-<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym`*)
-<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym`*)
-<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym`*)
-<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym`*)
+^.^|*`jr`*
+^.^|*`$rd`* 
 |===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+.2+^.<|*`jr`*
+.2+^.<|*:*
+<.<|jump to address(*`$rd`*)
+<.<|Direct register jump
+|===========================
+
+*Usage :* 
+
+[source]
+----
+jirl                $t4
+Machine Instruction -------------
+jirl                $zero, $t4, 0
+----
+
+==== *9.2.2 `ret`* 
+
+*Syntax:*
+
+ opcode
 
 [options="header"]
-[cols="40,10,50"]
 |===========================
-^.^|Macros Instruction
-^.^|Feature
-^.^|Machine Instructions
+^.^|opcode
 
-.8+<.^|*`la.global`* *`$rd`*, *`sym_global`*
-
-.2+^.^|*`NORMAL`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym_global`*)
-<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym_global`*)
-
-.2+^.^|*`GTOPCR`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_global`*)
-<.^|*`addi.d`* *`$rd`*, *`$rd`*, *`%pc_lo12`*(*`sym_global`*)
-
-.4+^.^|*`GTOABS`*
-<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_global`*)
-<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym_global`*)
-<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym_global`*)
-<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym_global`*)
+^.^|*`ret`*
 |===========================
+
+<<<
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+^.<|*`ret`*
+^.<|*:*
+<.<|Function return
+|===========================
+
+*Usage :* 
+
+[source]
+----
+ret
+Machine Instruction -------------
+jirl                $zero, $ra, 0  
+----
+
+==== *9.2.3 `call36`* 
+
+*Syntax:*
+
+ opcode    src1
 
 [options="header"]
-[cols="40,10,50"]
+[cols="90,10"]
 |===========================
-^.^|Macros Instruction
-^.^|Feature
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1
 
-.14+<.^|*`la.global`* *`$rd`*, *`$rj`*, *`sym_global_large`*
-
-.5+^.^|*`NORMAL`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym_global_large`*)
-<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%got_pc_lo12`*(*`sym_global_large`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%got64_pc_lo20`*(*`sym_global_large`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%got64_pc_hi12`*(*`sym_global_large`*)
-<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
-
-.5+^.^|*`GTOPCR`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_global_large`*)
-<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%pc_lo12`*(*`sym_global_large`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%pc64_lo20`*(*`sym_global_large`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%pc64_hi12`*(*`sym_global_large`*)
-<.^|*`add.d`* *`$rd`*, *`$rd`*, *`$rj`*
-
-.4+^.^|*`GTOABS`*
-
-<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_global_large`*)
-<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym_global_large`*)
-<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym_global_large`*)
-<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym_global_large`*)
+^.^|*`call36`*
+^.^|*`sym_call`* 
 |===========================
 
-*Feature* :
+*Description :*
 
-* *`GTOPCR`* : *`la-global-with-pcrel`*
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+^.<|*`call36`*
+^.<|*:*
+<.<|jump to *`sym_call`*
+|===========================
 
-* *`GTOABS`* : *`la-global-with-abs`*
+*Usage :* 
+
+[source]
+----
+call36              sym_call
+Machine Instruction ----------------------
+pcaddu18i           $ra, %call36(sym_call)
+jirl                $ra, $ra, 0     
+----
+
+* sym_call only allows symbol names, not immediate values.
+
+[NOTE]
+====
+The addressing range of *`call36`* depends on the range of {*`si20`*,18b0} in *`pcaddu18i`*. For details, see the *`https://github.com/loongson/la-abi-specs/releases/tag/v2.30/la-abi.pdf[LoongArch abi manual]:8.3`* .
+====
+
+==== *9.2.4 `tail36`* 
+
+*Syntax:*
+
+ opcode    src1,  src2
 
 [options="header"]
-[cols="40,10,50"]
+[cols="80,10,10"]
 |===========================
-^.^|Macros Instruction
-^.^|Feature
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1
+^.^|src2
 
-.6+<.^|*`la.local`* *`$rd`*, *`sym_local`*
-
-.2+^.^|*`NORMAL`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_local`*)
-<.^|*`addi.d`* *`$rd`*, *`$rd`*, *`%pc_lo12`*(*`sym_local`*)
-
-.4+^.^|*`LTOABS`*
-
-<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_local`*)
-<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym_local`*)
-<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym_local`*)
-<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym_local`*)
+^.^|*`tail36`*
+^.^|*`$rd`*
+^.^|*`sym_tail`* 
 |===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="85,20,895"]
+|===========================
+^.<|*`tail36`*
+^.<|*:*
+<.<|jump to *`sym_tail`*
+|===========================
+
+*Usage :* 
+
+[source]
+----
+tail36              $t1, sym_tail
+Machine Instruction ----------------------
+pcaddu18i           $t1, %call36(sym_tail)
+jirl                $t1, $t1, 0     
+----
+
+* sym_call only allows symbol names, not immediate values.
+
+[NOTE]
+====
+The addressing range of *`tail36`* depends on the range of {*`si20`*,18b0} in *`pcaddu18i`*. For details, see the *`https://github.com/loongson/la-abi-specs/releases/tag/v2.30/la-abi.pdf[LoongArch abi manual]:8.3`* .
+====
+
+=== *9.3 Branch Macro Instructions*
+
+==== *9.3.1 `bgt`, `ble`, `bgtu`, `bleu`* 
+
+*Syntax:*
+
+ opcode    src1,  src2,  src3
 
 [options="header"]
-[cols="40,10,50"]
+[cols="60,10,10,20"]
 |===========================
-^.^|Macros Instruction
-^.^|Feature
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1 
+^.^|src2
+^.^|src3
 
-.9+<.^|*`la.local`* *`$rd`*, *`$rj`*, *`sym_local_large`*
-
-.5+^.^|*`NORMAL`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_local`*)
-<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%pc_lo12`*(*`sym_local`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%pc64_lo20`*(*`sym_local`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%pc64_hi12`*(*`sym_local`*)
-<.^|*`add.d`* *`$rd`*, *`$rd`*, *`$rj`*
-
-.4+^.^|*`LTOABS`*
-
-<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_local`*)
-<.^|*`ori`* *`$rd`*, *`$rd`*, *`%abs_lo12`*(*`sym_local`*)
-<.^|*`lu32i.d`* *`$rd`*, *`%abs64_lo20`*(*`sym_local`*)
-<.^|*`lu52i.d`* *`$rd`*, *`$rd`*, *`%abs64_hi12`*(*`sym_local`*)
+^.^|*`bgt`*, *`ble`*, *`bgtu`*, *`bleu`*
+^.^|*`$rd`*
+^.^|*`$rj`* 
+^.^|*`si18` \| `symbol`* 
 |===========================
 
-*Feature* :
+*Description :*
 
-* *`LTOABS`* : *`la-local-with-abs`*
+[grid=none]
+[frame=none]
+[cols="55,20,40,150,50,150,535"]
+|===========================
+<.^|*`bgt`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(*`$rj`*)
+^.^|`*>*` 
+^.^|signed(*`$rd`*)
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+
+<.^|*`ble`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(*`$rj`*) 
+^.^|`*< =*` 
+^.^|signed(*`$rd`*) 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+
+<.^|*`bgtu`*
+^.^|*:*
+<.^|*if* ( 
+^.^|unsigned(*`$rj`*)
+^.^|`*>*` 
+^.^|unsigned(*`$rd`*)
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+
+<.^|*`bleu`*
+^.^|*:*
+<.^|*if* ( 
+^.^|unsigned(*`$rj`*) 
+^.^|`*< =*` 
+^.^|unsigned(*`$rd`*) 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+|===========================
+
+* *`si18`* : a 4-bytes aligned 18-bits signed immediate value in range :
+
+** [*`-131072`*, *`131068`*] or [*`-0x20000`*, *`0x1fffc`*]
+
+* *`symbol`* : Tags in assembly for jump.
+
+*Usage :* 
+
+[source]
+----
+bgt                 $rj, $rd, si18 or symbol       
+ble                 $rj, $rd, si18 or symbol        
+bgtu                $rj, $rd, si18 or symbol       
+bleu                $rj, $rd, si18 or symbol        
+Machine Instruction ------------------------
+blt                 $rd, $rj, si18 or symbol       
+bge                 $rd, $rj, si18 or symbol        
+bltu                $rd, $rj, si18 or symbol       
+bgeu                $rd, $rj, si18 or symbol        
+----
+
+==== *9.3.2 `bltz`, `bgtz`, `blez`, `bgez`* 
+
+*Syntax:*
+
+ opcode    src1,  src2
 
 [options="header"]
-[cols="50,50"]
+[cols="70,10,20"]
 |===========================
-^.^|Macros Instruction
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1 
+^.^|src2
 
-.4+<.^|*`la.abs`* *`$rd`*, *`sym_abs`*
-
-<.^|*`lu12i.w`* *`$rd`*, *`%abs_hi20`*(*`sym_abs`*)
-<.^|*`ori`* *`$rj`*, *`$zero`*, *`%abs_lo12`*(*`sym_abs`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%abs64_lo20`*(*`sym_abs`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%abs64_hi12`*(*`sym_abs`*)
+^.^|*`bltz`*, *`bgtz`*, *`blez`*, *`bgez`*
+^.^|*`$rd`*
+^.^|*`si18` \| `symbol`* 
 |===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="55,20,40,150,50,50,635"]
+|===========================
+<.^|*`bltz`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(*`$rd`*)
+^.^|`*>*` 
+^.^|*`0`*
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+
+<.^|*`bgtz`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(*`$rd`*) 
+^.^|`*<*` 
+^.^|*`0`* 
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+
+<.^|*`blez`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(*`$rd`*) 
+^.^|`*< =*` 
+^.^|*`0`*
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+
+<.^|*`bgez`*
+^.^|*:*
+<.^|*if* ( 
+^.^|signed(*`$rd`*) 
+^.^|`*> =*` 
+^.^|*`0`*
+<.^|) *jump* ( *`si18` `\|` `symbol`* )
+|===========================
+
+* *`si18`* : a 4-bytes aligned 18-bits signed immediate value in range :
+
+** [*`-131072`*, *`131068`*] or [*`-0x20000`*, *`0x1fffc`*]
+
+* *`symbol`* : Tags in assembly for jump.
+
+*Usage :* 
+
+[source]
+----
+bltz                $rd, si18 or symbol 
+bgtz                $rd, si18 or symbol 
+blez                $rd, si18 or symbol 
+bgez                $rd, si18 or symbol 
+----
+
+[source]
+----
+Machine Instruction --------------------------
+blt                 $rd, $zero, si18 or symbol 
+blt                 $zero, $rd, si18 or symbol 
+bge                 $zero, $rd, si18 or symbol 
+bge                 $rd, $zero, si18 or symbol 
+----
+
+=== *9.4 Load Address Macro Instructions*
+
+* Load the *`symbol address`* into a general register and package the relocation information.
+
+==== *9.4.1 `la`.{`local`/`global`}* 
+
+*Syntax:*
+
+ opcode    src1,  src2
 
 [options="header"]
-[cols="50,50"]
+[cols="70,10,20"]
 |===========================
-^.^|Macros Instruction
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1 
+^.^|src2
 
-.2+<.^|*`la.pcrel`* *`$rd`*, *`sym_pcrel`*
+^.^|*`la.local`*
+^.^|*`$rd`*
+^.^|*`sym_local`* 
 
-<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_pcrel`*)
-<.^|*`addi.d`* *`$rd`*, *`$rd`*, *`%pc_lo12`*(*`sym_pcrel`*)
-
-.5+<.^|*`la.pcrel`* *`$rd`*, *`$rj`*, *`sym_pcrel_large`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%pc_hi20`*(*`sym_pcrel_large`*)
-<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%pc_lo12`*(*`sym_pcrel_large`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%pc64_lo20`*(*`sym_pcrel_large`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%pc64_hi12`*(*`sym_pcrel_large`*)
-<.^|*`add.d`* *`$rd`*, *`$rd`*, *`$rj`*
+^.^|*`la`*, *`la.global`*
+^.^|*`$rd`*
+^.^|*`sym_global`* 
 |===========================
+
+ opcode    src1,  src2,  src3
 
 [options="header"]
-[cols="50,50"]
+[cols="60,10,10,20"]
 |===========================
-^.^|Macros Instruction
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1 
+^.^|src2
+^.^|src3
 
-.2+<.^|*`la.got`* *`$rd`*, *`sym_got`*
+^.^|*`la.local`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+^.^|*`sym_local_large`* 
 
-<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym_got`*)
-<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym_got`*)
-
-.5+<.^|*`la.got`* *`$rd`*, *`$rj`*, *`sym_got_large`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%got_pc_hi20`*(*`sym_got_large`*)
-<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%got_pc_lo12`*(*`sym_got_large`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%got64_pc_lo20`*(*`sym_got_large`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%got64_pc_hi12`*(*`sym_got_large`*)
-<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+^.^|*`la.global`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+^.^|*`sym_global_large`*
 |===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="120,20,860"]
+|===========================
+<.^|*`la.local`*
+^.^|*:*
+<.^|*`la.local`* can load the addresses of symbols defined within the current module.
+
+.2+<.<|*`la.global`*
+.2+^.<|*:*
+<.^|*`la.global`* can load addresses with symbols defined at any address.
+<.^|*`la $rd`*, *`sym`* alias for *`la.global $rd`*, *`sym`*.
+|===========================
+
+*Usage :* 
+
+* Method to load *`sym_local`*: 
+
+[source]
+----
+la.local            $a0, sym_local       // load sym_local address to $a0.
+ld.{x}              $a1, $a0, 0          // load sym_local to $a1.
+----
+
+[NOTE]
+====
+The {*`x`*} in *`ld`*.{*`x`*} instruction depends on the size of the symbol contents.
+====
+
+.*`la.local`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %pc_hi20(sym_local)
+addi.d              $a0, $a0, %pc_lo12(sym_local)
+ld.{x}              $a1, $a0, 0
+----
+
+.*`la.local`* Expand as *`la.abs`*: (GNU: *`-mla-local-with-abs`* LLVM: *`--mattr=+la-local-with-abs`*)
+[source]
+----
+lu12i.w             $a0, %abs_hi20(sym_local)
+ori                 $a0, $a0, %abs_lo12(sym_local)
+lu32i.d             $a0, %abs64_lo20(sym_local)
+lu52i.d             $a0, $a0, %abs64_hi12(sym_local)
+ld.{x}              $a1, $a0, 0
+----
+
+* Method to load *`sym_local_large`*: 
+
+[source]
+----
+la.local            $a0, $a1, sym_local_large  // load sym_local_large address to $a0.
+ld.{x}              $a2, $a0, 0                // load sym_local_large to $a2.
+----
+
+[NOTE]
+====
+The {*`x`*} in *`ld`*.{*`x`*} instruction depends on the size of the symbol contents.
+====
+
+.*`la.local`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %pc_hi20(sym_local_large)
+addi.d              $a1, $zero, %pc_lo12(sym_local_large)
+lu32i.d             $a1, %pc64_lo20(sym_local_large)
+lu52i.d             $a1, $a1, %pc64_hi12(sym_local_large)
+add.d               $a0, $a0, $a1
+ld.{x}              $a2, $a0, 0
+----
+
+.*`la.local`* Expand as *`la.abs`*: (GNU: *`-mla-local-with-abs`* LLVM: *`--mattr=+la-local-with-abs`*)
+[source]
+----
+lu12i.w             $a0, %abs_hi20(sym_local)
+ori                 $a0, $a0, %abs_lo12(sym_local)
+lu32i.d             $a0, %abs64_lo20(sym_local)
+lu52i.d             $a0, $a0, %abs64_hi12(sym_local)
+ld.{x}              $a2, $a0, 0
+----
+
+* Method to load *`sym_global`*: 
+
+[source]
+----
+la.global           $a0, sym_global      // load sym_global to $a0.
+la                  $a0, sym_global      // load sym_global to $a0.
+----
+
+[NOTE]
+====
+In normal expansion, *`la.global`* / *`la`* will directly load the content of the symbol instead of its address. In other cases, the address of the symbol is loaded.
+====
+
+.*`la.global`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %got_pc_hi20(sym_global)
+ld.d                $a0, $a0, %got_pc_lo12(sym_global)
+----
+
+.*`la.global`* Expand as *`la.pcrel`*:  (GNU: *`-mla-global-with-pcrel`* LLVM: *`--mattr=+la-global-with-pcrel`*)
+[source]
+----
+pcalau12i           $a0, %pc_hi20(sym_global)
+addi.d              $a0, $a0, %pc_lo12(sym_global)
+ld.{x}              $a1, $a0, 0
+----
+
+.*`la.global`* Expand as *`la.abs`*:  (GNU: *`-mla-global-with-abs`* LLVM: *`--mattr=+la-global-with-abs`*)
+[source]
+----
+lu12i.w             $a0, %abs_hi20(sym_global)
+ori                 $a0, $a0, %abs_lo12(sym_global)
+lu32i.d             $a0, %abs64_lo20(sym_global)
+lu52i.d             $a0, $a0, %abs64_hi12(sym_global)
+ld.{x}              $a1, $a0, 0
+----
+
+* Method to load *`sym_global_large`*: 
+
+[source]
+----
+la.global           $a0, $a1, sym_global_large   // load sym_global_large to $a0.
+----
+
+[NOTE]
+====
+In normal expansion, *`la.global`* will directly load the content of the symbol instead of its address. In other cases, the address of the symbol is loaded.
+====
+
+.*`la.global`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %got_pc_hi20(sym_global_large)
+addi.d              $a1, $zero, %got_pc_lo12(sym_global_large)
+lu32i.d             $a1, %got64_pc_lo20(sym_global_large)
+lu52i.d             $a1, $a1, %got64_pc_hi12(sym_global_large)
+ldx.d               $a0, $a0, $a1
+----
+
+.*`la.global`* Expand as *`la.pcrel`*:  (GNU: *`-mla-global-with-pcrel`* LLVM: *`--mattr=+la-global-with-pcrel`*)
+[source]
+----
+pcalau12i           $a0, %pc_hi20(sym_global_large)
+addi.d              $a1, $zero, %pc_lo12(sym_global_large)
+lu32i.d             $a1, %pc64_lo20(sym_global_large)
+lu52i.d             $a1, $a1, %pc64_hi12(sym_global_large)
+add.d               $a0, $a0, $a1
+ld.{x}              $a0, $a0, 0
+----
+
+[NOTE]
+====
+The {*`x`*} in *`ld`*.{*`x`*} instruction depends on the size of the symbol contents.
+====
+
+.*`la.global`* Expand as *`la.abs`*:  (GNU: *`-mla-global-with-abs`* LLVM: *`--mattr=+la-global-with-abs`*)
+[source]
+----
+lu12i.w             $a0, %abs_hi20(sym_global_large)
+ori $a0,            $a0, %abs_lo12(sym_global_large)
+lu32i.d             $a0, %abs64_lo20(sym_global_large)
+lu52i.d             $a0, $a0, %abs64_hi12(sym_global_large)
+ld.{x}              $a0, $a0, 0
+----
+
+[NOTE]
+====
+The {*`x`*} in *`ld`*.{*`x`*} instruction depends on the size of the symbol contents.
+====
+
+==== *9.4.2 `la`.`abs`* 
+
+*Syntax:*
+
+ opcode    src1,  src2
 
 [options="header"]
-[cols="50,50"]
+[cols="60,10,30"]
 |===========================
-^.^|Macros Instruction
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1 
+^.^|src2
 
-.2+<.^|*`la.tls.le`* *`$rd`*, *`sym_le`*
-
-<.^|*`lu12i.w`* *`$rd`*, *`%le_hi20`*(*`sym_le`*)
-<.^|*`ori`* *`$rd`*, *`$rd`*, *`%le_lo12`*(*`sym_le`*)
-
-.2+<.^|*`la.tls.ie`* *`$rd`*, *`sym_ie`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%ie_pc_hi20`*(*`sym_ie`*)
-<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%ie_pc_lo12`*(*`sym_ie`*)
-
-.5+<.^|*`la.tls.ie`* *`$rd`*, *`$rj`*, *`sym_ie_large`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%ie_pc_hi20`*(*`sym_ie_large`*)
-<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%ie_pc_lo12`*(*`sym_ie_large`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%ie64_pc_lo20`*(*`sym_ie_large`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%ie64_pc_hi12`*(*`sym_ie_large`*)
-<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+^.^|*`la.abs`*
+^.^|*`$rd`*
+^.^|*`sym_abs`* 
 |===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="100,20,880"]
+|===========================
+.3+<.<|*`la.abs`*
+.3+^.<|*:*
+<.^|It is used to load symbols defined at fixed addresses.
+<.^|When loading, *`la.abs`* divides the address into four parts and uses four machine instructions to complete the loading operation for the symbol address.
+<.^|For undefined weak symbols, it loads a constant value of 0.
+|===========================
+
+*Usage :* 
+
+* Method to load *`sym_abs`*: 
+
+[source]
+----
+la.abs              $a0, sym_abs       // load sym_abs address to $a0.
+ld.{x}              $a2, $a0, 0        // load sym_abs to $a2.
+----
+
+[NOTE]
+====
+The {*`x`*} in *`ld`*.{*`x`*} instruction depends on the size of the symbol contents.
+====
+
+.*`la.global`* Expand normally: 
+[source]
+----
+lu12i.w             $a0, %abs_hi20(sym_abs)
+ori                 $a0, $a0, %abs_lo12(sym_abs)
+lu32i.d             $a0, %abs64_lo20(sym_abs)
+lu52i.d             $a0, $a0, %abs64_hi12(sym_abs)
+ld.{x}              $a2, $a0, 0 
+----
+
+==== *9.4.3 `la`.`pcrel`* 
+
+*Syntax:*
+
+ opcode    src1,  src2
 
 [options="header"]
-[cols="50,50"]
+[cols="70,10,20"]
 |===========================
-^.^|Macros Instruction
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1 
+^.^|src2
 
-.2+<.^|*`la.tls.ld`* *`$rd`*, *`sym_ld`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%ld_pc_hi20`*(*`sym_ld`*)
-<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym_ld`*)
-
-.5+<.^|*`la.tls.ld`* *`$rd`*, *`$rj`*, *`sym_ld_large`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%ld_pc_hi20`*(*`sym_ld_large`*)
-<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%got_pc_lo12`*(*`sym_ld_large`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%got64_pc_lo20`*(*`sym_ld_large`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%got64_pc_hi12`*(*`sym_ld_large`*)
-<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+^.^|*`la.pcrel`*
+^.^|*`$rd`*
+^.^|*`sym_pcrel`* 
 |===========================
+
+ opcode    src1,  src2,  src3
 
 [options="header"]
-[cols="50,50"]
+[cols="60,10,10,20"]
 |===========================
-^.^|Macros Instruction
-^.^|Machine Instructions
+^.^|opcode
+^.^|src1 
+^.^|src2
+^.^|src3
 
-.2+<.^|*`la.tls.gd`* *`$rd`*, *`sym_gd`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%gd_pc_hi20`*(*`sym_gd`*)
-<.^|*`ld.d`* *`$rd`*, *`$rd`*, *`%got_pc_lo12`*(*`sym_gd`*)
-
-.5+<.^|*`la.tls.gd`* *`$rd`*, *`$rj`*, *`sym_gd_large`*
-
-<.^|*`pcalau12i`* *`$rd`*, *`%gd_pc_hi20`*(*`sym_gd_large`*)
-<.^|*`addi.d`* *`$rj`*, *`$zero`*, *`%got_pc_lo12`*(*`sym_gd_large`*)
-<.^|*`lu32i.d`* *`$rj`*, *`%got64_pc_lo20`*(*`sym_gd_large`*)
-<.^|*`lu52i.d`* *`$rj`*, *`$rj`*, *`%got64_pc_hi12`*(*`sym_gd_large`*)
-<.^|*`ldx.d`* *`$rd`*, *`$rd`*, *`$rj`*
+^.^|*`la.pcrel`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+^.^|*`sym_pcrel_large`* 
 |===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="100,20,880"]
+|===========================
+<.<|*`la.pcrel`*
+^.<|*:*
+<.^|Load symbols at minimal cost using the local symbol's PC-relative address. Undefined weak symbols cannot be loaded. 
+|===========================
+
+*Usage :* 
+
+* Method to load *`sym_pcrel`*: 
+
+[source]
+----
+la.pcrel            $a0, sym_pcrel     // load sym_pcrel address to $a0.
+ld.{x}              $a2, $a0, 0        // load sym_pcrel to $a2.
+----
+
+.*`la.global`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %pc_hi20(sym_pcrel)
+addi.d              $a0, $a0, %pc_lo12(sym_pcrel)
+ld.{x}              $a2, $a0, 0 
+----
+
+* Method to load *`sym_pcrel_large`*: 
+
+[source]
+----
+la.pcrel            $a0, $a1, sym_pcrel_large  // load sym_pcrel_large address to $a0.
+ld.{x}              $a2, $a0, 0                // load sym_pcrel_large to $a2.
+----
+
+[NOTE]
+====
+The {*`x`*} in *`ld`*.{*`x`*} instruction depends on the size of the symbol contents.
+====
+
+.*`la.global`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %pc_hi20(sym_pcrel_large)
+addi.d              $a1, $zero, %pc_lo12(sym_pcrel_large)
+----
+
+[source]
+----
+lu32i.d             $a1, %pc64_lo20(sym_pcrel_large)
+lu52i.d             $a1, $a1, %pc64_hi12(sym_pcrel_large)
+add.d               $a0, $a0, $a1
+ld.{x}              $a2, $a0, 0
+----
+
+==== *9.4.4 `la`.`got`* 
+
+*Syntax:*
+
+ opcode    src1,  src2
 
 [options="header"]
-[cols="18,30,62"]
+[cols="70,10,20"]
 |===========================
-^.^|Operand
-^.^|ELF reloc type 
-^.^|Usage
+^.^|opcode
+^.^|src1 
+^.^|src2
 
-<.^|*`%abs_hi20`*
-<.^|*`R_LARCH_ABS_HI20`*
-<.^|[31 … 12] bits of 32/64-bit absolute address
-
-<.^|*`%abs_lo12`*
-<.^|*`R_LARCH_ABS_LO12`*
-<.^|[11 … 0] bits of 32/64-bit absolute address
-
-<.^|*`%abs64_lo20`*
-<.^|*`R_LARCH_ABS64_LO20`*
-<.^|[51 … 32] bits of 64-bit absolute address
-
-<.^|*`%abs64_hi12`*
-<.^|*`R_LARCH_ABS64_HI12`*
-<.^|[63 … 52] bits of 64-bit absolute address
-
-<.^|*`%pc_hi20`*
-<.^|*`R_LARCH_PCALA_HI20`*
-<.^|[31 … 12] bits of 32/64-bit PC-relative offset
-
-<.^|*`%pc_lo12`*
-<.^|*`R_LARCH_PCALA_LO12`*
-<.^|[11 … 0] bits of 32/64-bit PC-relative offset
-
-<.^|*`%pc64_lo20`*
-<.^|*`R_LARCH_PCALA64_LO20`*
-<.^|[51 … 32] bits of 64-bit PC-relative offset
-
-<.^|*`%pc64_hi12`*
-<.^|*`R_LARCH_PCALA64_HI12`*
-<.^|[63 … 52] bits of 64-bit PC-relative offset
-
-<.^|*`%got_pc_hi20`*
-<.^|*`R_LARCH_GOT_PC_HI20`*
-<.^|[31 … 12] bits of 32/64-bit PC-relative offset to GOT entry
-
-<.^|*`%got_pc_lo12`*
-<.^|*`R_LARCH_GOT_PC_LO12`*
-<.^|[11 … 0] bits of 32/64-bit PC-relative offset to GOT entry
-
-<.^|*`%got64_pc_lo20`*
-<.^|*`R_LARCH_GOT64_PC_LO20`*
-<.^|[51 … 32] bits of 64-bit PC-relative offset to GOT entry
-
-<.^|*`%got64_pc_hi12`*
-<.^|*`R_LARCH_GOT64_PC_HI12`*
-<.^|[63 … 52] bits of 64-bit PC-relative offset to GOT entry
-
-<.^|*`%le_hi20`*
-<.^|*`R_LARCH_TLS_LE_HI20`*
-<.^|[31 … 12] bits of 32/64-bit offset from TP register
-
-<.^|*`%le_lo12`*
-<.^|*`R_LARCH_TLS_LE_LO12`*
-<.^|[11 … 0] bits of 32/64-bit offset from TP register
-
-<.^|*`%ie_pc_hi20`*
-<.^|*`R_LARCH_TLS_IE_PC_HI20`*
-<.^|[31 … 12] bits of 32/64-bit PC-relative offset to TLS IE GOT entry
-
-<.^|*`%ie_pc_lo12`*
-<.^|*`R_LARCH_TLS_IE_PC_LO12`*
-<.^|[11 … 0] bits of 32/64-bit PC-relative offset to TLS IE GOT entry
-
-<.^|*`%ie64_pc_lo20`*
-<.^|*`R_LARCH_TLS_IE64_PC_LO20`*
-<.^|[51 … 32] bits of 64-bit PC-relative offset to TLS IE GOT entry
-
-<.^|*`%ie64_pc_hi12`*
-<.^|*`R_LARCH_TLS_IE64_PC_HI12`*
-<.^|[63 … 52] bits of 64-bit PC-relative offset to TLS IE GOT entry
-
-<.^|*`%ld_pc_hi20`*
-<.^|*`R_LARCH_TLS_LD_PC_HI20`*
-<.^|[51 … 32] bits of 64-bit PC-relative offset to TLS LD GOT entry
-
-<.^|*`%gd_pc_hi20`*
-<.^|*`R_LARCH_TLS_GD_PC_HI20`*
-<.^|[63 … 52] bits of 64-bit PC-relative offset to TLS GD GOT entry
+^.^|*`la.got`*
+^.^|*`$rd`*
+^.^|*`sym_got`* 
 |===========================
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="60,10,10,20"]
+|===========================
+^.^|opcode
+^.^|src1 
+^.^|src2
+^.^|src3
+
+^.^|*`la.got`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+^.^|*`sym_got_large`* 
+|===========================
+
+*Description :*
+
+[grid=none]
+[frame=none]
+[cols="100,20,880"]
+|===========================
+<.<|*`la.got`*
+^.<|*:*
+<.^|Use the Global Offset Table (GOT) to load the address of a symbol from a double array constructed by the static linker.
+|===========================
+
+*Usage :*  
+
+* Method to load *`sym_got`*: 
+
+[source]
+----
+la.got              $a0, sym_got        // load sym_got to $a0.
+----
+
+.*`la.got`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %got_pc_hi20(sym_got)
+ld.d                $a0, $a0, %got_pc_lo12(sym_got)
+----
+
+.*`la.got`* Expand *`abs`*:  (GNU: *`-mla-global-with-abs`* LLVM: *`--mattr=+la-global-with-abs`*)
+[source]
+----
+lu12i.w             $a0, %got_hi20(sym_got)
+ori                 $a0, $a0, %got_lo12(sym_got)
+lu32i.d             $a0, %got64_lo20(sym_got)
+lu52i.d             $a0, $a0, %got64_hi12(sym_got)
+ld.d                $a0, $a0, 0
+----
+
+* Method to load *`sym_got_large`*: 
+
+[source]
+----
+la.got              $a0, $a1, sym_got_large   // load sym_got_large to $a0.
+----
+
+.*`la.got`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %got_pc_hi20(sym_got_large)
+addi.d              $a1, $zero, %got_pc_lo12(sym_got_large)
+lu32i.d             $a1, %got64_pc_lo20(sym_got_large)
+lu52i.d             $a1, $a1, %got64_pc_hi12(sym_got_large)
+ldx.d               $a0, $a0, $a1
+----
+
+==== *9.4.5 `la`.`tls`.{`le` / `ie` / `ld` / `gd` / `desc`}* 
+
+*Syntax:*
+
+ opcode    src1,  src2
+
+[options="header"]
+[cols="70,10,20"]
+|===========================
+^.^|opcode
+^.^|src1 
+^.^|src2
+
+^.^|*`la.tls.le`*
+^.^|*`$rd`*
+^.^|*`sym_le`* 
+
+^.^|*`la.tls.ie`*
+^.^|*`$rd`*
+^.^|*`sym_ie`* 
+
+^.^|*`la.tls.ld`*
+^.^|*`$rd`*
+^.^|*`sym_ld`* 
+
+^.^|*`la.tls.gd`*
+^.^|*`$rd`*
+^.^|*`sym_gd`* 
+
+^.^|*`la.tls.desc`*
+^.^|*`$rd`*
+^.^|*`sym_desc`* 
+|===========================
+
+ opcode    src1,  src2,  src3
+
+[options="header"]
+[cols="60,10,10,20"]
+|===========================
+^.^|opcode
+^.^|src1 
+^.^|src2
+^.^|src3
+
+^.^|*`la.tls.ie`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+^.^|*`sym_ie_large`* 
+
+^.^|*`la.tls.ld`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+^.^|*`sym_ld_large`* 
+
+^.^|*`la.tls.gd`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+^.^|*`sym_gd_large`* 
+
+^.^|*`la.tls.desc`*
+^.^|*`$rd`*
+^.^|*`$rj`*
+^.^|*`sym_desc_large`* 
+|===========================
+
+* *`la.tls.ld`* is alias for *`la.tls.gd`*.
+
+*Description :*
+
+* *`Thread Local Storage`* (*`TLS`*) is a space (*`TLS block`*) that is unique to a thread in a user program.
+** *`$tp`* is used to support *`TLS`*.
+
+[grid=none]
+[frame=none]
+[cols="130,20,850"]
+|===========================
+<.^|*`la.tls.le`*
+^.^|*:*
+<.^|Load *`$tp`*-relative offset of *`TLS`* symbol.
+
+<.^|*`la.tls.ie`*
+^.^|*:*
+<.^|Load runtime *`$tp`*-relative offset of *`TLS`* symbol from *`GOT`* entry.
+
+<.^|*`la.tls.ld`*
+^.^|*:*
+<.^|Alias for *`la.tls.gd`* .
+
+<.^|*`la.tls.gd`*
+^.^|*:*
+<.^|Load the runtime information that is passed to *`__tls_get_addr`*, which is used to access *`TLS`* symbol.
+
+<.<|*`la.tls.desc`*
+^.<|*:*
+<.^|A more flexible address for loading symbols from *`TLS`*, which is often used for link optimization.
+|===========================
+
+*Usage :*  
+
+* Method to load *`sym_le`* address: 
+
+[source]
+----
+la.tls.le           $a0, sym_le         // load sym_le address offset to $a0.
+add.{w/d}           $a0, $a0, $tp       // load sym_le address to $a0.
+----
+
+.*`la.tls.le`* Expand normally: 
+[source]
+----
+lu12i.w             $a0, %le_hi20(sym_le)
+ori                 $a0, $a0, %le_lo12(sym_le)
+add.{w/d}           $a0, $a0, $tp 
+----
+
+* Method to load *`sym_le_large`* address: 
+
+[source]
+----
+la.tls.le           $a0, sym_le_large   // load sym_le_large address offset to $a0.
+add.{w/d}           $a0, $a0, $tp       // load sym_le_large address to $a0.
+----
+
+.*`la.tls.le`* Expand normally: 
+[source]
+----
+lu12i.w             $a0, %le_hi20(sym_le_large)
+ori                 $a0, $a0, %le_lo12(sym_le_large)
+lu32i.d             $a0, %le64_hi20(sym_le_large)
+lu52i.d             $a0, $a0, %le64_hi12(sym_le_large)
+add.{w/d}           $a0, $a0, $tp 
+----
+
+* Method to load *`sym_ie`* address: 
+
+[source]
+----
+la.tls.ie           $a0, sym_ie         // load sym_ie address offset to $a0.
+add.{w/d}           $a0, $a0, $tp       // load sym_ie address to $a0.
+----
+
+.*`la.tls.ie`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %ie_pc_hi20(sym_ie)
+ld.d                $a0, $a0, %ie_pc_lo12(sym_ie)
+add.{w/d}           $a0, $a0, $tp
+----
+
+.*`la.tls.ie`* Expand *`abs`*:  (GNU: *`-mla-global-with-abs`* LLVM: *`--mattr=+la-global-with-abs`*)
+[source]
+----
+lu12i.w             $a0, %ie_hi20(sym_ie)
+ori                 $a0, $a0, %ie_lo12(sym_ie)
+lu32i.d             $a0, %ie64_lo20(sym_ie)
+lu52i.d             $a0, $a0, %ie64_hi12(sym_ie)
+ld.d                $a0, $a0, 0
+----
+
+* Method to load *`sym_ie_large`* address: 
+
+[source]
+----
+la.tls.ie           $a0, $a1, sym_ie_large // load sym_ie_large address offset to $a0.
+add.{w/d}           $a0, $a0, $tp          // load sym_ie_large address to $a0.
+----
+
+.*`la.tls.ie`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %ie_pc_hi20(sym_ie_large)
+addi.d              $a1, $zero, %ie_pc_lo12(sym_ie_large)
+lu32i.d             $a1, %ie64_pc_lo20(sym_ie_large)
+lu52i.d             $a1, $a1, %ie64_pc_hi12(sym_ie_large)
+ldx.d               $a0, $a0, $a1
+add.{w/d}           $a0, $a0, $tp
+----
+
+* Method to load *`sym_gd`* address: (*`la.tls.gd`* alias for *`la.tls.ld`*)
+
+[source]
+----
+la.tls.gd           $a0, sym_gd          // load __tls_get_addr args to $a0.
+bl                  %plt(__tls_get_addr) // __tls_get_addr ret sym_gd address to $a0.
+----
+
+.*`la.tls.gd`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %gd_pc_hi20(sym_gd)
+addi.d              $a0, $a0, %got_pc_lo12(sym_gd)
+bl                  %plt(__tls_get_addr)
+----
+
+.*`la.tls.gd`* Expand *`abs`*:  (GNU: *`-mla-global-with-abs`* LLVM: *`--mattr=+la-global-with-abs`*)
+[source]
+----
+lu12i.w             $a0, %gd_hi20(sym_gd)
+ori                 $a0, $a0, %got_lo12(sym_gd)
+lu32i.d             $a0, %got64_lo20(sym_gd)
+lu52i.d             $a0, $a0, %got64_hi12(sym_gd)
+bl                  %plt(__tls_get_addr)
+----
+
+* Method to load *`sym_gd_large`* address: 
+
+[source]
+----
+la.tls.gd           $a0, $a1, sym_gd_large // load __tls_get_addr args to $a0.
+bl                  %plt(__tls_get_addr) // __tls_get_addr ret sym_gd address to $a0.
+----
+
+.*`la.tls.gd`* Expand normally: 
+[source]
+----
+pcalau12i           $a0, %gd_pc_hi20(sym_gd_large)
+addi.d              $a1, $zero, %got_pc_lo12(sym_gd_large)
+lu32i.d             $a1, %got64_pc_lo20(sym_gd_large)
+lu52i.d             $a1, $a1, %got64_pc_hi12(sym_gd_large)
+add.d               $a0, $a0, $a1
+bl                  %plt(__tls_get_addr)
+----
+
+* Method to load *`sym_desc`* address: 
+
+[source]
+----
+la.tls.desc         $a0, sym_desc        // load sym_desc address offset to $a0.
+add.{w/d}           $a0, $a0, $tp        // load sym_desc address to $a0.
+----
+
+.*`la.tls.desc`* Expand normally
+[source]
+----
+pcalau12i           $a0, %desc_pc_hi20(sym_desc)
+addi.d              $a0, $a0, %desc_pc_lo12(sym_desc)
+ld.d                $ra, $a0, %desc_ld(sym_desc)
+jirl                $ra, $ra, %desc_call(sym_desc)
+add.{w/d}           $a0, $a0, $tp
+----
+
+.*`la.tls.desc`* Expand *`abs`*:  (GNU: *`-mla-global-with-abs`* LLVM: *`--mattr=+la-global-with-abs`*)
+----
+lu12i.w             $a0, %desc_hi20(sym_desc)
+ori                 $a0, $a0, %desc_lo12(sym_desc)
+lu32i.d             $a0, %desc64_lo20(sym_desc)
+lu52i.d             $a0, $a0, %desc64_hi12(sym_desc)
+ld.d                $ra, $a0, %desc_ld(sym_desc)
+jirl                $ra, $ra, %desc_call(sym_desc)
+add.{w/d}           $a0, $a0, $tp
+----
+
+* Method to load *`sym_desc_large`* address: 
+
+[source]
+----
+la.tls.desc         $a0, $a1, sym_desc_large  // load sym_desc address offset to $a0.
+add.{w/d}           $a0, $a0, $tp             // load sym_desc address to $a0.
+----
+
+.*`la.tls.desc`* Expand normally
+[source]
+----
+pcalau12i           $a0, %desc_pc_hi20(sym_desc_large)
+addi.d              $a1, $zero, %desc_pc_lo12(sym_desc_large)
+lu32i.d             $a1, %desc64_pc_lo20(sym_desc_large)
+lu52i.d             $a1, $a1, %desc64_pc_hi12(sym_desc_large)
+add.d               $a0, $a0, $a1
+ld.d                $ra, $a0, %desc_ld(sym_desc_large)
+jirl                $ra, $ra, %desc_call(sym_desc_large)
+add.{w/d}           $a0, $a0, $tp
+----
+
+

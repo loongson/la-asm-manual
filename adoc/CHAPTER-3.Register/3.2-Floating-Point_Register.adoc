@@ -6,9 +6,9 @@
 === *3.4 Condition Flag Register*
 
 [.text-justify]
-*`LoongArch`* has a total of 8 *`CFR`*, denoted as *`$fcc0`*-*`$fcc7`*, each of which can be read and written. The bit width of *`CFR`* is *1* bit. The result of the floating-point comparison will be written to the condition flag register, set to *1* when the comparison result is true, otherwise set to *0*. The judgment condition for floating-point branch instructions comes from the condition flag register.
+*`LoongArch`* has a total of 8 *`CFRs`*, denoted as *`$fcc0`*-*`$fcc7`*, each of which can be read and written. The bit width of *`CFR`* is *1* bit. The result of the floating-point comparison is written to the condition flag register, which is set to 1 if the comparison result is true, and to 0 otherwise. The judgment condition for floating-point branch instructions comes from the condition flag register.
 
 === *3.5 Floating-Point Control Status Register*
 
 [.text-justify]
-*`LoongArch`* has a total of 4 *`FCSRs`*, denoted as *`$fcsr0`*-*`$fcsr3`*, with a bitwidth of 32 bits. Among them, *`$fcsr0`*-*`$fcsr3`* are aliases for the central domain of *`$fcsr0`*, that is, accessing *`$fcsr0`*-*`$fcsr3`* is actually accessing certain domains of *`$fcsr0`*. When the software writes *`$fcsr0`*-*`$fcsr3`*, the corresponding fields in *`$fcsr0`* are modified while the remaining bits remain unchanged.
+*`LoongArch`* has a total of 4 *`FCSRs`*, denoted as *`$fcsr0`*-*`$fcsr3`*, with a bit width of 32 bits. Among them, *`$fcsr0`*-*`$fcsr3`* are aliases for the central domain of *`$fcsr0`*, meaning that accessing *`$fcsr0`*-*`$fcsr3`* actually accesses those specific domains of *`$fcsr0`*. When software writes to *`$fcsr0`*-*`$fcsr3`*, the corresponding fields in *`$fcsr0`* are modified, while the remaining bits remain unchanged.

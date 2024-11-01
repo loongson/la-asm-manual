@@ -33,7 +33,7 @@
 <.^|*`$fd`*[63:0] = *`$fj`*[63:0]
 |===========================
 
-* *`FMOV{S/D}`* Write the value of floating-point register *`$fj`* in single/double precision floating-point format to floating-point register *`$fd`*. If the value of *`$fj`* is not in *`single`*/*`double`* floating-point format, the result is uncertain. The above instruction operations are non arithmetic and do not raise *`IEEE 754`* exceptions, nor do they modify the Cause and Flags fields of the floating-point control status register.
+* *`FMOV{S/D}`* writes the value of floating-point register *`$fj`* in single/double precision floating-point format to floating-point register *`$fd`*. If the value of *`$fj`* is not in *`single`*/*`double`* floating-point format, the result is uncertain. The above instruction operations are non-arithmetic and do not raise *`IEEE 754`* exceptions, nor do they modify the Cause and Flags fields of the floating-point control status register.
 
 *Usage :* 
 [source]
@@ -80,7 +80,9 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.4.1`* .
 <.^|*`$fd`* = *`$fcc`*[*`ca`*] ? *`$fk`* : *`$fj`*
 |===========================
 
-* The *`FSEL`* instruction performs conditional assignment operations. When *`FSEL`* is executed, if the value of the condition flag register *`ca`* is equal to 0, the value of floating-point register *`$fj`* is written to *`$fd`*; otherwise, the value of floating-point register *`$fk`* is written to *`$fd`*.
+* The *`FSEL`* instruction performs conditional assignment operations. When *`FSEL`* is executed, if the value of the condition flag register *`ca`* is equal to 0, the value from floating-point register *`$fj`* is written to *`$fd`*; otherwise, the value from floating-point register *`$fk`* is written to *`$fd`*.
+
+<<<
 
 *Usage :* 
 [source]
@@ -269,6 +271,8 @@ For more information, refer to the *`LoongArch Architecture manual:3.2.4.5`* .
 ^.^|*`$fd`*
 ^.^|*`$FCC`*[*`cj`*]  
 |===========================
+
+<<<
 
 *Description :*
 

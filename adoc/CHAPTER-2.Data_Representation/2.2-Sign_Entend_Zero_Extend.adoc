@@ -1,7 +1,7 @@
 === *2.2 Sign Extend & Zero Extend*
 
 [.text-justify]
-In *`LoongArch`* computing instructions, immediate values require both *`Sign-Extend`* and *`Zero-Extend`*.
+In *`LoongArch`* computing instructions, immediate values require either *`Sign-Extend`* or *`Zero-Extend`*.
 
 [.text-justify]
 * 32-bit sign extend: Fills the high 32-n bits of an n-bit immediate with the highest bit of the immediate.
@@ -16,4 +16,4 @@ In *`LoongArch`* computing instructions, immediate values require both *`Sign-Ex
 * 64 bit unsigned extend: Fill the high 64-n bits of the n-bit immediate with 0.
 
 [.text-justify]
-In the subsequent instructions, `*Sign*`*Extend*(x, len) represents sign extend, x represents the extend object, and len represents the number of digits in the final length of x after sign extend. `*Zero*`*Extend*(x, len) uses 0 to extend x to len.
+In the subsequent instructions, `*Sign*`*Extend*(x, len) represents sign extension, where x is the object to be extended and len is the desired final length of x after the sign extension. ZeroExtend(x, len) extends x to len by filling the additional bits with 0.

@@ -6,4 +6,4 @@ There are thirty-two General Registers (*`GR`*), denoted as *`$r0`*-*`$r31`*, wh
 === *3.2 PC Register*
 
 [.text-justify]
-There is only one *`PC`* that records the address of the current instruction. The *`PC`* register cannot be directly modified by instructions, it can only be indirectly modified by transfer instructions, exception trapping, and exception return instructions. *`PC`* registers can be directly read as source operands for some non transfer instructions. The width of *`PC`* always matches the width of *`GR`*.
+There is only one *`PC`* that records the address of the current instruction. The *`PC`* register cannot be directly modified by instructions, it can only be indirectly modified by transfer instructions, exception trapping, and exception return instructions. *`PC`* registers can be directly read as source operands for some non-transfer instructions. The width of *`PC`* always matches the width of *`GR`*.

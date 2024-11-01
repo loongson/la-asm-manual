@@ -48,15 +48,15 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.3.1`* .
 
 ====== *8.1.1.3.2 `CL{O/Z}.{W/D}`, `CT{O/Z}.{W/D}`*
 
-This section involves four functions, namely CLO, CLZ, CTO, and CTZ.
+This section involves four functions: CLO, CLZ, CTO, and CTZ.
 
-* The `*CLO*` function performs the operation that for the data of bit [63/31:0] in the general register rj, the number of continuous bits 1 is measured from bit 63/31 to bit 0, and the result is written into the general register rd.
+* The `*CLO*` function performs the operation that for the data of bit [63/31:0] in the general register *`rj`*, the number of continuous bits 1 is measured from bit 63/31 to bit 0, and the result is written into the general register *`rd`*.
 
-* The `*CLZ*` function performs the operation that for the data of bit [63/31:0] in the general register rj, the number of continuous bits 0 is measured from bit 63/31 to bit 0, and the result is written into the general register rd.
+* The `*CLZ*` function performs the operation that for the data of bit [63/31:0] in the general register *`rj`*, the number of continuous bits 0 is measured from bit 63/31 to bit 0, and the result is written into the general register *`rd`*.
 
-* The `*CTO*` function performs the operation that for the data of bit [63/31:0] in the general register rj, the number of continuous bits 1 is measured from bit 0 to bit 63/31, and the result is written into the general register rd.
+* The `*CTO*` function performs the operation that for the data of bit [63/31:0] in the general register *`rj`*, the number of continuous bits 1 is measured from bit 0 to bit 63/31, and the result is written into the general register *`rd`*.
 
-* The `*CTZ*` function performs the operation that for the data of bit [63/31:0] in the general register rj, the number of continuous bits 0 is measured from bit 0 to bit 63/31, and the result is written into the general register rd.
+* The `*CTZ*` function performs the operation that for the data of bit [63/31:0] in the general register *`rj`*, the number of continuous bits 0 is measured from bit 0 to bit 63/31, and the result is written into the general register *`rd`*.
 
 *Syntax:*
 
@@ -135,9 +135,9 @@ clo.d    $r25, $r23                  # $r25 = 12
 
 * *Explanation:*
 
-** Calculate the number of consecutive bit 1 from bit 31 to bit 0. The operands involved in the calculation are *`0xf00fffff`*, and stop when the first bit 0 occurs. So the result obtained by running the instruction is 4.
+** Calculate the number of consecutive bits set to 1 from bit 31 to bit 0. The operand involved in the calculation is *`0xf00fffff`*, and the count stops when the first bit 0 occurs. So the result obtained from running the instruction is 4.
 
-** Calculate the number of consecutive bit 1 from bit 63 to bit 0. The operands involved in the calculation are *`0xfff00000f00fffff`*, and stop when the first bit 0 occurs. So the result obtained by running the instruction is 12.
+** Calculate the number of consecutive bits set to 1 from bit 63 to bit 0. The operand involved in the calculation is *`0xfff00000f00fffff`*, and the count stops when the first bit 0 occurs. So the result obtained from running the instruction is 12.
 
 [source]
 ----
@@ -148,9 +148,9 @@ clz.d    $r25, $r23                  # $r25 = 12
 
 * *Explanation:*
 
-** Calculate the number of consecutive bit 0 from bit 31 to bit 0. The operands involved in the calculation are *`0x0000ffff`*, and stop when the first bit 0 occurs. So the result obtained by running the instruction is 16.
+** Calculate the number of consecutive bits set to 0 from bit 31 to bit 0. The operand involved in the calculation is *`0x0000ffff`*, and the count stops when the first bit 1 occurs. So the result obtained from running the instruction is 16.
 
-** Calculate the number of consecutive bit 0 from bit 63 to bit 0. The operands involved in the calculation are *`0x000fffff0000ffff`*, and stop when the first bit 0 occurs. So the result obtained by running the instruction is 12.
+** Calculate the number of consecutive bits set to 0 from bit 63 to bit 0. The operand involved in the calculation is *`0x000fffff0000ffff`*, and the count stops when the first bit 1 occurs. So the result obtained from running the instruction is 12.
 
 [source]
 ----
@@ -161,9 +161,9 @@ cto.d    $r25, $r23                  # $r25 = 52
 
 * *Explanation:*
 
-** Calculate the number of consecutive bit 1 from bit 0 to bit 31. The operands involved in the calculation are *`0xffffffff`*, and stop when the first bit 0 occurs. So the result obtained by running the instruction is 32.
+** Calculate the number of consecutive bits set to 1 from bit 0 to bit 31. The operand involved in the calculation is *`0xffffffff`*, and the count stops when the first bit 0 occurs. So the result obtained from running the instruction is 32.
 
-** Calculate the number of consecutive bit 1 from bit 0 to bit 63. The operands involved in the calculation are *`0x000fffffffffffff`*, and stop when the first bit 0 occurs. So the result obtained by running the instruction is 52.
+** Calculate the number of consecutive bits set to 1 from bit 0 to bit 63. The operand involved in the calculation is *`0x000fffffffffffff`*, and the count stops when the first bit 0 occurs. So the result obtained from running the instruction is 52.
 
 [source]
 ----
@@ -174,9 +174,9 @@ ctz.d    $r25, $r23                  # $r25 = 52
 
 * *Explanation:*
 
-** Calculate the number of consecutive bit 0 from bit 0 to bit 31. The operands involved in the calculation are *`0x00000000`*, and stop when the first bit 0 occurs. So the result obtained by running the instruction is 32.
+** Calculate the number of consecutive bits set to 0 from bit 0 to bit 31. The operand involved in the calculation is *`0x00000000`*, and the count stops when the first bit 1 occurs. So the result obtained from running the instruction is 32.
 
-** Calculate the number of consecutive bit 0 from bit 0 to bit 63. The operands involved in the calculation are *`0xfff0000000000000`*, and stop when the first bit 0 occurs. So the result obtained by running the instruction is 52.
+** Calculate the number of consecutive bits set to 0 from bit 0 to bit 63. The operand involved in the calculation is *`0xfff0000000000000`*, and the count stops when the first bit 1 occurs. So the result obtained from running the instruction is 52.
 
 [NOTE]
 =====
@@ -232,7 +232,12 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.3.2`* .
 ----
 li.d        $r23, 0x0000000001230000    # $r23 = 0x0000000001230000
 li.d        $r24, 0x0000000000004567    # $r24 = 0x0000000000004567
+----
+
+[source]
+----
 bytepick.w  $r25, $r23, $r24, sa2       # $r25 = 0x0000000045670123
+
 li.d        $r23, 0x0123456700000000    # $r23 = 0x0123456700000000
 li.d        $r24, 0x0000000089abcdef    # $r24 = 0x0000000089abcdef 
 bytepick.d  $r25, $r23, $r24, sa3       # $r25 = 0x89abcdef01234567
@@ -310,21 +315,21 @@ revb.d     $r25, $r23                  # $r25 = 0x1032547698badcfe
 
 * *Explanation:*
 
-** Function description of the *`revb`* series instructions: Reverse the byte data within a specified range, with different suffixes determining different ranges. 
+** Function description of the *`revb`* series instructions: Reverse the byte order within a specified range, with different suffixes indicating different ranges.
 
-** *`revb.2h`* represents dividing the data into two halfwords, and reversing the bytes in each of the two halfwords. When using the *`revb.h`* instruction to process *`0xfedcba9876543210`*, only data between bit 31 and bit 0 will be processed. *`0x76543210`* will be divided into two halfwords, namely *`0x7654`* and *`0x3210`*, and the bytes in the two will be arranged in reverse to obtain *`0x5476`* and *`0x1032`*. The final result is *`0x0000000054761032`*.
+** *`revb.2h`* divides the data into two halfwords and reverses the bytes in each of the two halfwords. For example, when using the *`revb.h`* instruction to process *`0xfedcba9876543210`*, only the data between bit 31 and bit 0 will be processed. The lower 32 bits, *`0x76543210`*, will be divided into two halfwords: *`0x7654`* and *`0x3210`*. The bytes in these halfwords are then reversed to obtain *`0x5476`* and *`0x1032`*. The final result is *`0x0000000054761032`*.
 
 *** *`0xfedcba98 7654 3210`* -> *`revb`*(*`7654`, `3210`*) -> *`0x0000000054761032`*
 
-** *`revb.4h`* means dividing the data into four halfwords and arranging the bytes in reverse order in each of the two halfwords. 
+** *`revb.4h`* divides the data into four halfwords and reverses the bytes in each of the four halfwords. 
 
 *** *`0xfedc ba98 7654 3210`* -> *`revb`*(*`fedc`, `ba98`, `7654`, `3210`*) -> *`0xdcfe98ba54761032`*
 
-** *`revb.2w`* means dividing the data into two words and arranging the bytes in reverse in each word. 
+** *`revb.2w`* divides the data into two words and reverses the bytes in each word. 
 
 *** *`0xfedcba98 76543210`* -> *`revb`*(*`fedcba98`, `76543210`*) -> *`0x98badcfe10325476`*
 
-** *`revb.d`* represents the reverse arrangement of bytes in the entire doubleword data.
+** *`revb.d`* reverses the byte order of the entire doubleword data.
 
 *** *`0xfedcba9876543210`* -> *`revb`*(*`fedcba9876543210`*) -> *`0x1032547698badcfe`*
 
@@ -426,7 +431,7 @@ bitrev.8b    $r25, $r23                  # $r25 = 0x7f3b5d196e2a4c08
 
 ** *`bitrev.4b`*
 
-*** Divide bit 31 to bit 0 into 4 bytes to perform a bitwise reverse order operation.
+*** Divide the bits from 31 to 0 into 4 bytes and perform a bitwise reverse order operation.
 
 *** *`0x10`* -> *`0b00010000`* -> *bitrev*(*`0b00010000`*) -> *`0b00001000`* -> *`0x08`*
 
@@ -440,7 +445,7 @@ bitrev.8b    $r25, $r23                  # $r25 = 0x7f3b5d196e2a4c08
 
 ** *`bitrev.8b`*
 
-*** Divide bit 63 to bit 0 into 8 bytes to perform a bitwise reverse order operation.
+*** Divide the bits from 63 to 0 into 8 bytes and perform a bitwise reverse order operation.
 
 *** *`0x10`* -> *`0b00010000`* -> *bitrev*(*`0b00010000`*) -> *`0b00001000`* -> *`0x08`*
 
@@ -576,7 +581,7 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.3.7`* .
 <.^|*`$rd`*[63:0] = `*Sign*`*Extend* ({*`$rd`*[31: *`msbw`*+1], *`$rj`*[*`msbw`*-*`lsbw`*:0], *`$rd`*[*`lsbw`*-1: 0]}, GRLEN)
 |===========================
 
-* *`msbw`*, *`lsbw`*  : Unsigned value range(*`integer`*) : *31* > *`msbw`* > *`lsbw`* > *0*
+* *`msbw`*, *`lsbw`*  : Unsigned value range(*`integer`*) : *31* >= *`msbw`* >= *`lsbw`* >= *0*
 
 [grid=none]
 [frame=none]
@@ -587,7 +592,7 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.3.7`* .
 <.^|*`$rd`*[63:0] = {*`$rd`*[63: *`msbd`*+1], *`$rj`*[*`msbd`*-*`lsbd`*:0], *`$rd`*[*`lsbd`*-1: 0]}
 |===========================
 
-* *`msbd`*, *`lsbd`*  : Unsigned value range(*`integer`*) : *63* > *`msbd`* > *`lsbd`* > *0*
+* *`msbd`*, *`lsbd`*  : Unsigned value range(*`integer`*) : *63* >= *`msbd`* >= *`lsbd`* >= *0*
 
 *Usage :* 
 [source]
@@ -656,7 +661,7 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.3.8`* .
 <.^|*`$rd`*[63:0] = `*Sign*`*Extend* ( `*Zero*`*Extend* (*`$rj`*[*`msbw`* : *`lsbw`*], 32), GRLEN)
 |===========================
 
-* *`msbw`*, *`lsbw`*  : Unsigned value range(*`integer`*) : *31* > *`msbw`* > *`lsbw`* > *0*
+* *`msbw`*, *`lsbw`*  : Unsigned value range(*`integer`*) : *31* >= *`msbw`* >= *`lsbw`* >= *0*
 
 [grid=none]
 [frame=none]
@@ -667,7 +672,7 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.3.8`* .
 <.^|*`$rd`*[63:0] = `*Zero*`*Extend* (*`$rj`*[*`msbd`* : *`lsbd`*], 64)
 |===========================
 
-* *`msbd`*, *`lsbd`*  : Unsigned value range(*`integer`*) : *63* > *`msbd`* > *`lsbd`* > *0*
+* *`msbd`*, *`lsbd`*  : Unsigned value range(*`integer`*) : *63* >= *`msbd`* >= *`lsbd`* >= *0*
 
 *Usage :* 
 [source]

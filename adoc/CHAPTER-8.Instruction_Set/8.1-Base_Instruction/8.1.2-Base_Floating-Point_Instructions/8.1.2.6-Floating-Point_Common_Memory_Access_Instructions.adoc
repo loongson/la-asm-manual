@@ -77,6 +77,8 @@ fst.d        $f24, $r12, 0              # memory[$r12] = 0x400c000000000000 = 3.
 For more information, refer to the *`LoongArch Architecture manual:3.2.6.1`* .
 =====
 
+<<<
+
 ====== *8.1.2.6.2 `FLDX.{S/D}`, `FSTX.{S/D}`*
 
 *Syntax:*

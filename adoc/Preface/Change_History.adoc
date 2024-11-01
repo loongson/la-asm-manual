@@ -13,5 +13,9 @@
 
 <.^|2024-04-10 
 ^.^|V1.0 
-<.^|This update has added descriptions of instructions in *`LoongArch Architecture manual v1.10`* to this Guide and corrected some incorrect descriptions.
+<.^|This update has added descriptions of instructions from the *`LoongArch Architecture manual v1.10`* to this Guide and corrected some incorrect descriptions.
+
+<.^|2024-10-17
+^.^|V1.1 
+<.^|Fixed some incorrect descriptions. Updated the description of the macro instruction in CHAPTER 9. Added informations on the usage of registers in the CFI macro instructions and the *`.option`* directive.
 |==========================

@@ -1,7 +1,7 @@
 == *CHAPTER 1. Introduction*
 
 [.text-justify]
-This chapter introduces the *`LoongArch`* Architecture.
+This chapter introduces the *`LoongArch`* architecture.
 
 include::1.1-LoongArch_Architecture_Overview.adoc[]
 

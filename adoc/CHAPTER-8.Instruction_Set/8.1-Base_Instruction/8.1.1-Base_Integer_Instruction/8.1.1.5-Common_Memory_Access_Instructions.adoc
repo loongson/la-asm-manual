@@ -63,7 +63,7 @@
 <.^|*`$rd`*[63:0] = `*MemoryLoad*` (*`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN), [63:0])
 |===========================
 
-* *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
+* *`si12`* : 12-bit immediate, signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
 
 *Usage :* 
 
@@ -127,7 +127,7 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.5.1`* .
 <.^|`*MemoryStore*` ( *`$rd`*[63:0], ( *`$rj`* `*+*` `*Sign*`*Extend* (*`si12`*, GRLEN) ), [63:0] )
 |===========================
 
-* *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
+* *`si12`* : 12-bit immediate, signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
 
 *Usage :* 
 
@@ -209,6 +209,10 @@ li.w    $r24, -40           # $r24 = -40
 
                             # memory[$r22 - $r24] = 0x0123456789abcdef
 ldx.b   $r23, $r22, $r24    # $r23 = 0xffffffffffffffef
+----
+
+[source]
+----
 ldx.bu  $r23, $r22, $r24    # $r23 = 0x00000000000000ef
 ldx.h   $r23, $r22, $r24    # $r23 = 0xffffffffffffcdef
 ldx.hu  $r23, $r22, $r24    # $r23 = 0x000000000000cdef
@@ -394,6 +398,8 @@ stptr.d $r23, $r22, -40    # memory[$r22 - 40] = 0xfedcba9876543210
 For more information, refer to the *`LoongArch Architecture manual:2.2.5.3`* .
 =====
 
+<<<
+
 ====== *8.1.1.5.6 `PRELD`, `PRELDX`*
 
 *Syntax:*
@@ -423,15 +429,15 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.5.3`* .
 
 *`preld`* : 
 
-* The processor learns from the hint in the *`PRELD`* instruction what type will be acquired and which level of *`Cache`* the data to be taken back fill in, *`hint`* has 32 optional values (0 to 31), 0 represents load to level 1 *`Cache`*, and 8 represents store to level 1 *`Cache`*. The remaining *`hint`* values are not defined and are processed for nop instructions when the processor executes.
+* The processor uses the hint in the *`PRELD`* instruction to determine the type of operation and which level of *`Cache`* to fill the data from. The *`hint`* has 32 optional values (0 to 31), where 0 represents a load to level 1 *`Cache`*, and 8 represents a store to level 1 *`Cache`*. The remaining *`hint`* values are not defined and are processed for nop instructions when the processor executes.
 
-* *`si12`* : 12 bit immediate, Signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
+* *`si12`* : 12-bit immediate, signed value range(*`integer`*) : [*`-2048`, `2047`*] or [*`-0x800`, `0x7ff`*]
 
 *`preldx`* : 
 
-* The *`PRELDX`* instruction continuously prefetches data from memory into the Cache according to the configuration parameters, and the continuously prefetched data is a *`block`* (*`block`*) of length *`block_size`* starting from the specified base *`address`* (*`base`*) with a number of (*`block_num`*) spacing stride. The *`base address`* is the sum of the [63:0] bits in the general register *`rj`* and the sign extension [15:0] bits in the general register *`rk`*. The [I16] bits in general register *`rk`* are the address sequence ascending and descending flag bits, with 0 indicating address ascending and 1 indicating address descending. The value of bits [25:20] in general register *`rk`* is *`block_size`*, the basic unit of *`block_size`* is 16 bytes, so the maximum length of a single *`block`* is 1KB. The value of bits [39:32] in general register *`rk`* is *`block_num`*-*`1`*, so a single instruction can prefetch up to 256 *`blocks`*. The value of bits [59:44] in the block general register *`rk`* is treated as a signed number and defines the stride between adjacent blocks, the basic unit of stride is 1 byte. The value of bits [39:32] in *`rk`* is *`block.num`*-*`1`*, so a single instruction can prefetch up to 256 blocks. The value of bits [59:44] in general register *`rk`* is regarded as a signed number, which defines the corresponding The basic unit of stride and stride between adjacent blocks is 1 byte.
+* The *`PRELDX`* instruction continuously prefetches data from memory into the cache according to the configuration parameters. The prefetch operation retrieves a *`block`* (*`block`*) of data, with a length of *`block_size`*, starting from a specified base *`address`* (*`base`*) and with a spacing stride defined by *`block_num`* . The *`base address`* is the sum of the [63:0] bits in the general register *`rj`* and the sign extension [15:0] bits in the general register *`rk`*. The [I16] bits in general register *`rk`* are the address sequence ascending and descending flag bits, where 0 indicates address ascending and 1 indicates address descending. The value of bits [25:20] in general register *`rk`* is *`block_size`*, with a basic unit of *`block_size`* is 16 bytes, so the maximum length of a single *`block`* is 1KB. The value of bits [39:32] in general register *`rk`* is *`block_num`*-*`1`*, so a single instruction can prefetch up to 256 *`blocks`*. The value of bits [59:44] in the block general register *`rk`* is treated as a signed number and defines the stride between adjacent blocks, with a basic unit of 1 byte. The value of bits [39:32] in *`rk`* is *`block.num`*-*`1`*, so a single instruction can prefetch up to 256 blocks. The value of bits [59:44] in general register *`rk`* is regarded as a signed number that defines the stride between adjacent blocks, with a basic unit of 1 byte.
 
-* *`hint`* in the *`PRELDX`* instruction indicates the type of prefetch and the level of *`Cache`* into which the fetched data is to be filled. hint has 32 selectable values from 0 to 31. Currently, *`hint`*=*`0`* is defined as load prefetch to level 1 data *`Cache`*, *`hint`*=*`2`* is defined as load prefetch to level 3 *`Cache`*, *`hint`*=*`8`* is defined as store prefetch to level 1 data *`Cache`*. The meaning of the rest of *`hint`* values is not defined yet, and the processor executes it as *`NOP`* instruction.
+* The *`hint`* in the *`PRELDX`* instruction indicates the type of prefetch and the level of *`Cache`* into which the fetched data is to be filled. The *`hint`* has 32 selectable values from 0 to 31. Currently, *`hint`*=*`0`* is defined as a load prefetch to level 1 data *`Cache`*, *`hint`*=*`2`* is defined as a load prefetch to level 3 *`Cache`*, *`hint`*=*`8`* is defined as a store prefetch to level 1 data *`Cache`*. The meanings of the remaining *`hint`* values are not yet defined and the processor executes it as *`NOP`* instruction.
 
 [NOTE]
 =====

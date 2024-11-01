@@ -6,15 +6,15 @@
 |===========================
 <.^|*`SLL`*
 ^.^|*:*
-<.^|Shift data logic left.
+<.^|Shift data left logically.
 
 <.^|*`SRL`*
 ^.^|*:*
-<.^|Shift data logic right.
+<.^|Shift data right logically.
 
 <.^|*`SRA`*
 ^.^|*:*
-<.^|Arithmetic shift of data to the right.
+<.^|Arithmetic shift data to the right.
 
 <.^|*`ROTR`*
 ^.^|*:*
@@ -99,13 +99,12 @@ srl.w    $r25, $r23, $r24            # $r25 = 0x000000003c000003
 sra.w    $r25, $r23, $r24            # $r25 = 0xfffffffffc000003
 # $r23 = 0xf000000e = 0b11110000000000000000000000001110
 # $r25 = SignExtend({2'$r23[31], $r23[31:2]} , GRLEN)
+# {2'$r23[31], $r23[31:2]} = 0b11111100000000000000000000000011 = 0xfc000003
+# $r25 = 0xfffffffffc000003
 ----
 
 [source]
 ----
-# {2'$r23[31], $r23[31:2]} = 0b11111100000000000000000000000011 = 0xfc000003
-# $r25 = 0xfffffffffc000003
-
 rotr.w   $r25, $r23, $r24            # $r25 = 0xffffffffbc000003
 # $r23 = 0xf000000e = 0b11110000000000000000000000001110
 # $r25 = SignExtend({$r23[1:0], $r23[31:2]} , GRLEN)
@@ -173,9 +172,9 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.2.1`* .
 <.^|} , GRLEN)
 |===========================
 
-Consider *`ui5`* as shift amount(*`SA`* is unsigned value range(*`integer`*) : [*`0` , `31`*]), which is the offset. 
+Consider *`ui5`* as the shift amount(*`SA`* is an unsigned value in the range(*`integer`*) : [*`0` , `31`*]), which serves as the offset.
 
-* *`ui5`* : 5 bit immediate, Unsigned value range(*`integer`*) : [*`0`, `31`*] or [*`0x0`, `0x1f`*]
+* *`ui5`* : 5-bit immediate, unsigned value range(*`integer`*) : [*`0`, `31`*] or [*`0x0`, `0x1f`*]
 
 *Usage :* 
 [source]
@@ -192,16 +191,16 @@ srli.w    $r25, $r23, 2            # $r25 = 0x000000003c000003
 # $r23 = 0xf000000e = 0b11110000000000000000000000001110
 # $r25 = SignExtend({2'b0, $r23[31:2]} , GRLEN)
 # {2'b0, $r23[31:2]} = 0b00111100000000000000000000000011 = 0x3c000003
-----
-
-[source]
-----
 # $r25 = 0x000000003c000003
 
 srai.w    $r25, $r23, 2            # $r25 = 0xfffffffffc000003
 # $r23 = 0xf000000e = 0b11110000000000000000000000001110
 # $r25 = SignExtend({2'$r23[31], $r23[31:2]} , GRLEN)
 # {2'$r23[31], $r23[31:2]} = 0b11111100000000000000000000000011 = 0xfc000003
+----
+
+[source]
+----
 # $r25 = 0xfffffffffc000003
 
 rotri.w   $r25, $r23, 2            # $r25 = 0xffffffffbc000003
@@ -271,7 +270,7 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.2.2`* .
 <.^|}
 |===========================
 
-Consider *`$rk`*[5:0] as shift amount(*`SA`* is unsigned value range(*`integer`*) : [*`0` , `63`*]), which is the offset. 
+Consider *`$rk`*[5:0] as the shift amount(*`SA`* is an unsigned value in the range(*`integer`*) : [*`0` , `63`*]), which serves as the offset.
 
 *Usage :* 
 
@@ -285,10 +284,7 @@ sll.d    $r25, $r23, $r24            # $r25 = 0xc000000000000038
 # $r25 = {$r23[63-2:0], 2'b0}
 # $r25 = 0b1100000000000000000000000000000000000000000000000000000000111000
 # $r25 = 0x0xc000000000000038
-----
 
-[source]
-----
 srl.d    $r25, $r23, $r24            # $r25 = 0x3c00000000000003
 # $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
 # $r25 = {2'b0, $r23[63:2]}
@@ -298,6 +294,10 @@ srl.d    $r25, $r23, $r24            # $r25 = 0x3c00000000000003
 sra.d    $r25, $r23, $r24            # $r25 = 0xfc00000000000003
 # $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
 # $r25 = {2'$r23[63], $r23[63:2]}
+----
+
+[source]
+----
 # $r25 = 0b1111110000000000000000000000000000000000000000000000000000000011
 # $r25 = 0x0xfc00000000000003
 
@@ -368,9 +368,9 @@ For more information, refer to the *`LoongArch Architecture manual:2.2.2.3`* .
 <.^|}
 |===========================
 
-Consider *`ui6`* as shift amount(*`SA`* is unsigned value range(*`integer`*) : [*`0` , `63`*]), which is the offset. 
+Consider *`ui6`* as the shift amount(*`SA`* is an unsigned value in the range(*`integer`*) : [*`0` , `63`*]), which serves as the offset. 
 
-* *`ui6`* : 6 bit immediate, Unsigned value range(*`integer`*) : [*`0`, `63`*] or [*`0x0`, `0x3f`*]
+* *`ui6`* : 6-bit immediate, unsigned value range(*`integer`*) : [*`0`, `63`*] or [*`0x0`, `0x3f`*]
 
 *Usage :* 
 [source]
@@ -378,10 +378,6 @@ Consider *`ui6`* as shift amount(*`SA`* is unsigned value range(*`integer`*) : [
 li.d     $r23, 0xf00000000000000e    # $r23 = 0xf00000000000000e
 
 sll.d    $r25, $r23, 2               # $r25 = 0xc000000000000038
-----
-
-[source]
-----
 # $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
 # $r25 = {$r23[63-2:0], 2'b0}
 # $r25 = 0b1100000000000000000000000000000000000000000000000000000000111000
@@ -392,7 +388,10 @@ srl.d    $r25, $r23, 2               # $r25 = 0x3c00000000000003
 # $r25 = {2'b0, $r23[63:2]}
 # $r25 = 0b0011110000000000000000000000000000000000000000000000000000000011
 # $r25 = 0x0x3c00000000000003
+----
 
+[source]
+----
 sra.d    $r25, $r23, 2               # $r25 = 0xfc00000000000003
 # $r23 = 0b1111000000000000000000000000000000000000000000000000000000001110
 # $r25 = {2'$r23[63], $r23[63:2]}
