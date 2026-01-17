@@ -261,7 +261,7 @@ The addressing range of *`call36`* depends on the range of {*`si20`*,18b0} in *`
 tail36              $t1, sym_tail
 Machine Instruction ----------------------
 pcaddu18i           $t1, %call36(sym_tail)
-jirl                $t1, $t1, 0     
+jirl                $zero, $t1, 0     
 ----
 
 * sym_call only allows symbol names, not immediate values.
@@ -1019,7 +1019,7 @@ add.{w/d}           $a0, $a0, $tp       // load sym_le_large address to $a0.
 ----
 lu12i.w             $a0, %le_hi20(sym_le_large)
 ori                 $a0, $a0, %le_lo12(sym_le_large)
-lu32i.d             $a0, %le64_hi20(sym_le_large)
+lu32i.d             $a0, %le64_lo20(sym_le_large)
 lu52i.d             $a0, $a0, %le64_hi12(sym_le_large)
 add.{w/d}           $a0, $a0, $tp 
 ----
